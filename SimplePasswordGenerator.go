@@ -16,7 +16,7 @@ import (
 
 func main() {
 	// user input for go help https://www.geeksforgeeks.org/how-to-take-input-from-the-user-in-golang/
-
+	println("Hello and welcom to GoLock3r's simple password generator! \nThis password generator is the first iteration of GoLock3r's password generator it \nallows you to create a password of length 8 to length 16. \nIt also alows you to choose if you want specaisl character (more to come). \n\n\n\n\n ")
 	println("Enter the length of the password you would like! input needs to be a number between 8 and 16")
 	var num = 0
 	fmt.Scanln(&num)
