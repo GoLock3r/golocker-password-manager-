@@ -40,8 +40,8 @@ func main() {
 	}
 	var pw = passwordgen(num, allow)
 
-	print(pw) // outputs password that was created at random
-
+	println(pw) // outputs password that was created at random
+	println("Thanks for using our password generator Version 0.1.1")
 }
 
 func passwordgen(n int, allow bool) string {
