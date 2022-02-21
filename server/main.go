@@ -3,8 +3,16 @@ package main
 import (
 	"fmt"
 	"golang.org/x/crypto/ssh/terminal"
+	"golock3r/server/logger"
 	"golock3r/server/authtool"
 )
+
+// func main() {
+// 	logger.Setup("logs.txt")
+// 	// logger.Info("Something here")
+// 	logger.LogInfo.Println("Something here")
+// }
+
 
 func main() {
 	var user string

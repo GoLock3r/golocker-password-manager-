@@ -10,11 +10,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-/*
-Basic flow:
-	Authenticator -> Database interface -> access entries (read, add, edit) -> deliver to user
-*/
-
 const LOG_FILE = "logs.txt"
 const PASSWD_FILE = "logins.txt"
 
