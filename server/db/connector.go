@@ -11,15 +11,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-// In format
-// url: <site url, can be null>
-// title: <entry title, can be null>
-// username: <username, can be null>
-// password: <password, cannot be null>
-// other: <self ex. can be null
-// creation_date: <date the entry was created>
-//
-
 var Loggers *logger.Loggers
 
 var col *mongo.Collection
@@ -30,7 +21,7 @@ type entry struct {
 	title    string
 	username string
 	password string
-	other    string
+	notes    string
 }
 
 func Connect(collection string) {
@@ -62,7 +53,7 @@ func WriteEntry(ent entry) {
 		"title":    ent.title,
 		"username": ent.username,
 		"password": ent.password,
-		"other":    ent.other,
+		"notes":    ent.notes,
 		"date":     time.Now().String()}
 
 	result, err := col.InsertOne(ctx, to_insert)
@@ -91,7 +82,7 @@ func ReadAll() {
 		panic(err)
 		Loggers.LogError.Println("Could not read entries")
 	}
-	var results []bson.M
+	var results []bson.D
 
 	if err = cursor.All(ctx, &results); err != nil {
 		panic(err)
@@ -102,6 +93,7 @@ func ReadAll() {
 		for _, field := range result {
 			fmt.Println(field)
 		}
+		fmt.Println("")
 	}
 }
 

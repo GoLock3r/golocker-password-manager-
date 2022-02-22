@@ -1,21 +1,24 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"golock3r/server/authtool"
 	"golock3r/server/db"
 	"golock3r/server/logger"
+	"os"
+	"strings"
 
 	"golang.org/x/crypto/ssh/terminal"
 )
 
 func main() {
-	// Flow: Authenticate -> Show entries and perform queries -> Create entries with generated passwords
+	// Flow: Authenticate -> Show entries and perform queries -> Create entries with generated passwords -> Logout and iterate
 
 	loggers := logger.CreateLoggers("logs.txt") // Instantiate Loggers
 
 	db.Loggers = loggers
-	// db.Connect("demo")
+	// db.WriteEntry(db.CreateEntry("a", "b", "c", "d", "e"))
 
 	authtool.Loggers = loggers
 	authtool.LoginFile = "logins.txt"
@@ -37,6 +40,9 @@ func main() {
 
 		if authtool.ValidateUser(username, string(password)) {
 			fmt.Println("\n\nWelcome", username)
+
+			db.Connect(username)
+
 			var iterate = true
 
 			for iterate {
@@ -51,37 +57,53 @@ func main() {
 
 				switch input {
 				case "0":
-					fmt.Println("\nGoodbye!")
+					fmt.Println("\nGoodbye!\n")
 					iterate = false
 
+				case "1":
+					fmt.Println("\nViewing all entries\n")
+					db.ReadAll()
+
 				case "2":
-					fmt.Println("\nEntry title: ")
-					fmt.Scanln(&input)
+					fmt.Println("\nHere's where you'd enter a title to search by\n")
 
 				case "3":
-					fmt.Println("\nInserting an entry...")
+					var title, url, username, other string = "", "", "", ""
+					reader := bufio.NewReader(os.Stdin)
+
+					fmt.Println("\nCreating an entry...")
 					fmt.Print("Entry Title: ")
-					fmt.Scanln(&input)
+					title, _ = reader.ReadString('\n')
+					title = strings.TrimSpace(title)
+
 					fmt.Print("Website URL: ")
-					fmt.Scanln(&input)
+					url, _ = reader.ReadString('\n')
+					url = strings.TrimSpace(url)
+
+					fmt.Print("Notes: ")
+					other, _ = reader.ReadString('\n')
+					other = strings.TrimSpace(other)
+
 					fmt.Print("Username: ")
-					fmt.Scanln(&input)
+					username, _ = reader.ReadString('\n')
+					username = strings.TrimSpace(username)
 					fmt.Print("Password: ")
-					fmt.Scanln(&input)
+					entry_password, _ := terminal.ReadPassword(0)
+
+					db.WriteEntry(db.CreateEntry(url, title, username, string(entry_password), other))
+
+					fmt.Println("\nWrote entry to database!\n")
 
 				case "4":
-					fmt.Println("\nDelete an entry: ")
-
-				case "1":
-					fmt.Println("\nViewing all entries")
+					fmt.Println("\nHere's where you'd delete an entry by title\n")
 
 				default:
-					fmt.Println("\nInvalid input")
+					fmt.Println("\nInvalid input. Try again.\n")
 				}
 			}
 
 		} else {
-			fmt.Println("\nInvalid username / password.")
+			fmt.Println("\nInvalid username / password")
 		}
 		fmt.Print("Continue? y/n: ")
 		fmt.Scanln(&input)
