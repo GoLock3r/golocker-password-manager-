@@ -2,7 +2,7 @@ package authtool
 
 import (
 	"bufio"
-	"log"
+	"golock3r/server/logger"
 	"os"
 	"strconv"
 	"strings"
@@ -10,39 +10,19 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-const LOG_FILE = "logs.txt"
-const PASSWD_FILE = "logins.txt"
+var LoginFile = "logins.txt"
 
 var hash []byte
 var user string
 
-var (
-	WarnLog  *log.Logger
-	InfoLog  *log.Logger
-	ErrorLog *log.Logger
-)
-
-func Init() {
-	// https://www.honeybadger.io/blog/golang-logging/
-	file, err := os.OpenFile(LOG_FILE, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	WarnLog = log.New(file, "WARNING: ", log.Ldate|log.Ltime|log.Lshortfile)
-	InfoLog = log.New(file, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile)
-	ErrorLog = log.New(file, "ERROR: ", log.Ldate|log.Ltime|log.Lshortfile)
-
-	hash = []byte("0")
-	user = ""
-}
+var Loggers *logger.Loggers
 
 func HashUserPassword(username string, password string, rounds int) string {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), rounds)
 	if err != nil {
-		ErrorLog.Println(err)
+		Loggers.LogError.Println(err)
 	} else {
-		InfoLog.Println("Password hashed successfully")
+		Loggers.LogInfo.Println("Password hashed successfully")
 	}
 	hash = bytes
 	user = username
@@ -51,10 +31,10 @@ func HashUserPassword(username string, password string, rounds int) string {
 
 //https://stackoverflow.com/questions/8757389/reading-a-file-line-by-line-in-go
 func ValidateUser(username string, password string) bool {
-	file, err := os.Open(PASSWD_FILE)
+	file, err := os.Open(LoginFile)
 
 	if err != nil {
-		ErrorLog.Println(err)
+		Loggers.LogError.Println(err)
 	}
 
 	defer file.Close()
@@ -73,16 +53,15 @@ func ValidateUser(username string, password string) bool {
 }
 
 //https://varunpant.com/posts/reading-and-writing-binary-files-in-go-lang/
-
 func WriteFile() {
 	if string(hash[0]) == "0" {
-		WarnLog.Println("")
+		Loggers.LogWarning.Println("")
 	} else {
 		line := user + ":" + string(hash) + "\n"
-		file, err := os.OpenFile(PASSWD_FILE, os.O_APPEND|os.O_WRONLY, os.ModeAppend)
+		file, err := os.OpenFile(LoginFile, os.O_APPEND|os.O_WRONLY, os.ModeAppend)
 
 		if err != nil {
-			ErrorLog.Println("password file not found / cannot be opened!")
+			Loggers.LogError.Println("password file not found / cannot be opened!")
 		}
 
 		defer file.Close()
@@ -90,30 +69,9 @@ func WriteFile() {
 		len, err := file.WriteString(line)
 
 		if err != nil {
-			ErrorLog.Println(err)
+			Loggers.LogError.Println(err)
 		} else {
-			InfoLog.Println("Wrote " + strconv.Itoa(len) + " bytes of data")
+			Loggers.LogInfo.Println("Wrote " + strconv.Itoa(len) + " bytes of data")
 		}
 	}
 }
-
-// func main() {
-// 	var user string
-
-// 	fmt.Print("Enter your username: ")
-// 	fmt.Scanln(&user)
-
-// 	fmt.Print("Enter your password: ")
-// 	password, _ := terminal.ReadPassword(0)
-
-// 	// hashUserPassword(user, string(password), 20)
-// 	// writeFile()
-
-// 	if validateUser(user, string(password)) {
-// 		fmt.Println("\nYou're in!")
-// 		InfoLog.Println("A user has logged in")
-// 	} else {
-// 		fmt.Println("\nInvalid username / password")
-// 		WarnLog.Println("Invalid login attempt!")
-// 	}
-// }
