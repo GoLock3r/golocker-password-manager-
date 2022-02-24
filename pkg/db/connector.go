@@ -28,13 +28,11 @@ func Connect(collection string) {
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://localhost:27017"))
 
 	if err != nil {
-		panic(err)
 		Loggers.LogError.Println("Could not connect to database")
 	}
 
 	err = client.Ping(ctx, nil)
 	if err != nil {
-		panic(err)
 		Loggers.LogError.Println("Could not ping database")
 	} else {
 		Loggers.LogInfo.Println("Connected to database")
@@ -59,7 +57,6 @@ func WriteEntry(ent entry) {
 	result, err := col.InsertOne(ctx, to_insert)
 
 	if err != nil {
-		panic(err)
 		Loggers.LogError.Println("Could not write entry")
 	} else {
 		Loggers.LogInfo.Println("Wrote entry", result)

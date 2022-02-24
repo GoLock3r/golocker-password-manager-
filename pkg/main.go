@@ -18,12 +18,11 @@ func main() {
 	loggers := logger.CreateLoggers("logs.txt") // Instantiate Loggers
 
 	db.Loggers = loggers
-	// db.WriteEntry(db.CreateEntry("a", "b", "c", "d", "e"))
 
 	authtool.Loggers = loggers
 	authtool.LoginFile = "logins.txt"
 
-	fmt.Println("Welcome to GoLock3r, extremely rudimentary CLI edition\n")
+	fmt.Println("Welcome to GoLock3r, extremely rudimentary CLI edition")
 
 	var username = ""
 	var input = ""
@@ -57,15 +56,15 @@ func main() {
 
 				switch input {
 				case "0":
-					fmt.Println("\nGoodbye!\n")
+					fmt.Println("\nGoodbye!")
 					iterate = false
 
 				case "1":
-					fmt.Println("\nViewing all entries\n")
+					fmt.Println("\nViewing all entries")
 					db.ReadAll()
 
 				case "2":
-					fmt.Println("\nHere's where you'd enter a title to search by\n")
+					fmt.Println("\nHere's where you'd enter a title to search by")
 
 				case "3":
 					var title, url, username, other string = "", "", "", ""
@@ -92,13 +91,13 @@ func main() {
 
 					db.WriteEntry(db.CreateEntry(url, title, username, string(entry_password), other))
 
-					fmt.Println("\nWrote entry to database!\n")
+					fmt.Println("\nWrote entry to database!")
 
 				case "4":
-					fmt.Println("\nHere's where you'd delete an entry by title\n")
+					fmt.Println("\nHere's where you'd delete an entry by title")
 
 				default:
-					fmt.Println("\nInvalid input. Try again.\n")
+					fmt.Println("\nInvalid input. Try again.")
 				}
 			}
 
@@ -114,7 +113,7 @@ func main() {
 	}
 }
 
-func createUser(username string, password string) {
-	authtool.HashUserPassword(username, password, 12)
-	authtool.WriteFile()
-}
+// func createUser(username string, password string) {
+// 	authtool.HashUserPassword(username, password, 12)
+// 	authtool.WriteFile()
+// }
