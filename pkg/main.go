@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"golock3r/server/authtool"
+	"golock3r/server/crypt"
 	"golock3r/server/db"
 	"golock3r/server/logger"
 	"os"
@@ -18,6 +19,7 @@ func main() {
 	loggers := logger.CreateLoggers("logs.txt") // Instantiate Loggers
 
 	db.Loggers = loggers
+	crypt.Loggers = loggers
 
 	authtool.Loggers = loggers
 	authtool.LoginFile = "logins.txt"
@@ -28,7 +30,7 @@ func main() {
 	var input = ""
 
 	// Uncomment to create a user account for demonstration
-	// createUser("demo", "demo123")
+	authtool.CreateUser("demo", "demo123")
 
 	for {
 		fmt.Print("Please enter your username: ")
@@ -38,6 +40,8 @@ func main() {
 		password, _ := terminal.ReadPassword(0)
 
 		if authtool.ValidateUser(username, string(password)) {
+			key := authtool.GetKey(username, string(password))
+
 			fmt.Println("\n\nWelcome", username)
 
 			db.Connect(username)
@@ -74,22 +78,29 @@ func main() {
 					fmt.Print("Entry Title: ")
 					title, _ = reader.ReadString('\n')
 					title = strings.TrimSpace(title)
+					title = crypt.CleanStringData(crypt.Encrypt(key, crypt.ChunkStringData(title)))
 
 					fmt.Print("Website URL: ")
 					url, _ = reader.ReadString('\n')
 					url = strings.TrimSpace(url)
+					url = crypt.CleanStringData(crypt.Encrypt(key, crypt.ChunkStringData(url)))
 
 					fmt.Print("Notes: ")
 					other, _ = reader.ReadString('\n')
 					other = strings.TrimSpace(other)
+					other = crypt.CleanStringData(crypt.Encrypt(key, crypt.ChunkStringData(other)))
 
 					fmt.Print("Username: ")
 					username, _ = reader.ReadString('\n')
 					username = strings.TrimSpace(username)
+					username = crypt.CleanStringData(crypt.Encrypt(key, crypt.ChunkStringData(username)))
+
 					fmt.Print("Password: ")
 					entry_password, _ := terminal.ReadPassword(0)
+					str_password := string(entry_password)
+					str_password = crypt.CleanStringData(crypt.Encrypt(key, crypt.ChunkStringData(str_password)))
 
-					db.WriteEntry(db.CreateEntry(url, title, username, string(entry_password), other))
+					db.WriteEntry(db.CreateEntry(url, title, username, str_password, other))
 
 					fmt.Println("\nWrote entry to database!")
 

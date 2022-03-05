@@ -3,6 +3,7 @@ package authtool
 
 import (
 	"bufio"
+	"crypto/sha512"
 	"golock3r/server/logger"
 	"os"
 	"strconv"
@@ -173,4 +174,18 @@ func userExists(username string) bool {
 		}
 	}
 	return false
+}
+
+// Returns a SHA512 sum used as the AES encryption key for an authenticated user
+// Returns nothing if the user is not authenticated
+func GetKey(username string, password string) []byte {
+	sha_hash := sha512.New()
+	var keystring = username + password
+
+	if ValidateUser(username, password) {
+		sha_hash.Write([]byte(keystring))
+		return sha_hash.Sum(nil)[0:32]
+	} else {
+		return []byte(nil)
+	}
 }

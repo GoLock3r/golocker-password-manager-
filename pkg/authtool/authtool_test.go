@@ -117,6 +117,27 @@ func TestChangePassword(t *testing.T) {
 	}
 }
 
+func TestGetKey(t *testing.T) {
+	removeFiles()
+
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	LoginFile = "testlogins.txt"
+	// Create a user
+	if !CreateUser("Username", "password") {
+		t.Errorf("Could't create user")
+	}
+	// Attempt to get key from user
+	// Verify that key is returned
+	if len(GetKey("Username", "password")) != 32 {
+		t.Errorf("Invalid keylength for valid user")
+	}
+	// Verify that an empty key is returned for an invalid user
+	if len(GetKey("Username", "invalidPassword")) != 0 {
+		t.Errorf("Invalid keylength for invalid user")
+	}
+
+}
+
 func TestCleanup(t *testing.T) {
 	// Remove test logs & login files at the end of execution
 	removeFiles()
