@@ -68,7 +68,18 @@ func ReadFromTitle(title string) {
 }
 
 func ReadFromUsername(username string) {
-
+	filter := bson.D{{"username", username}} //found help on mongo db documentation https://docs.mongodb.com/drivers/go/current/fundamentals/crud/query-document/
+	cursor, err := col.Find(context.TODO(), filter)
+	if err != nil {
+		panic(err)
+	}
+	var results []bson.D
+	if err = cursor.All(context.TODO(), &results); err != nil {
+		panic(err)
+	}
+	for _, result := range results {
+		fmt.Println(result)
+	}
 }
 
 func ReadAll() {
