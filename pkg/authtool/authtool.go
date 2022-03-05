@@ -11,13 +11,21 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+// Structure for deleting and modifying entries
+type entry struct {
+	user string
+	pass []byte
+}
+
 var LoginFile = "logins.txt"
 var Loggers *logger.Loggers
 
+var Rounds = 12
+
 // Given a password and number of bcrypt rounds, hash the given password
 // and return its hash value.
-func HashUserPassword(password string, rounds int) []byte {
-	bytes, err := bcrypt.GenerateFromPassword([]byte(password), rounds)
+func HashUserPassword(password string) []byte {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), Rounds)
 	if err != nil {
 		Loggers.LogError.Println(err)
 	} else {
@@ -88,23 +96,61 @@ func WriteFile(user string, hash []byte) bool {
 // if successful and false if otherwise
 func CreateUser(username string, password string) bool {
 	if !userExists(username) {
-		return WriteFile(username, HashUserPassword(password, 12))
+		return WriteFile(username, HashUserPassword(password))
 	} else {
 		return false
 	}
 
 }
 
-// Given a username, delete a user from the logins file. Returns true if the user
-// is successfully deleted and false if otherwise
-func DeleteUser(username string) bool {
-	return true
-}
+// Given a valid username and password, change the associated password.
+// Given a valid username, delete the user's username and password entry
+// from the logins file. Returns true if either is successful, false if otherwise
+func ModifyUser(username string, password string, delete_user bool) bool {
+	file, err := os.Open(LoginFile)
 
-// Given a username and a new password, delete the old password hash and replace it
-// with the hash of the new password. Returns true if the user's password is successfully
-// changed, false if otherwise
-func ChangePassword(username string, new_password string) bool {
+	if err != nil {
+		Loggers.LogError.Println("Problem opening / reading file", err)
+		return false
+	}
+
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+
+	var entries []entry
+
+	for scanner.Scan() {
+
+		line := scanner.Text()
+		logins_user := strings.Split(line, ":")[0]
+		logins_pass := []byte(strings.Split(line, ":")[1])
+
+		if delete_user {
+			if !(logins_user == username) {
+				entries = append(entries, entry{logins_user, logins_pass})
+			}
+		} else {
+			if logins_user == username {
+				entries = append(entries, entry{logins_user, HashUserPassword(password)})
+			} else {
+				entries = append(entries, entry{logins_user, logins_pass})
+			}
+		}
+
+	}
+
+	err = os.Remove(LoginFile)
+
+	if err != nil {
+		Loggers.LogError.Println("Problems deleting user from logins file! Cannot re-create file!")
+		return false
+	} else {
+		for _, ent := range entries {
+			WriteFile(ent.user, ent.pass)
+		}
+	}
+	Loggers.LogInfo.Println("Modified / deleted user")
 	return true
 }
 
