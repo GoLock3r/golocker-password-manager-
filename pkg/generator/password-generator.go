@@ -17,75 +17,80 @@ import (
 
 var Loggers *logger.Loggers
 
-func GenPassword(n int, allow bool) string {
+func GenPassword(n int, allow bool) string { // n is length of password without dashes expect password length to add anywhere from 0-3 dashes depending on length
 	var password = ""
 	var letters = [26]string{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"}
 	var lettersAndSpecialAndNumbers = [48]string{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "=", "+", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"}
 	rand.Seed(time.Now().UTC().UnixNano()) // didnt know that i had to seed found an i googled issues found this https://stackoverflow.com/questions/12321133/how-to-properly-seed-random-number-generator
 
-	if !allow {
-		for i := 0; i <= n; i++ {
-			var uplow = 0
-			var temp = ""
+	if n <= 16 && n > 0 {
+		if !allow {
+			for i := 0; i <= n; i++ {
+				var uplow = 0
+				var temp = ""
 
-			uplow = rand.Int()
-			if i%4 == 0 && i != n && i != 0 {
+				uplow = rand.Int()
+				if i%4 == 0 && i != n && i != 0 {
 
-				if uplow%2 == 0 {
-					password += letters[rand.Intn(26)] //showed me how to use rand.Int https://stackoverflow.com/questions/22892120/how-to-generate-a-random-string-of-a-fixed-length-in-go
-					password += "-"
+					if uplow%2 == 0 {
+						password += letters[rand.Intn(26)] //showed me how to use rand.Int https://stackoverflow.com/questions/22892120/how-to-generate-a-random-string-of-a-fixed-length-in-go
+						password += "-"
+					}
+					if uplow%2 != 0 {
+						temp = letters[rand.Intn(26)]
+						temp = strings.ToUpper(temp)
+						password += temp
+						password += "-"
+					}
+
 				}
-				if uplow%2 != 0 {
-					temp = letters[rand.Intn(26)]
-					temp = strings.ToUpper(temp)
-					password += temp
-					password += "-"
+				if i%4 != 0 || i == n {
+					if uplow%2 == 0 {
+						password += letters[rand.Intn(26)] //showed me how to use rand.Int https://stackoverflow.com/questions/22892120/how-to-generate-a-random-string-of-a-fixed-length-in-go
+					}
+					if uplow%2 != 0 {
+						temp = letters[rand.Intn(26)]
+						temp = strings.ToUpper(temp)
+						password += temp
+					}
 				}
-
 			}
-			if i%4 != 0 || i == n {
-				if uplow%2 == 0 {
-					password += letters[rand.Intn(26)] //showed me how to use rand.Int https://stackoverflow.com/questions/22892120/how-to-generate-a-random-string-of-a-fixed-length-in-go
+			return password
+		} else {
+			for i := 0; i <= n; i++ {
+				var uplow = 0
+				var temp = ""
+
+				uplow = rand.Int()
+				if i%4 == 0 && i != n && i != 0 {
+
+					if uplow%2 == 0 {
+						password += lettersAndSpecialAndNumbers[rand.Intn(48)] //showed me how to use rand.Int https://stackoverflow.com/questions/22892120/how-to-generate-a-random-string-of-a-fixed-length-in-go
+						password += "-"
+					}
+					if uplow%2 != 0 {
+						temp = lettersAndSpecialAndNumbers[rand.Intn(48)]
+						temp = strings.ToUpper(temp)
+						password += temp
+						password += "-"
+					}
+
 				}
-				if uplow%2 != 0 {
-					temp = letters[rand.Intn(26)]
-					temp = strings.ToUpper(temp)
-					password += temp
+				if i%4 != 0 || i == n {
+					if uplow%2 == 0 {
+						password += lettersAndSpecialAndNumbers[rand.Intn(48)] //showed me how to use rand.Int https://stackoverflow.com/questions/22892120/how-to-generate-a-random-string-of-a-fixed-length-in-go
+					}
+					if uplow%2 != 0 {
+						temp = lettersAndSpecialAndNumbers[rand.Intn(48)]
+						temp = strings.ToUpper(temp)
+						password += temp
+					}
 				}
 			}
+			return password
 		}
-		return password
 	} else {
-		for i := 0; i <= n; i++ {
-			var uplow = 0
-			var temp = ""
-
-			uplow = rand.Int()
-			if i%4 == 0 && i != n && i != 0 {
-
-				if uplow%2 == 0 {
-					password += lettersAndSpecialAndNumbers[rand.Intn(48)] //showed me how to use rand.Int https://stackoverflow.com/questions/22892120/how-to-generate-a-random-string-of-a-fixed-length-in-go
-					password += "-"
-				}
-				if uplow%2 != 0 {
-					temp = lettersAndSpecialAndNumbers[rand.Intn(48)]
-					temp = strings.ToUpper(temp)
-					password += temp
-					password += "-"
-				}
-
-			}
-			if i%4 != 0 || i == n {
-				if uplow%2 == 0 {
-					password += lettersAndSpecialAndNumbers[rand.Intn(48)] //showed me how to use rand.Int https://stackoverflow.com/questions/22892120/how-to-generate-a-random-string-of-a-fixed-length-in-go
-				}
-				if uplow%2 != 0 {
-					temp = lettersAndSpecialAndNumbers[rand.Intn(48)]
-					temp = strings.ToUpper(temp)
-					password += temp
-				}
-			}
-		}
-		return password
+		Loggers.LogWarning.Println("please enter a number between 1 and 16")
+		return ""
 	}
 }
