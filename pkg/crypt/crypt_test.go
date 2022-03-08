@@ -1,10 +1,10 @@
 package crypt
 
-// import (
-// 	"golock3r/server/authtool"
-// 	"golock3r/server/logger"
-// 	"testing"
-// )
+import (
+	"golock3r/server/authtool"
+	"golock3r/server/logger"
+	"testing"
+)
 
 var sample_1 = "The quick brown fox jumps over the lazy dog."
 var sample_2 = "SomeUsernameHere"
