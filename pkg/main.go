@@ -105,6 +105,7 @@ func main() {
 					fmt.Println("\nWrote entry to database!")
 
 				case "4":
+					// db.ReadFromUsername("joe_cool")
 					fmt.Println("\nHere's where you'd delete an entry by title")
 
 				default:
@@ -123,8 +124,3 @@ func main() {
 		}
 	}
 }
-
-// func createUser(username string, password string) {
-// 	authtool.HashUserPassword(username, password, 12)
-// 	authtool.WriteFile()
-// }

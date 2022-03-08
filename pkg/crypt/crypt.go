@@ -8,6 +8,8 @@ import (
 	"crypto/rand"
 	"golock3r/server/logger"
 	"io"
+	"strconv"
+	"strings"
 )
 
 var Loggers *logger.Loggers
@@ -53,6 +55,50 @@ func CleanStringData(data [][]byte) string {
 		}
 	}
 	return str_encoded
+}
+
+// Convert byte data to a string. Does not strip padding
+func ToString(data [][]byte) string {
+	str := ""
+
+	for _, block := range data {
+		for _, b := range block {
+			str += string(b)
+		}
+	}
+	return str
+}
+
+// Converts byte data into a string of int values. Used for storage
+func FormatStorage(data [][]byte) string {
+	str := ""
+
+	for _, block := range data {
+		for _, b := range block {
+			str += strconv.Itoa(int(b)) + " "
+		}
+	}
+	return str
+}
+
+// Converts storage data into byte array of 32 byte blocks
+func FormatRaw(data string) [][]byte {
+	var block []byte
+	var chunks [][]byte
+	i := 1
+	raw := strings.Split(data, " ")
+	raw = raw[:len(raw)-1]
+
+	for _, str_val := range raw {
+		val, _ := strconv.Atoi(str_val)
+		block = append(block, byte(val))
+		if i%32 == 0 {
+			chunks = append(chunks, block)
+			block = nil
+		}
+		i += 1
+	}
+	return chunks
 }
 
 // Given a key and a byte array of chunked input of plaintext data (16 bytes each),
