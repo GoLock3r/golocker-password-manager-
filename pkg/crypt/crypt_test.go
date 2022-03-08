@@ -3,12 +3,18 @@ package crypt
 import (
 	"golock3r/server/authtool"
 	"golock3r/server/logger"
+	"os"
 	"testing"
 )
 
 var sample_1 = "The quick brown fox jumps over the lazy dog."
 var sample_2 = "SomeUsernameHere"
 var sample_3 = "VerySecurePassword!123"
+
+func removeFiles() {
+	os.Remove("testlogins.txt")
+	os.Remove("testlogs.txt")
+}
 
 // Helper method to test the equality of two byte arrays
 func checkEquality(a []byte, b []byte) bool {
@@ -27,6 +33,7 @@ func checkEquality(a []byte, b []byte) bool {
 // Helper method to receive a unique key from a validated user
 func getKey() []byte {
 	Loggers = logger.CreateLoggers("testlogs.txt")
+	authtool.LoginFile = "testlogins.txt"
 	authtool.Loggers = Loggers
 	authtool.CreateUser("Test", "Password")
 	return authtool.GetKey("Test", "Password")
@@ -145,4 +152,9 @@ func TestEncryptDecryptFormatting(t *testing.T) {
 	if ToString(dec1) != ToString(chunk_sample_1) {
 		t.Errorf("Formatting is interfering with decryption. Decrypted output does not equal input")
 	}
+}
+
+func TestCleanup(t *testing.T) {
+	// Remove test logs & login files at the end of execution
+	removeFiles()
 }
