@@ -151,8 +151,3 @@ func main() {
 		}
 	}
 }
-
-// func createUser(username string, password string) {
-// 	authtool.HashUserPassword(username, password, 12)
-// 	authtool.WriteFile()
-// }
