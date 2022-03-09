@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"golock3r/server/logger"
+	"strings"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -63,12 +64,12 @@ func WriteEntry(ent entry) {
 	}
 }
 
-func ReadFromTitle(title string) {
-
+func TestPrint(test string) string {
+	return test
 }
 
-func ReadFromUsername(username string) {
-	filter := bson.D{{"username", username}} //found help on mongo db documentation https://docs.mongodb.com/drivers/go/current/fundamentals/crud/query-document/
+func ReadFromTitle(entryTitle string) {
+	filter := bson.D{{Key: "title", Value: entryTitle}}
 	cursor, err := col.Find(context.TODO(), filter)
 	if err != nil {
 		panic(err)
@@ -78,8 +79,31 @@ func ReadFromUsername(username string) {
 		panic(err)
 	}
 	for _, result := range results {
-		fmt.Println(result)
+		fmt.Println("")
+		for _, field := range result {
+			fmt.Println(field)
+		}
 	}
+	fmt.Println("")
+}
+
+func ReadFromUsername(entryUsername string) {
+	filter := bson.D{{Key: "username", Value: entryUsername}} //found help on mongo db documentation https://docs.mongodb.com/drivers/go/current/fundamentals/crud/query-document/
+	cursor, err := col.Find(context.TODO(), filter)
+	if err != nil {
+		panic(err)
+	}
+	var results []bson.D
+	if err = cursor.All(context.TODO(), &results); err != nil {
+		panic(err)
+	}
+	for _, result := range results {
+		fmt.Println("")
+		for _, field := range result {
+			fmt.Println(field)
+		}
+	}
+	fmt.Println("")
 }
 
 func ReadAll() {
@@ -105,10 +129,30 @@ func ReadAll() {
 	}
 }
 
-func UpdateEntry() {
+// Resource used: https://golangdocs.com/mongodb-golang
+func UpdateEntry(entryTitle string) {
+	filter := bson.D{{Key: "title", Value: entryTitle}}
+	var input1, input2 = "", ""
+	fmt.Println("Enter the field you would like to update: ")
+	fmt.Scanln(&input1)
+	fmt.Println("Enter the new value for your chosen field: ")
+	fmt.Scanln(&input2)
+	input1 = strings.TrimSpace(input1)
+	input2 = strings.TrimSpace(input2)
 
+	update := bson.D{{Key: "$set", Value: bson.D{{Key: input1, Value: input2}}}}
+
+	_, err := col.UpdateOne(context.TODO(), filter, update)
+	if err != nil {
+		panic(err)
+	}
 }
 
-func DeleteEntry() {
-
+func DeleteEntry(entryTitle string) {
+	_, err := col.DeleteOne(context.TODO(), bson.D{{Key: "title", Value: entryTitle}})
+	if err != nil {
+		panic(err)
+	} else {
+		fmt.Println("Entry deleted.")
+	}
 }
