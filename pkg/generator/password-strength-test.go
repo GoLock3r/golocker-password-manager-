@@ -4,7 +4,7 @@ import (
 	"strings"
 )
 
-func passwordstren(password string) {
+func Passwordstren(password string) int {
 	var strength string
 	var length int
 	var hascap int
