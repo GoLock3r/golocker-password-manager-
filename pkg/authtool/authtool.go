@@ -186,6 +186,6 @@ func GetKey(username string, password string) []byte {
 		sha_hash.Write([]byte(keystring))
 		return sha_hash.Sum(nil)[0:32]
 	} else {
-		return []byte(nil)
+		return nil
 	}
 }

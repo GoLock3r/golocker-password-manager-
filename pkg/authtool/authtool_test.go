@@ -1,4 +1,4 @@
-// Test authtool package memebers
+// Test authtool package members
 package authtool
 
 import (
@@ -30,21 +30,31 @@ func TestUserValidation(t *testing.T) {
 
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	LoginFile = "testlogins.txt"
-	// Attempt to create a user
-	if !CreateUser(username, password) {
-		t.Errorf("Could't create user")
+
+	var logins = []struct {
+		username string
+		password string
+		valid    bool
+	}{
+		{"Username", "Password", true},
+		{"Username", "password", false},
+		{"username", "Password", false},
+		{"Other_Username", "Some_other_password", true},
 	}
-	// Verify that validate user works as intended
-	if !ValidateUser(username, password) {
-		t.Errorf("ValidateUser() false negative. Got false, wanted true")
+	// Create users
+	for _, login := range logins {
+		if login.valid {
+			// Attempt to create a user
+			if !CreateUser(login.username, login.password) {
+				t.Error("Could't create user", login.username)
+			}
+		}
 	}
-	// Check false positives
-	if ValidateUser(username, "InvalidPassword") {
-		t.Errorf("ValidateUser() false positive on invalid password. Got true, wanted false")
-	}
-	// Check false positives
-	if ValidateUser("InvalidUsername", password) {
-		t.Errorf("ValidateUser() false positive on invalid username. Got true, wanted false")
+	// Attempt to sign in into specified valid & invalid accounts
+	for _, login := range logins {
+		if is_valid := ValidateUser(login.username, login.password); login.valid != is_valid {
+			t.Error("ValidateUser() Error. Wanted", login.valid, "got", is_valid, "for username", login.username, "with password", login.password)
+		}
 	}
 }
 
@@ -55,11 +65,11 @@ func TestDuplicateUserCreation(t *testing.T) {
 	LoginFile = "testlogins.txt"
 	// Create a user
 	if !CreateUser(username, password) {
-		t.Errorf("Could't create user")
+		t.Error("Could't create user")
 	}
 	// Create the same user again (should not happen)
 	if CreateUser(username, password) {
-		t.Errorf("")
+		t.Error("Creating a duplicate user for username", username)
 	}
 }
 
@@ -68,6 +78,7 @@ func TestDeleteUser(t *testing.T) {
 
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	LoginFile = "testlogins.txt"
+
 	// Create a user
 	if !CreateUser("Username_1", "password1") {
 		t.Errorf("Could't create user")
