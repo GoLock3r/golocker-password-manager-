@@ -40,7 +40,7 @@ func main() {
 		password, _ := terminal.ReadPassword(0)
 
 		if authtool.ValidateUser(username, string(password)) {
-			key := authtool.GetKey(username, string(password))
+			//key := authtool.GetKey(username, string(password))
 
 			fmt.Println("\n\nWelcome", username)
 
@@ -52,8 +52,10 @@ func main() {
 
 				fmt.Println("Type 1 to view all entries")
 				fmt.Println("Type 2 to search for an entry by title")
-				fmt.Println("Type 3 to create an entry")
-				fmt.Println("Type 4 to delete an entry")
+				fmt.Println("Type 3 to search for an entry by username")
+				fmt.Println("Type 4 to create an entry")
+				fmt.Println("Type 5 to update an entry")
+				fmt.Println("Type 6 to delete an entry")
 				fmt.Println("Type 0 to logout")
 				fmt.Print("> ")
 				fmt.Scanln(&input)
@@ -68,9 +70,22 @@ func main() {
 					db.ReadAll()
 
 				case "2":
-					fmt.Println("\nHere's where you'd enter a title to search by")
+					var title string = ""
+					reader := bufio.NewReader(os.Stdin)
+					fmt.Println("\nPlease enter the title by which you'd like to search: ")
+					title, _ = reader.ReadString('\n')
+					title = strings.TrimSpace(title)
+					db.ReadFromTitle(title)
 
 				case "3":
+					var username string = ""
+					reader := bufio.NewReader(os.Stdin)
+					fmt.Println("\nPlease enter the username by which you'd like to search: ")
+					username, _ = reader.ReadString('\n')
+					username = strings.TrimSpace(username)
+					db.ReadFromUsername(username)
+
+				case "4":
 					var title, url, username, other string = "", "", "", ""
 					reader := bufio.NewReader(os.Stdin)
 
@@ -78,34 +93,47 @@ func main() {
 					fmt.Print("Entry Title: ")
 					title, _ = reader.ReadString('\n')
 					title = strings.TrimSpace(title)
-					title = crypt.CleanStringData(crypt.Encrypt(key, crypt.ChunkStringData(title)))
+					//title = crypt.CleanStringData(crypt.Encrypt(key, crypt.ChunkStringData(title)))
 
 					fmt.Print("Website URL: ")
 					url, _ = reader.ReadString('\n')
 					url = strings.TrimSpace(url)
-					url = crypt.CleanStringData(crypt.Encrypt(key, crypt.ChunkStringData(url)))
+					//url = crypt.CleanStringData(crypt.Encrypt(key, crypt.ChunkStringData(url)))
 
 					fmt.Print("Notes: ")
 					other, _ = reader.ReadString('\n')
 					other = strings.TrimSpace(other)
-					other = crypt.CleanStringData(crypt.Encrypt(key, crypt.ChunkStringData(other)))
+					//other = crypt.CleanStringData(crypt.Encrypt(key, crypt.ChunkStringData(other)))
 
 					fmt.Print("Username: ")
 					username, _ = reader.ReadString('\n')
 					username = strings.TrimSpace(username)
-					username = crypt.CleanStringData(crypt.Encrypt(key, crypt.ChunkStringData(username)))
+					//username = crypt.CleanStringData(crypt.Encrypt(key, crypt.ChunkStringData(username)))
 
 					fmt.Print("Password: ")
 					entry_password, _ := terminal.ReadPassword(0)
 					str_password := string(entry_password)
-					str_password = crypt.CleanStringData(crypt.Encrypt(key, crypt.ChunkStringData(str_password)))
+					//str_password = crypt.CleanStringData(crypt.Encrypt(key, crypt.ChunkStringData(str_password)))
 
 					db.WriteEntry(db.CreateEntry(url, title, username, str_password, other))
 
 					fmt.Println("\nWrote entry to database!")
 
-				case "4":
-					fmt.Println("\nHere's where you'd delete an entry by title")
+				case "5":
+					var title string = ""
+					reader := bufio.NewReader(os.Stdin)
+					fmt.Println("\nPlease enter the title of the entry you'd like to update: ")
+					title, _ = reader.ReadString('\n')
+					title = strings.TrimSpace(title)
+					db.UpdateEntry(title)
+
+				case "6":
+					var title string = ""
+					reader := bufio.NewReader(os.Stdin)
+					fmt.Println("\nPlease enter the title of the entry you'd like to delete: ")
+					title, _ = reader.ReadString('\n')
+					title = strings.TrimSpace(title)
+					db.DeleteEntry(title)
 
 				default:
 					fmt.Println("\nInvalid input. Try again.")
@@ -123,8 +151,3 @@ func main() {
 		}
 	}
 }
-
-// func createUser(username string, password string) {
-// 	authtool.HashUserPassword(username, password, 12)
-// 	authtool.WriteFile()
-// }
