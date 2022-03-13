@@ -5,7 +5,7 @@ import (
 )
 
 func Passwordstren(password string) int {
-	var strength string
+	var strength int
 	var length int
 	var hascap int
 	var hasspec int
@@ -39,13 +39,16 @@ func Passwordstren(password string) int {
 	}
 
 	if length+hascap+hasspec+hasnum+hasnodicword == 4 {
-		strength = "your password is decent"
+		strength =length+hascap+hasspec+hasnum+hasnodicword
+		//maybe log the strength of password decent
 	}
 	if length+hascap+hasspec+hasnum+hasnodicword <= 3 {
-		strength = "your password sucks figure it out"
+		strength = length+hascap+hasspec+hasnum+hasnodicword
+		// weaaak
 	}
 	if length+hascap+hasspec+hasnum+hasnodicword == 5 {
-		strength = "eyyyyy lets get it your password is strong"
+		strength = length+hascap+hasspec+hasnum+hasnodicword
+		//strongest we can tell most likely 
 	}
 	return strength
 }
