@@ -40,7 +40,7 @@ func main() {
 		password, _ := terminal.ReadPassword(0)
 
 		if authtool.ValidateUser(username, string(password)) {
-			//key := authtool.GetKey(username, string(password))
+			key := authtool.GetKey(username, string(password))
 
 			fmt.Println("\n\nWelcome", username)
 
@@ -67,7 +67,12 @@ func main() {
 
 				case "1":
 					fmt.Println("\nViewing all entries")
-					db.ReadAll()
+					for _, entry := range db.ReadAll() {
+						for k, v := range db.DecryptEntry(key, entry) {
+							fmt.Println(k, v)
+						}
+						fmt.Println("")
+					}
 
 				case "2":
 					var title string = ""
@@ -93,29 +98,32 @@ func main() {
 					fmt.Print("Entry Title: ")
 					title, _ = reader.ReadString('\n')
 					title = strings.TrimSpace(title)
-					//title = crypt.CleanStringData(crypt.Encrypt(key, crypt.ChunkStringData(title)))
 
 					fmt.Print("Website URL: ")
 					url, _ = reader.ReadString('\n')
 					url = strings.TrimSpace(url)
-					//url = crypt.CleanStringData(crypt.Encrypt(key, crypt.ChunkStringData(url)))
 
 					fmt.Print("Notes: ")
 					other, _ = reader.ReadString('\n')
 					other = strings.TrimSpace(other)
-					//other = crypt.CleanStringData(crypt.Encrypt(key, crypt.ChunkStringData(other)))
 
 					fmt.Print("Username: ")
 					username, _ = reader.ReadString('\n')
 					username = strings.TrimSpace(username)
-					//username = crypt.CleanStringData(crypt.Encrypt(key, crypt.ChunkStringData(username)))
 
 					fmt.Print("Password: ")
 					entry_password, _ := terminal.ReadPassword(0)
 					str_password := string(entry_password)
-					//str_password = crypt.CleanStringData(crypt.Encrypt(key, crypt.ChunkStringData(str_password)))
 
-					db.WriteEntry(db.CreateEntry(url, title, username, str_password, other))
+					entry := map[string]string{
+						"title":         title,
+						"private_url":   url,
+						"private_notes": other,
+						"username":      username,
+						"password":      str_password,
+					}
+
+					db.WriteEntry(db.EncryptEntry(key, entry))
 
 					fmt.Println("\nWrote entry to database!")
 
@@ -125,7 +133,7 @@ func main() {
 					fmt.Println("\nPlease enter the title of the entry you'd like to update: ")
 					title, _ = reader.ReadString('\n')
 					title = strings.TrimSpace(title)
-					db.UpdateEntry(title)
+					//db.UpdateEntry(title) going to need to update this line at some point to reflect changes hunter made to code to get ready for imput from front end
 
 				case "6":
 					var title string = ""
