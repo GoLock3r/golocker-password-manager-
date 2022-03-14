@@ -7,6 +7,13 @@ import (
 	"testing"
 )
 
+var samples = [6]string{"The quick brown fox jumps over the lazy dog.",
+	"SomeUsernameHere",
+	"VerySecurePassword!123",
+	" ",
+	"",
+	string(byte(0))}
+
 var sample_1 = "The quick brown fox jumps over the lazy dog."
 var sample_2 = "SomeUsernameHere"
 var sample_3 = "VerySecurePassword!123"
@@ -14,20 +21,6 @@ var sample_3 = "VerySecurePassword!123"
 func removeFiles() {
 	os.Remove("testlogins.txt")
 	os.Remove("testlogs.txt")
-}
-
-// Helper method to test the equality of two byte arrays
-func checkEquality(a []byte, b []byte) bool {
-	if len(a) != len(b) {
-		return false
-	} else {
-		for i := 0; i < len(a); i++ {
-			if a[i] != b[i] {
-				return false
-			}
-		}
-	}
-	return true
 }
 
 // Helper method to receive a unique key from a validated user
@@ -39,27 +32,16 @@ func getKey() []byte {
 	return authtool.GetKey("Test", "Password")
 }
 
-func TestChunkData(t *testing.T) {
-	chunk_sample_1 := ChunkStringData(sample_1)
-	chunk_sample_2 := ChunkStringData(sample_2)
-	chunk_sample_3 := ChunkStringData(sample_3)
-	// Test sample 1
-	for _, block := range chunk_sample_1 {
-		if len(block) != 16 {
-			t.Errorf("Chunks should be of size 16")
+func TestChunkDataSize(t *testing.T) {
+	// Chunks should be of size 16
+	for _, sample := range samples {
+		chunk_sample := ChunkStringData(sample)
+		for _, block := range chunk_sample {
+			if len(block) != 16 {
+				t.Errorf("Chunks should be of size 16")
+			}
 		}
-	}
-	// Test sample 2
-	for _, block := range chunk_sample_2 {
-		if len(block) != 16 {
-			t.Errorf("Chunks should be of size 16")
-		}
-	}
-	// Test sample 3
-	for _, block := range chunk_sample_3 {
-		if len(block) != 16 {
-			t.Errorf("Chunks should be of size 16")
-		}
+
 	}
 }
 
@@ -67,10 +49,22 @@ func TestStringFunctions(t *testing.T) {
 	chunk_sample_1 := ChunkStringData(sample_1)
 	chunk_sample_2 := ChunkStringData(sample_2)
 	chunk_sample_3 := ChunkStringData(sample_3)
-	// Test sample 1
-	if CleanStringData(chunk_sample_1) != sample_1 {
-		t.Errorf("CleanStringData() not clearing padding or some other issue.")
+
+	for _, sample := range samples {
+		chunk_sample := ChunkStringData(sample)
+
+		if CleanStringData(chunk_sample) != sample {
+			t.Error("CleanStringData() not clearing padding or some other issue.")
+		}
+
+		if ToString(chunk_sample) == sample_1 {
+			t.Errorf("ToString should not remove padding.")
+		}
+
 	}
+
+	// Test sample 1
+
 	// Test sample 2
 	if CleanStringData(chunk_sample_2) != sample_2 {
 		t.Errorf("CleanStringData() not clearing padding or some other issue.")
@@ -80,9 +74,7 @@ func TestStringFunctions(t *testing.T) {
 		t.Errorf("CleanStringData() not clearing padding or some other issue.")
 	}
 	// Should not equal as ToString does not remove padding
-	if ToString(chunk_sample_1) == sample_1 {
-		t.Errorf("ToString should not remove padding")
-	}
+
 }
 
 func TestFormats(t *testing.T) {
@@ -152,6 +144,23 @@ func TestEncryptDecryptFormatting(t *testing.T) {
 	if ToString(dec1) != ToString(chunk_sample_1) {
 		t.Errorf("Formatting is interfering with decryption. Decrypted output does not equal input")
 	}
+}
+
+func TestNewChanges(t *testing.T) {
+	key := getKey()
+	chunk_sample_1 := ChunkStringData(sample_2)
+
+	enc1_fmt := FormatHex(Encrypt(key, chunk_sample_1))
+	enc1_raw := FormatHexToRaw(enc1_fmt)
+	t.Error(enc1_fmt)
+	t.Error(HexToString(enc1_raw))
+
+	dec1 := Decrypt(key, enc1_raw)
+	t.Error(CleanStringData(dec1), CleanStringData(chunk_sample_1))
+
+	e := EncryptStringToHex(key, "Testing")
+	t.Error(e)
+	t.Error(DecryptStringFromHex(key, e))
 }
 
 func TestCleanup(t *testing.T) {
