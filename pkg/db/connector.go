@@ -165,13 +165,15 @@ func ReadAll() []map[string]string {
 }
 
 // Resource used: https://golangdocs.com/mongodb-golang
-func UpdateEntry(entryTitle string) {
+func UpdateEntry(entryTitle string, updateField string, updateEntry string) bool {
 	filter := bson.D{{Key: "title", Value: entryTitle}}
 	var input1, input2 = "", ""
-	fmt.Println("Enter the field you would like to update: ")
-	fmt.Scanln(&input1)
-	fmt.Println("Enter the new value for your chosen field: ")
-	fmt.Scanln(&input2)
+	// fmt.Println("Enter the field you would like to update: ")
+	// fmt.Scanln(&input1)
+	// fmt.Println("Enter the new value for your chosen field: ")
+	// fmt.Scanln(&input2)
+	input1 = updateField
+	input2 = updateEntry
 	input1 = strings.TrimSpace(input1)
 	input2 = strings.TrimSpace(input2)
 
@@ -180,7 +182,9 @@ func UpdateEntry(entryTitle string) {
 	_, err := col.UpdateOne(context.TODO(), filter, update)
 	if err != nil {
 		Loggers.LogError.Println("Entry couldn't be updated", err)
+		return false
 	}
+	return true
 }
 
 func DeleteEntry(entryTitle string) bool {

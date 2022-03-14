@@ -102,20 +102,7 @@ Connect("test")
 
 func TestReadAll(t *testing.T) {
 Connect("test")
-	// entry := map[string]string{
-	// 	"title":        "Test Title",
-	// 	"password":     "VerySecurePassword",
-	// 	"username":     "Test",
-	// 	"private_note": "There is a private note here! Don't tell your dad!",
-	// 	"public_note":  "This is a public note. Feel free to share with your pop!",
-	// }
-	// entry2 := map[string]string{
-	// 	"title":        "Title",
-	// 	"password":     "VerySecurePassword",
-	// 	"username":     "Test1",
-	// 	"private_note": "There is a private note here! Don't tell your dad!",
-	// 	"public_note":  "This is a public note. Feel free to share with your pop!",
-	// }
+	
 	 ra := ReadAll()
 
 	if ra == nil || len(ra) < 2 {
@@ -125,11 +112,18 @@ Connect("test")
 }
 
 func TestUpdate(t *testing.T) {
+	
+	if !UpdateEntry("title", "title", "testUpdate"){
+		t.Error("unable to update database entry")
+	}
 
 }
 
 func TestDelete(t *testing.T) {
-
+	if !DeleteEntry("Test"){
+		t.Error("unable to delete")
+	}
+	
 }
 
 func TestRemoveAll(t *testing.T) {
