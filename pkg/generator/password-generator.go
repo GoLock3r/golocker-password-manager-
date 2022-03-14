@@ -4,8 +4,6 @@
 // User has the option to have password contain special charaters including !@#$%^&*
 // Inclusivity of special characters depends on the websites that is used for what can be included
 // further changes to what characters can be included will grow depending on what websites allow
-// Then inputed length is not the final length the length of the password is break the password into chuncks of 4 add the -
-// as part of the length there will be the inputed length number of characters plus the dashes 
 
 package generator
 
