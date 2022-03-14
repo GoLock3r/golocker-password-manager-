@@ -68,9 +68,17 @@ func DecryptEntry(key []byte, entry map[string]string) map[string]string {
 	return dec_entry
 }
 
-// TODO Restate the above two functions, with varargs for 'labels' to encrypt. Encrypt labels if
-// Varargs exists, encrypt everything if no varargs are passed
-// TODO Functionality to exclude labels?
+// // Encrypt entries denoted by 'include_keys' variadict. If 'include_keys' is empty, default to above
+// // function's functionality (encrypt / decrypt anything that is labeled with 'password' or contains 'private')
+// // TODO replace above functions with these
+// func EncryptEntry(key []byte, entry map[string]string, include_keys ...string) map[string]string {
+
+// }
+
+// // Decrypt entries denoted by 'include_keys' variadict.
+// func DecryptEntry(key []byte, entry map[string]string, include_keys ...string) map[string]string {
+
+// }
 
 func WriteEntry(entry map[string]string) bool {
 	to_insert := bson.M{}
