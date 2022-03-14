@@ -89,13 +89,13 @@ func TestReadFromTitle(t *testing.T) {
 	Connect("test")
 	rt := ReadFromTitle("Test Title")
 
-	if rt == nil || rt[0]["title"] != "Test Title"{
+	if rt == nil || rt[0]["title"] != "Test Title" {
 		t.Error("expected one result got more than one or no result")
 	}
 }
 
 func TestReadFromUsername(t *testing.T) {
-Connect("test")
+	Connect("test")
 	ru := ReadFromUsername("Test")
 
 	if ru == nil || ru[0]["username"] != "Test" {
@@ -103,32 +103,8 @@ Connect("test")
 	}
 }
 
-<<<<<<< HEAD
-// 	// entry := map[string]string{
-// 	// 	"title":        "Test Title",
-// 	// 	"password":     "VerySecurePassword",
-// 	// 	"username":     "Test",
-// 	// 	"private_note": "There is a private note here! Don't tell your dad!",
-// 	// 	"public_note":  "This is a public note. Feel free to share with your pop!",
-// 	// }
-// 	// entry2 := map[string]string{
-// 	// 	"title":        "Title",
-// 	// 	"password":     "VerySecurePassword",
-// 	// 	"username":     "Test1",
-// 	// 	"private_note": "There is a private note here! Don't tell your dad!",
-// 	// 	"public_note":  "This is a public note. Feel free to share with your pop!",
-// 	// }
-// 	ru := ReadFromUsername("Test")
-//  if ru["username"] != "Test" {
-
-//  }
-// 	if ru == nil || ru[0] != "Test" {
-// 		t.Error("unexpected results expected to find entry found either a null entry or the wrong entry")
-// 	}
-// }
-=======
 func TestReadAll(t *testing.T) {
-Connect("test")
+	Connect("test")
 	// entry := map[string]string{
 	// 	"title":        "Test Title",
 	// 	"password":     "VerySecurePassword",
@@ -143,10 +119,9 @@ Connect("test")
 	// 	"private_note": "There is a private note here! Don't tell your dad!",
 	// 	"public_note":  "This is a public note. Feel free to share with your pop!",
 	// }
-	 ra := ReadAll()
+	ra := ReadAll()
 
 	if ra == nil || len(ra) < 2 {
->>>>>>> 6ff8d198397b2726dc391cd5b917ec5f5b2d679d
 
 		t.Error("unexpected results expected to find two")
 	}
