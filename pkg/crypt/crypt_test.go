@@ -154,6 +154,23 @@ func TestEncryptDecryptFormatting(t *testing.T) {
 	}
 }
 
+func TestNewChanges(t *testing.T) {
+	key := getKey()
+	chunk_sample_1 := ChunkStringData(sample_2)
+
+	enc1_fmt := FormatHex(Encrypt(key, chunk_sample_1))
+	enc1_raw := FormatHexToRaw(enc1_fmt)
+	t.Error(enc1_fmt)
+	t.Error(HexToString(enc1_raw))
+
+	dec1 := Decrypt(key, enc1_raw)
+	t.Error(CleanStringData(dec1), CleanStringData(chunk_sample_1))
+
+	e := EncryptStringToHex(key, "Testing")
+	t.Error(e)
+	t.Error(DecryptStringFromHex(key, e))
+}
+
 func TestCleanup(t *testing.T) {
 	// Remove test logs & login files at the end of execution
 	removeFiles()
