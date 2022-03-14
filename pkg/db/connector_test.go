@@ -22,9 +22,12 @@ func getKey() []byte {
 	return authtool.GetKey("Test", "Password")
 }
 
-func TestConnect(t *testing.T) {
-
-}
+// func TestConnect(t *testing.T) {
+// 	Loggers = logger.CreateLoggers("testlogs.txt")
+// 	if !Connect("demo") {
+// 		t.Error("Failed to connect to database.")
+// 	}
+// }
 
 func TestEncryptDecryptEntry(t *testing.T) {
 	entry := map[string]string{
@@ -55,6 +58,8 @@ func TestEncryptDecryptEntry(t *testing.T) {
 }
 
 func TestWriteEntry(t *testing.T) {
+
+	Loggers = logger.CreateLoggers("testlogs.txt")
 
 	Connect("test")
 
@@ -120,7 +125,9 @@ func TestWriteEntry(t *testing.T) {
 // 	// 	"public_note":  "This is a public note. Feel free to share with your pop!",
 // 	// }
 // 	ru := ReadFromUsername("Test")
+//  if ru["username"] != "Test" {
 
+//  }
 // 	if ru == nil || ru[0] != "Test" {
 // 		t.Error("unexpected results expected to find entry found either a null entry or the wrong entry")
 // 	}
