@@ -23,7 +23,7 @@ func getKey() []byte {
 }
 
 func TestConnect(t *testing.T) {
-	if !Connect("demo"){
+	if !Connect("demo") {
 		t.Error("Failed to connect to database")
 	}
 }
@@ -86,13 +86,13 @@ func TestReadFromTitle(t *testing.T) {
 	Connect("test")
 	rt := ReadFromTitle("Test Title")
 
-	if rt == nil || rt[0]["title"] != "Test Title"{
+	if rt == nil || rt[0]["title"] != "Test Title" {
 		t.Error("expected one result got more than one or no result")
 	}
 }
 
 func TestReadFromUsername(t *testing.T) {
-Connect("test")
+	Connect("test")
 	ru := ReadFromUsername("Test")
 
 	if ru == nil || ru[0]["username"] != "Test" {
@@ -101,9 +101,9 @@ Connect("test")
 }
 
 func TestReadAll(t *testing.T) {
-Connect("test")
-	
-	 ra := ReadAll()
+	Connect("test")
+
+	ra := ReadAll()
 
 	if ra == nil || len(ra) < 2 {
 
@@ -112,18 +112,18 @@ Connect("test")
 }
 
 func TestUpdate(t *testing.T) {
-	
-	if !UpdateEntry("title", "title", "testUpdate"){
+
+	if !UpdateEntry("title", "title", "testUpdate") {
 		t.Error("unable to update database entry")
 	}
 
 }
 
 func TestDelete(t *testing.T) {
-	if !DeleteEntry("Test"){
+	if !DeleteEntry("Test") {
 		t.Error("unable to delete")
 	}
-	
+
 }
 
 func TestRemoveAll(t *testing.T) {
