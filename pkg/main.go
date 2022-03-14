@@ -133,7 +133,7 @@ func main() {
 					fmt.Println("\nPlease enter the title of the entry you'd like to update: ")
 					title, _ = reader.ReadString('\n')
 					title = strings.TrimSpace(title)
-					db.UpdateEntry(title)
+					//db.UpdateEntry(title) going to need to update this line at some point to reflect changes hunter made to code to get ready for imput from front end
 
 				case "6":
 					var title string = ""
