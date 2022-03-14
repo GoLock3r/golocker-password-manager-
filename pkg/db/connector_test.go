@@ -23,6 +23,7 @@ func getKey() []byte {
 }
 
 func TestConnect(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
 	if !Connect("demo") {
 		t.Error("Failed to connect to database")
 	}

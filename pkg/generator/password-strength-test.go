@@ -39,16 +39,16 @@ func Passwordstren(password string) int {
 	}
 
 	if length+hascap+hasspec+hasnum+hasnodicword == 4 {
-		strength =length+hascap+hasspec+hasnum+hasnodicword
+		strength = length + hascap + hasspec + hasnum + hasnodicword
 		//maybe log the strength of password decent
 	}
 	if length+hascap+hasspec+hasnum+hasnodicword <= 3 {
-		strength = length+hascap+hasspec+hasnum+hasnodicword
+		strength = length + hascap + hasspec + hasnum + hasnodicword
 		// weaaak
 	}
 	if length+hascap+hasspec+hasnum+hasnodicword == 5 {
-		strength = length+hascap+hasspec+hasnum+hasnodicword
-		//strongest we can tell most likely 
+		strength = length + hascap + hasspec + hasnum + hasnodicword
+		//strongest we can tell most likely
 	}
 	return strength
 }
