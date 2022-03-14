@@ -6,7 +6,6 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/rand"
-	"encoding/hex"
 	"golock3r/server/logger"
 	"io"
 	"strconv"
@@ -70,7 +69,6 @@ func ToString(data [][]byte) string {
 	return str
 }
 
-// formatstorage and formatraw are fucking nerds get rid of them
 // Converts byte data into a string of int values. Used for storage
 func FormatStorage(data [][]byte) string {
 	str := ""
@@ -101,43 +99,6 @@ func FormatRaw(data string) [][]byte {
 		i += 1
 	}
 	return chunks
-}
-
-func FormatHex(data [][]byte) string {
-	str := ""
-
-	for _, block := range data {
-		str += hex.EncodeToString(block)
-	}
-	return str
-}
-
-func FormatHexToRaw(data string) [][]byte {
-	var block []byte
-	var chunks [][]byte
-	i := 1
-
-	byte_data, _ := hex.DecodeString(data)
-
-	for _, b := range byte_data {
-		block = append(block, b)
-		if i%32 == 0 {
-			chunks = append(chunks, block)
-			block = nil
-		}
-		i += 1
-	}
-	return chunks
-}
-
-func HexToString(data [][]byte) string {
-	str := ""
-
-	for _, block := range data {
-		val, _ := hex.DecodeString(string(block))
-		str += string(val)
-	}
-	return str
 }
 
 // Given a key and a byte array of chunked input of plaintext data (16 bytes each),
@@ -185,16 +146,4 @@ func Decrypt(key []byte, data [][]byte) [][]byte {
 		plaintext = append(plaintext, ct)
 	}
 	return plaintext
-}
-
-func EncryptStringToHex(key []byte, data string) string {
-	chunk_data := ChunkStringData(data)
-	enc := Encrypt(key, chunk_data)
-	return FormatHex(enc)
-}
-
-func DecryptStringFromHex(key []byte, data string) string {
-	chunk_data := FormatHexToRaw(data)
-	dec := Decrypt(key, chunk_data)
-	return CleanStringData(dec)
 }
