@@ -205,17 +205,6 @@ func DeleteEntry(entryTitle string) bool {
 		return true
 	}
 }
-<<<<<<< HEAD
-func RemoveAll() bool {
-	allEntries := ReadAll()
-
-	for i,entry := range allEntries {
-	
-		deleteEntry :=	DeleteEntry(allEntries[i][entry["title"]])
-		if !deleteEntry {
-			return false
-		}
-=======
 
 func RemoveAll() bool {
 	_, err := col.DeleteMany(context.TODO(), bson.D{{}})
@@ -225,14 +214,9 @@ func RemoveAll() bool {
 	} else {
 		Loggers.LogInfo.Println("Entries deleted")
 		return true
->>>>>>> 60c0840da43b54cbee3bfd3caeb2dc64ee7ff8ae
 	}
 	// allEntries := ReadAll()
 
-<<<<<<< HEAD
-	return true
-}
-=======
 	// for i, entry := range allEntries {
 
 	// 	deleteEntry := DeleteEntry(allEntries[i][entry["title"]])
@@ -241,4 +225,3 @@ func RemoveAll() bool {
 	// 	}
 	// }
 }
->>>>>>> 60c0840da43b54cbee3bfd3caeb2dc64ee7ff8ae
