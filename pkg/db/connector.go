@@ -206,15 +206,12 @@ func DeleteEntry(entryTitle string) bool {
 	}
 }
 func RemoveAll() bool {
-	allEntries := ReadAll()
-
-	for i, entry := range allEntries {
-
-		deleteEntry := DeleteEntry(allEntries[i][entry["title"]])
-		if !deleteEntry {
-			return false
-		}
+	_, err := col.DeleteMany(context.TODO(), bson.D{{}})
+	if err != nil {
+		Loggers.LogError.Println("Entries not deleted", err)
+		return false
+	} else {
+		Loggers.LogInfo.Println("Entries deleted")
+		return true
 	}
-
-	return true
 }
