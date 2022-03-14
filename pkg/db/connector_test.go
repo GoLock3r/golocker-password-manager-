@@ -23,12 +23,14 @@ func getKey() []byte {
 }
 
 func TestConnect(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
 	if !Connect("demo") {
 		t.Error("Failed to connect to database")
 	}
 }
 
 func TestEncryptDecryptEntry(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
 	entry := map[string]string{
 		"title":        "Test Title",
 		"password":     "VerySecurePassword",
@@ -57,7 +59,7 @@ func TestEncryptDecryptEntry(t *testing.T) {
 }
 
 func TestWriteEntry(t *testing.T) {
-
+	Loggers = logger.CreateLoggers("testlogs.txt")
 	Connect("test")
 
 	entry := map[string]string{
@@ -83,6 +85,7 @@ func TestWriteEntry(t *testing.T) {
 }
 
 func TestReadFromTitle(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
 	Connect("test")
 	rt := ReadFromTitle("Test Title")
 
@@ -92,6 +95,7 @@ func TestReadFromTitle(t *testing.T) {
 }
 
 func TestReadFromUsername(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
 	Connect("test")
 	ru := ReadFromUsername("Test")
 
@@ -101,6 +105,7 @@ func TestReadFromUsername(t *testing.T) {
 }
 
 func TestReadAll(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
 	Connect("test")
 
 	ra := ReadAll()
@@ -112,7 +117,7 @@ func TestReadAll(t *testing.T) {
 }
 
 func TestUpdate(t *testing.T) {
-
+	Loggers = logger.CreateLoggers("testlogs.txt")
 	if !UpdateEntry("title", "title", "testUpdate") {
 		t.Error("unable to update database entry")
 	}
@@ -120,6 +125,8 @@ func TestUpdate(t *testing.T) {
 }
 
 func TestDelete(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	Connect("test")
 	if !DeleteEntry("Test") {
 		t.Error("unable to delete")
 	}
@@ -127,6 +134,7 @@ func TestDelete(t *testing.T) {
 }
 
 func TestRemoveAll(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
 	Connect("test")
 	if !RemoveAll(){
 		t.Error("unable to remove all entries")
