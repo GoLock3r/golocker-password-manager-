@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"fmt"
+	"golock3r/server/crypt"
 	"golock3r/server/logger"
 	"strings"
 	"time"
@@ -17,16 +18,10 @@ var Loggers *logger.Loggers
 var col *mongo.Collection
 var ctx = context.TODO()
 
-type entry struct {
-	url      string
-	title    string
-	username string
-	password string
-	notes    string
-}
+var URI = "mongodb://localhost:27017"
 
-func Connect(collection string) {
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://localhost:27017"))
+func Connect(collection string) bool {
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(URI))
 
 	if err != nil {
 		Loggers.LogError.Println("Could not connect to database")
@@ -35,18 +30,30 @@ func Connect(collection string) {
 	err = client.Ping(ctx, nil)
 	if err != nil {
 		Loggers.LogError.Println("Could not ping database")
+		return false
 	} else {
 		Loggers.LogInfo.Println("Connected to database")
 	}
 	col = client.Database("golocker").Collection(collection)
+	return true
 }
 
-func CreateEntry(url string, title string, username string, password string, other string) entry {
-	var ent = entry{url, title, username, password, other}
-	return ent
+// Anything that is labeled 'password' or contains 'private' will be encrypted
+func EncryptEntry(key []byte, entry map[string]string) map[string]string {
+	crypt.Loggers = Loggers
+
+	enc_entry := make(map[string]string)
+
+	for k, v := range entry {
+		if k == "password" || strings.Contains(k, "private") {
+			enc_entry[k] = crypt.EncryptStringToHex(key, v)
+		} else {
+			enc_entry[k] = v
+		}
+	}
+	return enc_entry
 }
 
-<<<<<<< HEAD
 // Anything that is labeled 'password' or contains 'private' will be decrypted
 func DecryptEntry(key []byte, entry map[string]string) map[string]string {
 	crypt.Loggers = Loggers
@@ -82,31 +89,19 @@ func WriteEntry(entry map[string]string) bool {
 		to_insert[k] = v
 	}
 	to_insert["date"] = time.Now().String()
-=======
-func WriteEntry(ent entry) {
-	to_insert := bson.M{
-		"url":      ent.url,
-		"title":    ent.title,
-		"username": ent.username,
-		"password": ent.password,
-		"notes":    ent.notes,
-		"date":     time.Now().String()}
->>>>>>> 3fa676930dedbe0c91deaedefe28e81f718bfc10
 
 	result, err := col.InsertOne(ctx, to_insert)
 
 	if err != nil {
 		Loggers.LogError.Println("Could not write entry")
+		return false
 	} else {
 		Loggers.LogInfo.Println("Wrote entry", result)
+		return true
 	}
 }
 
-func TestPrint(test string) string {
-	return test
-}
-
-func ReadFromTitle(entryTitle string) {
+func ReadFromTitle(entryTitle string) []map[string]string {
 	filter := bson.D{{Key: "title", Value: entryTitle}}
 	cursor, err := col.Find(context.TODO(), filter)
 	if err != nil {
@@ -116,16 +111,20 @@ func ReadFromTitle(entryTitle string) {
 	if err = cursor.All(context.TODO(), &results); err != nil {
 		panic(err)
 	}
+
+	var results_map []map[string]string
+
 	for _, result := range results {
-		fmt.Println("")
+		val := make(map[string]string)
 		for _, field := range result {
-			fmt.Println(field)
+			val[field.Key] = fmt.Sprint(field.Value)
 		}
+		results_map = append(results_map, val)
 	}
-	fmt.Println("")
+	return results_map
 }
 
-func ReadFromUsername(entryUsername string) {
+func ReadFromUsername(entryUsername string) []map[string]string {
 	filter := bson.D{{Key: "username", Value: entryUsername}} //found help on mongo db documentation https://docs.mongodb.com/drivers/go/current/fundamentals/crud/query-document/
 	cursor, err := col.Find(context.TODO(), filter)
 	if err != nil {
@@ -135,46 +134,54 @@ func ReadFromUsername(entryUsername string) {
 	if err = cursor.All(context.TODO(), &results); err != nil {
 		panic(err)
 	}
+
+	var results_map []map[string]string
+
 	for _, result := range results {
-		fmt.Println("")
+		val := make(map[string]string)
 		for _, field := range result {
-			fmt.Println(field)
+			val[field.Key] = fmt.Sprint(field.Value)
 		}
+		results_map = append(results_map, val)
 	}
-	fmt.Println("")
+	return results_map
 }
 
-func ReadAll() {
+func ReadAll() []map[string]string {
 
 	cursor, err := col.Find(ctx, bson.D{})
 
 	if err != nil {
-		panic(err)
-		Loggers.LogError.Println("Could not read entries")
+		Loggers.LogError.Println("Could not read entries", err)
 	}
 	var results []bson.D
 
 	if err = cursor.All(ctx, &results); err != nil {
-		panic(err)
-		Loggers.LogError.Println("cursor error")
+		Loggers.LogError.Println("Cursor error", err)
 	}
 
+	var results_map []map[string]string
+
 	for _, result := range results {
+		val := make(map[string]string)
 		for _, field := range result {
-			fmt.Println(field)
+			val[field.Key] = fmt.Sprint(field.Value)
 		}
-		fmt.Println("")
+		results_map = append(results_map, val)
 	}
+	return results_map
 }
 
 // Resource used: https://golangdocs.com/mongodb-golang
-func UpdateEntry(entryTitle string) {
+func UpdateEntry(entryTitle string, updateField string, updateEntry string) bool {
 	filter := bson.D{{Key: "title", Value: entryTitle}}
 	var input1, input2 = "", ""
-	fmt.Println("Enter the field you would like to update: ")
-	fmt.Scanln(&input1)
-	fmt.Println("Enter the new value for your chosen field: ")
-	fmt.Scanln(&input2)
+	// fmt.Println("Enter the field you would like to update: ")
+	// fmt.Scanln(&input1)
+	// fmt.Println("Enter the new value for your chosen field: ")
+	// fmt.Scanln(&input2)
+	input1 = updateField
+	input2 = updateEntry
 	input1 = strings.TrimSpace(input1)
 	input2 = strings.TrimSpace(input2)
 
@@ -182,14 +189,15 @@ func UpdateEntry(entryTitle string) {
 
 	_, err := col.UpdateOne(context.TODO(), filter, update)
 	if err != nil {
-		panic(err)
+		Loggers.LogError.Println("Entry couldn't be updated", err)
+		return false
 	}
+	return true
 }
 
-func DeleteEntry(entryTitle string) {
+func DeleteEntry(entryTitle string) bool {
 	_, err := col.DeleteOne(context.TODO(), bson.D{{Key: "title", Value: entryTitle}})
 	if err != nil {
-<<<<<<< HEAD
 		Loggers.LogError.Println("Entry couldn't be deleted", err)
 		return false
 	} else {
@@ -197,29 +205,16 @@ func DeleteEntry(entryTitle string) {
 		return true
 	}
 }
-
 func RemoveAll() bool {
-	_, err := col.DeleteMany(context.TODO(), bson.D{{}})
-	if err != nil {
-		Loggers.LogError.Println("Entries not deleted", err)
-		return false
-	} else {
-		Loggers.LogInfo.Println("Entries deleted")
-		return true
-	}
-	// allEntries := ReadAll()
+	allEntries := ReadAll()
 
-	// for i, entry := range allEntries {
+	for i, entry := range allEntries {
 
-	// 	deleteEntry := DeleteEntry(allEntries[i][entry["title"]])
-	// 	if !deleteEntry {
-	// 		return false
-	// 	}
-	// }
-=======
-		panic(err)
-	} else {
-		fmt.Println("Entry deleted.")
+		deleteEntry := DeleteEntry(allEntries[i][entry["title"]])
+		if !deleteEntry {
+			return false
+		}
 	}
->>>>>>> 3fa676930dedbe0c91deaedefe28e81f718bfc10
+
+	return true
 }
