@@ -201,12 +201,12 @@ func RemoveAll() bool {
 	allEntries := ReadAll()
 
 	for i,entry := range allEntries {
-		if entry != nil{
-			DeleteEntry(allEntries[i][entry["title"]])
+	
+		deleteEntry :=	DeleteEntry(allEntries[i][entry["title"]])
+		if !deleteEntry {
+			return false
 		}
 	}
-	
-
 
 	return true
 }

@@ -127,5 +127,9 @@ func TestDelete(t *testing.T) {
 }
 
 func TestRemoveAll(t *testing.T) {
-	removeFiles()
+	
+	if !RemoveAll(){
+		t.Error("unable to remove all entries")
+	}
+	
 }
