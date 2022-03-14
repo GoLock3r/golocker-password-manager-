@@ -197,3 +197,16 @@ func DeleteEntry(entryTitle string) bool {
 		return true
 	}
 }
+func RemoveAll() bool {
+	allEntries := ReadAll()
+
+	for i,entry := range allEntries {
+		if entry != nil{
+			DeleteEntry(allEntries[i][entry["title"]])
+		}
+	}
+	
+
+
+	return true
+}
