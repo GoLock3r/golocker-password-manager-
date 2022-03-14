@@ -54,90 +54,98 @@ func TestEncryptDecryptEntry(t *testing.T) {
 	}
 }
 
-// func TestWriteEntry(t *testing.T) {
-// 	entry := map[string]string{
-// 		"title":        "Test Title",
-// 		"password":     "VerySecurePassword",
-// 		"username":     "Test",
-// 		"private_note": "There is a private note here! Don't tell your dad!",
-// 		"public_note":  "This is a public note. Feel free to share with your pop!",
-// 	}
+func TestWriteEntry(t *testing.T) {
+	entry := map[string]string{
+		"title":        "Test Title",
+		"password":     "VerySecurePassword",
+		"username":     "Test",
+		"private_note": "There is a private note here! Don't tell your dad!",
+		"public_note":  "This is a public note. Feel free to share with your pop!",
+	}
+	entry2 := map[string]string{
+		"title":        "Title",
+		"password":     "VerySecurePassword",
+		"username":     "Test1",
+		"private_note": "There is a private note here! Don't tell your dad!",
+		"public_note":  "This is a public note. Feel free to share with your pop!",
+	}
 
-// 	we := WriteEntry(entry)
-
-// 	if we != true {
-// 		t.Error("Entry was not written entry was exepected to be written ")
-// 	}
-// }
+	we := WriteEntry(entry)
+	we2 := WriteEntry(entry2)
+	if we != true && we2 != true {
+		t.Error("Entry was not written entry was exepected to be written ")
+	}
+}
 
 // func TestReadFromTitle(t *testing.T) {
-// 	entry := map[string]string{
-// 		"title":        "Test Title",
-// 		"password":     "VerySecurePassword",
-// 		"username":     "Test",
-// 		"private_note": "There is a private note here! Don't tell your dad!",
-// 		"public_note":  "This is a public note. Feel free to share with your pop!",
-// 	}
-// 	entry := map[string]string{
-// 		"title":        "Test Title",
-// 		"pas2sword":     "VerySecurePassword",
-// 		"username":     "Test",
-// 		"private_note": "There is a private note here! Don't tell your dad!",
-// 		"public_note":  "This is a public note. Feel free to share with your pop!",
-// 	}
+// 	// entry := map[string]string{
+// 	// 	"title":        "Test Title",
+// 	// 	"password":     "VerySecurePassword",
+// 	// 	"username":     "Test",
+// 	// 	"private_note": "There is a private note here! Don't tell your dad!",
+// 	// 	"public_note":  "This is a public note. Feel free to share with your pop!",
+// 	// }
+// 	// entry2 := map[string]string{
+// 	// 	"title":        "Test Title",
+// 	// 	"pas2sword":     "VerySecurePassword",
+// 	// 	"username":     "Test",
+// 	// 	"private_note": "There is a private note here! Don't tell your dad!",
+// 	// 	"public_note":  "This is a public note. Feel free to share with your pop!",
+// 	// }
 
-// 	rt = ReadFromTitle("Test Title")
+// 	rt := ReadFromTitle("Test Title")
 
 // 	if rt == nil {
-// 		t.Error() &&||t .ggetKey("title") != "Test Title"
-// 	}""unexppected resuillstts  expected to find  entry found either a null entry or the wrong entry
+// 		t.Error("expected one result got more than one or no result")
+// 	}
 // }
 
 // func TestReadFromUsername(t *testing.T) {
 
-// entry := map[string]string{
-// 	"title":        "Test Title",
-// 	"password":     "VerySecurePassword",
-// 	"username":     "Test",
-// 	"private_note": "There is a private note here! Don't tell your dad!",
-// 	"public_note":  "This is a public note. Feel free to share with your pop!",
-// }
-// entry2 := map[string]string{
-// 	"title":        "Title",
-// 	"password":     "VerySecurePassword",
-// 	"username":     "Test1",
-// 	"private_note": "There is a private note here! Don't tell your dad!",
-// 	"public_note":  "This is a public note. Feel free to share with your pop!",
-// }
-// ru = ReadFromUsername("Test")
+// 	// entry := map[string]string{
+// 	// 	"title":        "Test Title",
+// 	// 	"password":     "VerySecurePassword",
+// 	// 	"username":     "Test",
+// 	// 	"private_note": "There is a private note here! Don't tell your dad!",
+// 	// 	"public_note":  "This is a public note. Feel free to share with your pop!",
+// 	// }
+// 	// entry2 := map[string]string{
+// 	// 	"title":        "Title",
+// 	// 	"password":     "VerySecurePassword",
+// 	// 	"username":     "Test1",
+// 	// 	"private_note": "There is a private note here! Don't tell your dad!",
+// 	// 	"public_note":  "This is a public note. Feel free to share with your pop!",
+// 	// }
+// 	ru := ReadFromUsername("Test")
 
-// if rt == nil || rt.getKey("username") != "Test" {
-// 	t.Error("unexpected results expected to find entry found either a null entry or the wrong entry")
-// }
+// 	if ru == nil || ru[0] != "Test" {
+// 		t.Error("unexpected results expected to find entry found either a null entry or the wrong entry")
+// 	}
 // }
 
 // func TestReadAll(t *testing.T) {
 
-// 	entry := map[string]string{
-// 		"title":        "Test Title",
-// 		"password":     "VerySecurePassword",
-// 		"username":     "Test",
-// 		"private_note": "There is a private note here! Don't tell your dad!",
-// 		"public_note":  "This is a public note. Feel free to share with your pop!",
-// 	}
-// 	entry2 := map[string]string{
-// 		"title":        "Title",
-// 		"password":     "VerySecurePassword",
-// 		"username":     "Test1",
-// 		"private_note": "There is a private note here! Don't tell your dad!",
-// 		"public_note":  "This is a public note. Feel free to share with your pop!",
-// 	}
-// 	ra = ReadAll()
+// 	// entry := map[string]string{
+// 	// 	"title":        "Test Title",
+// 	// 	"password":     "VerySecurePassword",
+// 	// 	"username":     "Test",
+// 	// 	"private_note": "There is a private note here! Don't tell your dad!",
+// 	// 	"public_note":  "This is a public note. Feel free to share with your pop!",
+// 	// }
+// 	// entry2 := map[string]string{
+// 	// 	"title":        "Title",
+// 	// 	"password":     "VerySecurePassword",
+// 	// 	"username":     "Test1",
+// 	// 	"private_note": "There is a private note here! Don't tell your dad!",
+// 	// 	"public_note":  "This is a public note. Feel free to share with your pop!",
+// 	// }
+// 	 ra := ReadAll()
 
-// 	if rt == nil || rt.len() < 2 { entry s either found none or not two entries
+// 	if ra == nil || len(ra) < 2 {
 
-// 	t.Error("unexpected results expected to find two")
-// 	}}
+// 		t.Error("unexpected results expected to find two")
+// 	}
+// }
 
 func TestUpdate(t *testing.T) {
 
