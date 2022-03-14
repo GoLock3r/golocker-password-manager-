@@ -54,21 +54,90 @@ func TestEncryptDecryptEntry(t *testing.T) {
 	}
 }
 
-func TestWriteEntry(t *testing.T) {
+// func TestWriteEntry(t *testing.T) {
+// 	entry := map[string]string{
+// 		"title":        "Test Title",
+// 		"password":     "VerySecurePassword",
+// 		"username":     "Test",
+// 		"private_note": "There is a private note here! Don't tell your dad!",
+// 		"public_note":  "This is a public note. Feel free to share with your pop!",
+// 	}
 
-}
+// 	we := WriteEntry(entry)
 
-func TestReadFromTitle(t *testing.T) {
+// 	if we != true {
+// 		t.Error("Entry was not written entry was exepected to be written ")
+// 	}
+// }
 
-}
+// func TestReadFromTitle(t *testing.T) {
+// 	entry := map[string]string{
+// 		"title":        "Test Title",
+// 		"password":     "VerySecurePassword",
+// 		"username":     "Test",
+// 		"private_note": "There is a private note here! Don't tell your dad!",
+// 		"public_note":  "This is a public note. Feel free to share with your pop!",
+// 	}
+// 	entry := map[string]string{
+// 		"title":        "Test Title",
+// 		"pas2sword":     "VerySecurePassword",
+// 		"username":     "Test",
+// 		"private_note": "There is a private note here! Don't tell your dad!",
+// 		"public_note":  "This is a public note. Feel free to share with your pop!",
+// 	}
 
-func TestReadFromUsername(t *testing.T) {
+// 	rt = ReadFromTitle("Test Title")
 
-}
+// 	if rt == nil {
+// 		t.Error() &&||t .ggetKey("title") != "Test Title"
+// 	}""unexppected resuillstts  expected to find  entry found either a null entry or the wrong entry
+// }
 
-func TestReadAll(t *testing.T) {
+// func TestReadFromUsername(t *testing.T) {
 
-}
+// entry := map[string]string{
+// 	"title":        "Test Title",
+// 	"password":     "VerySecurePassword",
+// 	"username":     "Test",
+// 	"private_note": "There is a private note here! Don't tell your dad!",
+// 	"public_note":  "This is a public note. Feel free to share with your pop!",
+// }
+// entry2 := map[string]string{
+// 	"title":        "Title",
+// 	"password":     "VerySecurePassword",
+// 	"username":     "Test1",
+// 	"private_note": "There is a private note here! Don't tell your dad!",
+// 	"public_note":  "This is a public note. Feel free to share with your pop!",
+// }
+// ru = ReadFromUsername("Test")
+
+// if rt == nil || rt.getKey("username") != "Test" {
+// 	t.Error("unexpected results expected to find entry found either a null entry or the wrong entry")
+// }
+// }
+
+// func TestReadAll(t *testing.T) {
+
+// 	entry := map[string]string{
+// 		"title":        "Test Title",
+// 		"password":     "VerySecurePassword",
+// 		"username":     "Test",
+// 		"private_note": "There is a private note here! Don't tell your dad!",
+// 		"public_note":  "This is a public note. Feel free to share with your pop!",
+// 	}
+// 	entry2 := map[string]string{
+// 		"title":        "Title",
+// 		"password":     "VerySecurePassword",
+// 		"username":     "Test1",
+// 		"private_note": "There is a private note here! Don't tell your dad!",
+// 		"public_note":  "This is a public note. Feel free to share with your pop!",
+// 	}
+// 	ra = ReadAll()
+
+// 	if rt == nil || rt.len() < 2 { entry s either found none or not two entries
+
+// 	t.Error("unexpected results expected to find two")
+// 	}}
 
 func TestUpdate(t *testing.T) {
 
@@ -81,27 +150,3 @@ func TestDelete(t *testing.T) {
 func TestRemoveAll(t *testing.T) {
 	removeFiles()
 }
-
-// func Test(t *testing.T) {
-// 	authtool.Loggers = logger.CreateLoggers("testlogs.txt")
-// 	Loggers = authtool.Loggers
-
-// 	entry := map[string]string{
-// 		"title":        "Test Title",
-// 		"password":     "VerySecurePassword",
-// 		"username":     "Test",
-// 		"private_note": "There is a private note here! Don't tell your dad!",
-// 		"public_note":  "This is a public note. This will not be encrypted!",
-// 	}
-
-// 	authtool.CreateUser("test", "test")
-// 	key := authtool.GetKey("test", "test")
-// 	enc_entry := EncryptEntry(key, entry)
-// 	t.Error(enc_entry)
-// 	t.Error(DecryptEntry(key, enc_entry))
-// 	t.Error(DecryptEntry([]byte("11111111111111111111111111111111"), enc_entry))
-
-// 	Connect("test")
-// 	WriteEntry(entry)
-// 	WriteEntry(enc_entry)
-// }

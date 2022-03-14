@@ -72,7 +72,7 @@ func DecryptEntry(key []byte, entry map[string]string) map[string]string {
 // Varargs exists, encrypt everything if no varargs are passed
 // TODO Functionality to exclude labels?
 
-func WriteEntry(entry map[string]string) {
+func WriteEntry(entry map[string]string) bool {
 	to_insert := bson.M{}
 
 	for k, v := range entry {
@@ -84,8 +84,10 @@ func WriteEntry(entry map[string]string) {
 
 	if err != nil {
 		Loggers.LogError.Println("Could not write entry")
+		return false
 	} else {
 		Loggers.LogInfo.Println("Wrote entry", result)
+		return true
 	}
 }
 
@@ -179,11 +181,13 @@ func UpdateEntry(entryTitle string) {
 	}
 }
 
-func DeleteEntry(entryTitle string) {
+func DeleteEntry(entryTitle string) bool {
 	_, err := col.DeleteOne(context.TODO(), bson.D{{Key: "title", Value: entryTitle}})
 	if err != nil {
 		Loggers.LogError.Println("Entry couldn't be deleted", err)
+		return false
 	} else {
 		Loggers.LogInfo.Println("Entry deleted")
+		return true
 	}
 }
