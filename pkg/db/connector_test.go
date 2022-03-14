@@ -23,7 +23,9 @@ func getKey() []byte {
 }
 
 func TestConnect(t *testing.T) {
-
+	if !Connect("demo"){
+		t.Error("Failed to connect to database")
+	}
 }
 
 func TestEncryptDecryptEntry(t *testing.T) {

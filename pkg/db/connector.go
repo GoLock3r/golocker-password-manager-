@@ -20,7 +20,7 @@ var ctx = context.TODO()
 
 var URI = "mongodb://localhost:27017"
 
-func Connect(collection string) {
+func Connect(collection string) bool {
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(URI))
 
 	if err != nil {
@@ -30,10 +30,12 @@ func Connect(collection string) {
 	err = client.Ping(ctx, nil)
 	if err != nil {
 		Loggers.LogError.Println("Could not ping database")
+		return false
 	} else {
 		Loggers.LogInfo.Println("Connected to database")
 	}
 	col = client.Database("golocker").Collection(collection)
+	return true
 }
 
 // Anything that is labeled 'password' or contains 'private' will be encrypted
