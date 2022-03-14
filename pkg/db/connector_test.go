@@ -55,6 +55,9 @@ func TestEncryptDecryptEntry(t *testing.T) {
 }
 
 func TestWriteEntry(t *testing.T) {
+
+	Connect("test")
+
 	entry := map[string]string{
 		"title":        "Test Title",
 		"password":     "VerySecurePassword",
