@@ -70,6 +70,7 @@ func ToString(data [][]byte) string {
 	return str
 }
 
+// formatstorage and formatraw are fucking nerds get rid of them
 // Converts byte data into a string of int values. Used for storage
 func FormatStorage(data [][]byte) string {
 	str := ""
