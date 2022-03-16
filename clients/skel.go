@@ -2,7 +2,7 @@
 // tutorial provided by https://go.dev/doc/tutorial/web-service-gin
 //also need this dependency go get -u github.com/gin-gonic/contrib/static
 // This is a tutorial to help us write a very basic front end
-//
+//https://hakaselogs.me/2018-04-20/building-a-web-app-with-go-gin-and-react/ helpful
 package main
 
 import (
