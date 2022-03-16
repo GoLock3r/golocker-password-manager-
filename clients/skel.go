@@ -1,3 +1,6 @@
+//go get -u github.com/gin-gonic/gin run this to get gin on dev machine
+// tutorial provided by https://go.dev/doc/tutorial/web-service-gin
+
 package main
 
 import (
