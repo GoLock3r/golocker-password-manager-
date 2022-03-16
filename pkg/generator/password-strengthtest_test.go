@@ -27,7 +27,6 @@ func Test_16lengthpass(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	gp := GenPassword(16, false)
 	ps := Passwordstren(gp)
-	println(ps)
 	if ps != 2 {
 		t.Errorf("Expected Strength 20 of password strength %q", ps)
 	}
@@ -45,7 +44,6 @@ func Test_16lengthpassWithSpecial(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	gp := GenPassword(16, true)
 	ps := Passwordstren(gp)
-	println(ps)
 	if ps != 4 {
 		t.Errorf("Expected Strength 20 of password strength %q", ps)
 	}
