@@ -9,8 +9,6 @@ import (
 	"encoding/hex"
 	"golock3r/server/logger"
 	"io"
-	"strconv"
-	"strings"
 )
 
 var Loggers *logger.Loggers
@@ -70,39 +68,8 @@ func ToString(data [][]byte) string {
 	return str
 }
 
-// formatstorage and formatraw are fucking nerds get rid of them
-// Converts byte data into a string of int values. Used for storage
-func FormatStorage(data [][]byte) string {
-	str := ""
-
-	for _, block := range data {
-		for _, b := range block {
-			str += strconv.Itoa(int(b)) + " "
-		}
-	}
-	return str
-}
-
-// Converts storage data into byte array of 32 byte blocks
-func FormatRaw(data string) [][]byte {
-	var block []byte
-	var chunks [][]byte
-	i := 1
-	raw := strings.Split(data, " ")
-	raw = raw[:len(raw)-1]
-
-	for _, str_val := range raw {
-		val, _ := strconv.Atoi(str_val)
-		block = append(block, byte(val))
-		if i%32 == 0 {
-			chunks = append(chunks, block)
-			block = nil
-		}
-		i += 1
-	}
-	return chunks
-}
-
+// Encodes byte array data into a hexidecimal string for
+// clean database storage
 func FormatHex(data [][]byte) string {
 	str := ""
 
@@ -112,6 +79,8 @@ func FormatHex(data [][]byte) string {
 	return str
 }
 
+// Decodes a hexidecimal string into a byte array of bytes
+// each of size 32 for decryption
 func FormatHexToRaw(data string) [][]byte {
 	var block []byte
 	var chunks [][]byte
@@ -130,18 +99,8 @@ func FormatHexToRaw(data string) [][]byte {
 	return chunks
 }
 
-func HexToString(data [][]byte) string {
-	str := ""
-
-	for _, block := range data {
-		val, _ := hex.DecodeString(string(block))
-		str += string(val)
-	}
-	return str
-}
-
 // Given a key and a byte array of chunked input of plaintext data (16 bytes each),
-// encrypt each chunk and return an array of encrypted chunked data (16 bytes each)
+// encrypt each chunk and return an array of encrypted chunked data (32 bytes each)
 func Encrypt(key []byte, data [][]byte) [][]byte {
 	var ciphertext [][]byte
 
@@ -166,7 +125,7 @@ func Encrypt(key []byte, data [][]byte) [][]byte {
 	return ciphertext
 }
 
-// Given a key and a byte array of chunked encrypted data (16 bytes each),
+// Given a key and a byte array of chunked encrypted data (32 bytes each),
 // decrypt each chunk and return an array of decrypted chunked data (16 bytes each)
 func Decrypt(key []byte, data [][]byte) [][]byte {
 	var plaintext [][]byte
