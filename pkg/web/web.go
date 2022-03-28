@@ -2,16 +2,41 @@ package web
 
 import (
 	"fmt"
+	"golock3r/server/authtool"
+	"golock3r/server/logger"
+	"html/template"
 	"net/http"
 )
 
 var validated = false
 
 func login(w http.ResponseWriter, r *http.Request) {
-
+	var fileName = "login.html"
+	t, err := template.ParseFiles(fileName)
+	if err != nil {
+		fmt.Println("Parse error")
+		return
+	}
+	err = t.ExecuteTemplate(w, fileName, nil)
+	if err != nil {
+		fmt.Println("Template execution error")
+	}
 }
 
 func loginSubmit(w http.ResponseWriter, r *http.Request) {
+	loggers := logger.CreateLoggers("testlogs.txt")
+	authtool.Loggers = loggers
+	authtool.LoginFile = "logins.txt"
+	username := r.FormValue("username")
+	password := r.FormValue("password")
+	validated = authtool.ValidateUser(username, string(password))
+	if validated {
+		w.WriteHeader(http.StatusOK)
+		fmt.Fprintf(w, "Your login was successful. Welcome to GoLock3r!")
+	} else {
+		w.WriteHeader(http.StatusNotFound)
+		fmt.Fprintf(w, "Your login was unsuccessful.")
+	}
 
 }
 
@@ -50,8 +75,10 @@ func edit(w http.ResponseWriter, r *http.Request) {
 func handler(w http.ResponseWriter, r *http.Request) {
 	switch r.URL.Path {
 	case "/":
+		login(w, r)
 		fmt.Println("A login page should be here")
 	case "/login-submit":
+		loginSubmit(w, r)
 		fmt.Println("Submit login")
 	case "/logout":
 		fmt.Println("Submit logout")
