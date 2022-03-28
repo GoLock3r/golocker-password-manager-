@@ -128,6 +128,7 @@ func TestDelete(t *testing.T) {
 }
 
 func TestRemoveAll(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
 	Connect("test")
 	if !RemoveAll() {
 		t.Error("unable to remove all entries")
