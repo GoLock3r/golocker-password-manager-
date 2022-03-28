@@ -14,7 +14,7 @@ import (
 )
 
 var Loggers *logger.Loggers
-
+var client *mongo.Client
 var col *mongo.Collection
 var ctx = context.TODO()
 
@@ -214,4 +214,16 @@ func RemoveAll() bool {
 		Loggers.LogInfo.Println("Entries deleted")
 		return true
 	}
+}
+func CloseClientDB() bool{
+    if client == nil {
+        return false
+    }
+    err := client.Disconnect(context.TODO())
+    if err != nil {
+        Loggers.LogError.Println("Fatal Error")
+		return false
+    }
+    fmt.Println("Connection to MongoDB closed.")
+	return true
 }

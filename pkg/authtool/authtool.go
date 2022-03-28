@@ -72,7 +72,7 @@ func WriteFile(user string, hash []byte) bool {
 		Loggers.LogWarning.Println("Password hash is empty. Not writing file")
 	} else {
 		line := user + ":" + string(hash) + "\n"
-		file, err := os.OpenFile(LoginFile, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0700)
+		file, err := os.OpenFile(File, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0700)
 
 		if err != nil {
 			Loggers.LogError.Println("Password file not found / cannot be opened.", err)
