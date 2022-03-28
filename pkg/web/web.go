@@ -3,6 +3,7 @@ package web
 import (
 	"fmt"
 	"golock3r/server/authtool"
+	"golock3r/server/db"
 	"golock3r/server/logger"
 	"html/template"
 	"net/http"
@@ -43,7 +44,7 @@ func loginSubmit(w http.ResponseWriter, r *http.Request) {
 func logout(w http.ResponseWriter, r *http.Request) {
 	loggers := logger.CreateLoggers("testlogs.txt")
 	authtool.Loggers = loggers
-	validated = authtool.connector.CloseClientDB()
+	validated = db.CloseClientDB()
 	if validated {
 		w.WriteHeader(http.StatusOK)
 		fmt.Fprintf(w, "Your login was successful. Welcome to GoLock3r!")
