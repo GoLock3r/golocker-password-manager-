@@ -33,7 +33,7 @@ func loginSubmit(w http.ResponseWriter, r *http.Request) {
 	validated = authtool.ValidateUser(username, string(password))
 	if validated {
 		w.WriteHeader(http.StatusOK)
-		fmt.Fprintf(w, "Your login was successful. Welcome to GoLock3r!")
+		fmt.Fprintf(w, "Your login was successful. Welcome to GoLock3r! "+username)
 	} else {
 		w.WriteHeader(http.StatusNotFound)
 		fmt.Fprintf(w, "Something went wrong")
