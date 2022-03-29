@@ -36,7 +36,7 @@ func loginSubmit(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Your login was successful. Welcome to GoLock3r!")
 	} else {
 		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, "Something went wrong")
+		fmt.Fprintf(w, "Your login was unsuccessful.")
 	}
 
 }
