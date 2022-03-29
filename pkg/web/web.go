@@ -7,9 +7,11 @@ import (
 	"golock3r/server/logger"
 	"html/template"
 	"net/http"
+	"strings"
 )
 
 var validated = false
+var URI = "mongodb://localhost:27017"
 
 func login(w http.ResponseWriter, r *http.Request) {
 	var fileName = "login.html"
@@ -28,15 +30,29 @@ func loginSubmit(w http.ResponseWriter, r *http.Request) {
 	loggers := logger.CreateLoggers("testlogs.txt")
 	authtool.Loggers = loggers
 	authtool.LoginFile = "logins.txt"
+	db.Loggers = loggers
+
 	username := r.FormValue("username")
 	password := r.FormValue("password")
+
 	validated = authtool.ValidateUser(username, string(password))
 	if validated {
+		var trimmedUser = strings.TrimSpace(username)
+		db.Connect(trimmedUser)
 		w.WriteHeader(http.StatusOK)
-		fmt.Fprintf(w, "Your login was successful. Welcome to GoLock3r! "+username)
+		var fileName = "login-submit.html"
+		t, err := template.ParseFiles(fileName)
+		if err != nil {
+			fmt.Println("Parse error")
+			return
+		}
+		err = t.ExecuteTemplate(w, fileName, username)
+		if err != nil {
+			fmt.Println("Template execution error")
+		}
 	} else {
 		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, "Something went wrong")
+		fmt.Fprintf(w, "Login was unsuccessful, sit tight or try again who am I to tell you what to do.")
 	}
 
 }
@@ -98,9 +114,21 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		loginSubmit(w, r)
 		fmt.Println("Submit login")
 	case "/logout":
+		logout(w, r)
 		fmt.Println("Submit logout")
 	case "/home":
-		fmt.Println("Users homepage")
+		// var fileName = "home.html"
+		// var username = "demo"
+		// t, err := template.ParseFiles(fileName)
+		// if err != nil {
+		// 	fmt.Println("Parse error")
+		// 	return
+		// }
+		// err = t.ExecuteTemplate(w, fileName, username)
+		// if err != nil {
+		// 	fmt.Println("Template execution error")
+		// }
+
 	case "/home/display":
 		fmt.Println("Display all db entries")
 	case "/home/search":
