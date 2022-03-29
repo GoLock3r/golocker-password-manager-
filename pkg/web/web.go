@@ -106,7 +106,7 @@ func edit(w http.ResponseWriter, r *http.Request) {
 	loggers := logger.CreateLoggers("testlogs.txt")
 	authtool.Loggers = loggers
 }
-func home(w http.ResponseWriter, r *http.Request, username string) {
+func home(w http.ResponseWriter, r *http.Request) {
 	loggers := logger.CreateLoggers(("testlogs.txt"))
 	authtool.Loggers = loggers
 	var fileName = "home.html"
@@ -115,7 +115,7 @@ func home(w http.ResponseWriter, r *http.Request, username string) {
 		fmt.Println("Parse error")
 		return
 	}
-	err = t.ExecuteTemplate(w, fileName, username)
+	err = t.ExecuteTemplate(w, fileName, usernameglobal)
 	if err != nil {
 		fmt.Println("Template execution error")
 	}
@@ -133,7 +133,8 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		logout(w, r)
 		fmt.Println("Submit logout")
 	case "/home":
-		home(w, r, usernameglobal)
+		home(w, r)
+		fmt.Println("should be a homepage")
 	case "/home/display":
 		fmt.Println("Display all db entries")
 	case "/home/search":
