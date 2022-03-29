@@ -13,7 +13,8 @@ import (
 var validated = false
 var URI = "mongodb://localhost:27017"
 var usernameglobal = ""
-func login(w http.ResponseWriter, r *http.Request){
+
+func login(w http.ResponseWriter, r *http.Request) {
 	var fileName = "login.html"
 	t, err := template.ParseFiles(fileName)
 	if err != nil {
@@ -26,7 +27,7 @@ func login(w http.ResponseWriter, r *http.Request){
 	}
 }
 
-func loginSubmit(w http.ResponseWriter, r *http.Request){
+func loginSubmit(w http.ResponseWriter, r *http.Request) {
 	loggers := logger.CreateLoggers("testlogs.txt")
 	authtool.Loggers = loggers
 	authtool.LoginFile = "logins.txt"
@@ -44,13 +45,13 @@ func loginSubmit(w http.ResponseWriter, r *http.Request){
 		t, err := template.ParseFiles(fileName)
 		if err != nil {
 			fmt.Println("Parse error")
-			return 
+			return
 		}
 		err = t.ExecuteTemplate(w, fileName, username)
 		if err != nil {
 			fmt.Println("Template execution error")
-			
-				}
+
+		}
 	} else {
 		w.WriteHeader(http.StatusNotFound)
 		fmt.Fprintf(w, "Login was unsuccessful, sit tight or try again who am I to tell you what to do.")
@@ -105,19 +106,19 @@ func edit(w http.ResponseWriter, r *http.Request) {
 	loggers := logger.CreateLoggers("testlogs.txt")
 	authtool.Loggers = loggers
 }
-func home(w http.ResponseWriter, r *http.Request,username string){
+func home(w http.ResponseWriter, r *http.Request, username string) {
 	loggers := logger.CreateLoggers(("testlogs.txt"))
 	authtool.Loggers = loggers
-		var fileName = "home.html"
-		t, err := template.ParseFiles(fileName)
-		if err != nil {
-			fmt.Println("Parse error")
-			return
-		}
-		err = t.ExecuteTemplate(w, fileName, username)
-		if err != nil {
-			fmt.Println("Template execution error")
-		}
+	var fileName = "home.html"
+	t, err := template.ParseFiles(fileName)
+	if err != nil {
+		fmt.Println("Parse error")
+		return
+	}
+	err = t.ExecuteTemplate(w, fileName, username)
+	if err != nil {
+		fmt.Println("Template execution error")
+	}
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
@@ -132,7 +133,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		logout(w, r)
 		fmt.Println("Submit logout")
 	case "/home":
-		home(w,r,usernameglobal)
+		home(w, r, usernameglobal)
 	case "/home/display":
 		fmt.Println("Display all db entries")
 	case "/home/search":
