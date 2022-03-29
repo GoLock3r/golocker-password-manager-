@@ -49,13 +49,13 @@ func loginSubmit(w http.ResponseWriter, r *http.Request){
 		err = t.ExecuteTemplate(w, fileName, username)
 		if err != nil {
 			fmt.Println("Template execution error")
-			usernameglobal = username
+			
 				}
 	} else {
 		w.WriteHeader(http.StatusNotFound)
 		fmt.Fprintf(w, "Login was unsuccessful, sit tight or try again who am I to tell you what to do.")
 	}
-
+	usernameglobal = username
 }
 
 func logout(w http.ResponseWriter, r *http.Request) {
