@@ -12,6 +12,11 @@ import (
 
 var validated = false
 var URI = "mongodb://localhost:27017"
+var Loggers *logger.Loggers
+
+// func loadHTML(w http.ResponseWriter, r *http.Request, fileName string) {
+
+// }
 
 func login(w http.ResponseWriter, r *http.Request) {
 	var fileName = "login.html"
@@ -70,9 +75,11 @@ func logout(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func createUser(w http.ResponseWriter, r *http.Request) {
+
+}
+
 func message(w http.ResponseWriter, r *http.Request) {
-	loggers := logger.CreateLoggers("testlogs.txt")
-	authtool.Loggers = loggers
 
 }
 
@@ -81,28 +88,19 @@ func readAll(w http.ResponseWriter, r *http.Request) {
 }
 
 func search(w http.ResponseWriter, r *http.Request) {
-	loggers := logger.CreateLoggers("testlogs.txt")
-	authtool.Loggers = loggers
+
 }
 
 func delete(w http.ResponseWriter, r *http.Request) {
-	loggers := logger.CreateLoggers("testlogs.txt")
-	authtool.Loggers = loggers
-}
 
-func createUser(w http.ResponseWriter, r *http.Request) {
-	loggers := logger.CreateLoggers("testlogs.txt")
-	authtool.Loggers = loggers
 }
 
 func createEntry(w http.ResponseWriter, r *http.Request) {
-	loggers := logger.CreateLoggers("testlogs.txt")
-	authtool.Loggers = loggers
+
 }
 
 func edit(w http.ResponseWriter, r *http.Request) {
-	loggers := logger.CreateLoggers("testlogs.txt")
-	authtool.Loggers = loggers
+
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
