@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-var validated = false
+var validated = true
 var URI = "mongodb://localhost:27017"
 var usernameglobal = ""
 
@@ -107,17 +107,22 @@ func edit(w http.ResponseWriter, r *http.Request) {
 	authtool.Loggers = loggers
 }
 func home(w http.ResponseWriter, r *http.Request) {
-	loggers := logger.CreateLoggers(("testlogs.txt"))
-	authtool.Loggers = loggers
-	var fileName = "home.html"
-	t, err := template.ParseFiles(fileName)
-	if err != nil {
-		fmt.Println("Parse error")
-		return
-	}
-	err = t.ExecuteTemplate(w, fileName, usernameglobal)
-	if err != nil {
-		fmt.Println("Template execution error")
+	if validated {
+		w.WriteHeader(http.StatusOK)
+		var fileName = "home.html"
+		t, err := template.ParseFiles(fileName)
+		if err != nil {
+			fmt.Println("Parse error")
+			return
+		}
+		err = t.ExecuteTemplate(w, fileName, usernameglobal)
+		if err != nil {
+			fmt.Println("Template execution error")
+
+		}
+	} else {
+		w.WriteHeader(http.StatusNotFound)
+		fmt.Fprintf(w, "well this isnt good your homepage should be here")
 	}
 }
 
@@ -136,8 +141,10 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		home(w, r)
 		fmt.Println("should be a homepage")
 	case "/home/display":
+		readAll(w, r)
 		fmt.Println("Display all db entries")
 	case "/home/search":
+
 		fmt.Println("Search here")
 	case "/home/delete":
 		fmt.Println("Delete here")

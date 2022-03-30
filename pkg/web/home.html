@@ -1,16 +1,22 @@
 <html>
     <head>
-        <h1>Welcome to GoLock3r, {{ . }}!</h1>
+        <h1>Welcome to GoLock3r, {{ . }}! This is your home page</h1>
     </head>
-    <body>
-        <p>Hello {{ . }} your login was successful! Welcome to your home page! I'm not your real dad!</p> 
-    </body>
-    <form action="/home/display">
-        <button type="submit">display all </button>
-        <button type="submit" formaction="/home/search">search</button>
-        <button type="submit" formaction ="/home/delete">delete</button>
-        <button type="submit" formaction = /home/create">create</button>
-        <button type="submit" formaction="/home/edit">edit</button>
+    <form action="/home/display" method="POST">
+        <input type="submit" value="display">
+        <button type="submit" formaction="/home/search">
+            search
+          </button>
+          <button type="submit" formaction="/home/delete">
+            delete
+          </button>
+          <button type="submit" formaction="/home/create">
+            create
+          </button>
+          <button type="submit" formaction="/home/edit">
+            edit
+          </button>
     </form>
+
 
 </html>
