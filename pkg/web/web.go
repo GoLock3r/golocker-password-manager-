@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-var validated = true
+var validated = false
 var URI = "mongodb://localhost:27017"
 var usernameglobal = ""
 
