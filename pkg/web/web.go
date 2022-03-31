@@ -10,10 +10,13 @@ import (
 	"strings"
 )
 
-var validated = false
-var URI = "mongodb://localhost:27017"
-var usernameglobal = ""
+var Loggers *logger.Loggers
 
+var valid_username = ""
+var validated = false
+
+// Serve a login page to the user and pass credentials off to the
+// loginSubmit function to verify these credentials
 func login(w http.ResponseWriter, r *http.Request) {
 	var fileName = "login.html"
 	t, err := template.ParseFiles(fileName)
@@ -27,6 +30,8 @@ func login(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// Process user credentials given from the login function.
+// Utilizes authtool package functionality to validate credentials.
 func loginSubmit(w http.ResponseWriter, r *http.Request) {
 	loggers := logger.CreateLoggers("testlogs.txt")
 	authtool.Loggers = loggers
@@ -52,13 +57,16 @@ func loginSubmit(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("Template execution error")
 
 		}
+		valid_username = username
+
 	} else {
 		w.WriteHeader(http.StatusNotFound)
 		fmt.Fprintf(w, "Login was unsuccessful, sit tight or try again who am I to tell you what to do.")
 	}
-	usernameglobal = username
+
 }
 
+// Strip validation from the users current session redirect elsewhere
 func logout(w http.ResponseWriter, r *http.Request) {
 	loggers := logger.CreateLoggers("testlogs.txt")
 	authtool.Loggers = loggers
@@ -72,33 +80,44 @@ func logout(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// Creates a new valid user account
 func createUser(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// Displays a message for the user
 func message(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// Reads all database entries for a validated user
 func readAll(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// Searches entry titles and usernames and displays the results
+// for a validated user
 func search(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// Deletes an entry from the database for a validated user
 func delete(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// Creates a new entry to be securely stored on the database for
+// a validated user
 func createEntry(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// Edits an entry for a validated user
 func edit(w http.ResponseWriter, r *http.Request) {
 
 }
+
+// Display the homepage for a validated user
 func home(w http.ResponseWriter, r *http.Request) {
 	if validated {
 		w.WriteHeader(http.StatusOK)
@@ -108,17 +127,18 @@ func home(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("Parse error")
 			return
 		}
-		err = t.ExecuteTemplate(w, fileName, usernameglobal)
+		err = t.ExecuteTemplate(w, fileName, valid_username)
 		if err != nil {
 			fmt.Println("Template execution error")
 
 		}
 	} else {
 		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, "well this isnt good your homepage should be here")
+		fmt.Fprintf(w, "well this isn't good your homepage should be here")
 	}
 }
 
+// Handle the navigation logic for the server's resources and functions
 func handler(w http.ResponseWriter, r *http.Request) {
 	switch r.URL.Path {
 	case "/":
@@ -150,6 +170,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// Creates an instance of the web server. Listens on port 8010
 func Run() {
 	http.HandleFunc("/", handler)
 	http.ListenAndServe(":8010", nil)

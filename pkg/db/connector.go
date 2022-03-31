@@ -20,6 +20,7 @@ var ctx = context.TODO()
 
 var URI = "mongodb://localhost:27017"
 
+// Connect to a user's collection identified by their unique username
 func Connect(collection string) bool {
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(URI))
 
@@ -38,7 +39,7 @@ func Connect(collection string) bool {
 	return true
 }
 
-// Anything that is labeled 'password' or contains 'private' will be encrypted
+// Encrypt anything that is labeled 'password' or contains 'private' will be encrypted
 func EncryptEntry(key []byte, entry map[string]string) map[string]string {
 	crypt.Loggers = Loggers
 
@@ -54,7 +55,7 @@ func EncryptEntry(key []byte, entry map[string]string) map[string]string {
 	return enc_entry
 }
 
-// Anything that is labeled 'password' or contains 'private' will be decrypted
+// Encrypt anything that is labeled 'password' or contains 'private' will be decrypted
 func DecryptEntry(key []byte, entry map[string]string) map[string]string {
 	crypt.Loggers = Loggers
 
@@ -82,6 +83,8 @@ func DecryptEntry(key []byte, entry map[string]string) map[string]string {
 
 // }
 
+// Write an entry to the database given a map of labeled values
+// Returns true if successful or false if otherwise.
 func WriteEntry(entry map[string]string) bool {
 	to_insert := bson.M{}
 
@@ -101,6 +104,8 @@ func WriteEntry(entry map[string]string) bool {
 	}
 }
 
+// Given the title of an entry, return the map of an entry / entries if
+// there are any matches, or return nothing if otherwise.
 func ReadFromTitle(entryTitle string) []map[string]string {
 	filter := bson.D{{Key: "title", Value: entryTitle}}
 	cursor, err := col.Find(context.TODO(), filter)
@@ -124,8 +129,10 @@ func ReadFromTitle(entryTitle string) []map[string]string {
 	return results_map
 }
 
+// Given the username in an entry, return the map of an entry / entries if
+// there are any matches, or return nothing if otherwise.
 func ReadFromUsername(entryUsername string) []map[string]string {
-	filter := bson.D{{Key: "username", Value: entryUsername}} //found help on mongo db documentation https://docs.mongodb.com/drivers/go/current/fundamentals/crud/query-document/
+	filter := bson.D{{Key: "username", Value: entryUsername}}
 	cursor, err := col.Find(context.TODO(), filter)
 	if err != nil {
 		panic(err)
@@ -147,6 +154,8 @@ func ReadFromUsername(entryUsername string) []map[string]string {
 	return results_map
 }
 
+// Return a map of all the entries in the database, or nothing if
+// the database is empty
 func ReadAll() []map[string]string {
 
 	cursor, err := col.Find(ctx, bson.D{})
@@ -172,7 +181,8 @@ func ReadAll() []map[string]string {
 	return results_map
 }
 
-// Resource used: https://golangdocs.com/mongodb-golang
+// Given an entries title, field and value, update that entry. Return true if the operation
+// was successful, or false if otherwise
 func UpdateEntry(entryTitle string, updateField string, updateEntry string) bool {
 	filter := bson.D{{Key: "title", Value: entryTitle}}
 	var input1, input2 = "", ""
@@ -195,6 +205,8 @@ func UpdateEntry(entryTitle string, updateField string, updateEntry string) bool
 	return true
 }
 
+// Given an entries title, delete that entry. Returns true if the operation
+// was successful, or false if otherwise.
 func DeleteEntry(entryTitle string) bool {
 	_, err := col.DeleteOne(context.TODO(), bson.D{{Key: "title", Value: entryTitle}})
 	if err != nil {
@@ -205,6 +217,9 @@ func DeleteEntry(entryTitle string) bool {
 		return true
 	}
 }
+
+// Remove all entries that exist in the database. Use this with caution!
+// Returns true if the operation was successful, or false if otherwise.
 func RemoveAll() bool {
 	_, err := col.DeleteMany(context.TODO(), bson.D{{}})
 	if err != nil {
@@ -215,15 +230,17 @@ func RemoveAll() bool {
 		return true
 	}
 }
-func CloseClientDB() bool{
-    if client == nil {
-        return false
-    }
-    err := client.Disconnect(context.TODO())
-    if err != nil {
-        Loggers.LogError.Println("Fatal Error")
+
+// Close client connection. Returns true if the operation was successful.
+func CloseClientDB() bool {
+	if client == nil {
 		return false
-    }
-    fmt.Println("Connection to MongoDB closed.")
+	}
+	err := client.Disconnect(context.TODO())
+	if err != nil {
+		Loggers.LogError.Println("Fatal Error")
+		return false
+	}
+	fmt.Println("Connection to MongoDB closed.")
 	return true
 }

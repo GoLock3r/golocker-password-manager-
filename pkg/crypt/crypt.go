@@ -146,12 +146,16 @@ func Decrypt(key []byte, data [][]byte) [][]byte {
 	return plaintext
 }
 
+// Given a 32 byte key and plaintext (data) of type string, encrypt the string
+// using the provided key and return the cyphertext
 func EncryptStringToHex(key []byte, data string) string {
 	chunk_data := ChunkStringData(data)
 	enc := Encrypt(key, chunk_data)
 	return FormatHex(enc)
 }
 
+// Given a 32 byte key and cyphertext (data) of type string, decrypt the string
+// using the provided key and return the plaintext if the decryption is successful
 func DecryptStringFromHex(key []byte, data string) string {
 	chunk_data := FormatHexToRaw(data)
 	dec := Decrypt(key, chunk_data)
