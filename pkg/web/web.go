@@ -85,11 +85,6 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 
 }
 
-// Displays a message for the user
-func message(w http.ResponseWriter, r *http.Request) {
-
-}
-
 // Reads all database entries for a validated user
 func readAll(w http.ResponseWriter, r *http.Request) {
 
@@ -165,6 +160,9 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Create here")
 	case "/home/edit":
 		fmt.Println("Edit here")
+
+	case "/createUser":
+		fmt.Print("just be a create user page")
 	default:
 		fmt.Println("Path not found?")
 	}
