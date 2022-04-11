@@ -66,14 +66,14 @@ func loginSubmit(w http.ResponseWriter, r *http.Request) {
 
 }
 
-// Strip validation from the users current session redirect elsewhere
+// Strip validation from the users database and dissconects from said data base\
 func logout(w http.ResponseWriter, r *http.Request) {
 	loggers := logger.CreateLoggers("testlogs.txt")
 	authtool.Loggers = loggers
 	validated = db.CloseClientDB()
 	if validated {
 		w.WriteHeader(http.StatusOK)
-		fmt.Fprintf(w, "Your login was successful. Welcome to GoLock3r!")
+		fmt.Fprintf(w, "Your logout was successful. From us at GoLoc3r goodbye!")
 	} else {
 		w.WriteHeader(http.StatusNotFound)
 		fmt.Fprintf(w, "Unexpected error. Logout was unsuccessful.")
@@ -81,6 +81,7 @@ func logout(w http.ResponseWriter, r *http.Request) {
 }
 
 // Creates a new valid user account
+//Utilizes authtool package
 func createUser(w http.ResponseWriter, r *http.Request) {
 	username := r.FormValue("username")
 	password := r.FormValue("password")
@@ -97,6 +98,7 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 }
 
 // Reads all database entries for a validated user
+// displays all of the entries in user database 
 func readAll(w http.ResponseWriter, r *http.Request) {
 if validated{
 	rA = db.ReadAll()
@@ -115,6 +117,9 @@ func searchByUsername(w http.ResponseWriter, r *http.Request) {
 	if validated{
 	username := r.FormValue("username")
 	var sBU = db.ReadFromUsername(username)
+
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprint(w,sBU)
 	}
 }
 
