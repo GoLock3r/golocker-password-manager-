@@ -88,64 +88,64 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 
 	var userCreated = authtool.CreateUser(username, password)
 
-	if userCreated == true{
+	if userCreated == true {
 		w.WriteHeader(http.StatusOK)
 		fmt.Fprintf(w, "New user created return to login page ")
-	}else{
+	} else {
 		w.WriteHeader(http.StatusNotFound)
-	    fmt.Fprint(w, "Unable to create new user try again")
+		fmt.Fprint(w, "Unable to create new user try again")
 	}
 }
 
 // Reads all database entries for a validated user
-// displays all of the entries in user database 
-func readAll(w http.ResponseWriter, r *http.Request) {
-if validated{
-	rA = db.ReadAll()
-}
-}
+// displays all of the entries in user database
+// func readAll(w http.ResponseWriter, r *http.Request) {
+// if validated{
+// 	rA = db.ReadAll()
+// }
+// }
 
-// Searches entry titles and usernames and displays the results
-// for a validated user
-func searchByTitle(w http.ResponseWriter, r *http.Request) {
-if validated{
-	title := r.FormValue("title")
-	var sBT = db.ReadFromTitle(title)
-}
-}
-func searchByUsername(w http.ResponseWriter, r *http.Request) {
-	if validated{
-	username := r.FormValue("username")
-	var sBU = db.ReadFromUsername(username)
+// // Searches entry titles and usernames and displays the results
+// // for a validated user
+// func searchByTitle(w http.ResponseWriter, r *http.Request) {
+// if validated{
+// 	title := r.FormValue("title")
+// 	var sBT = db.ReadFromTitle(title)
+// }
+// }
+// func searchByUsername(w http.ResponseWriter, r *http.Request) {
+// 	if validated{
+// 	username := r.FormValue("username")
+// 	var sBU = db.ReadFromUsername(username)
 
-	w.WriteHeader(http.StatusOK)
-	fmt.Fprint(w,sBU)
-	}
-}
+// 	w.WriteHeader(http.StatusOK)
+// 	fmt.Fprint(w,sBU)
+// 	}
+// }
 
-// Deletes an entry from the database for a validated user
-func delete(w http.ResponseWriter, r *http.Request) {
-if validated{
-	title := r.FormValue("title")
-	db.DeleteEntry(title)
-}
-}
+// // Deletes an entry from the database for a validated user
+// func delete(w http.ResponseWriter, r *http.Request) {
+// if validated{
+// 	title := r.FormValue("title")
+// 	db.DeleteEntry(title)
+// }
+// }
 
-// Creates a new entry to be securely stored on the database for
-// a validated user
-func createEntry(w http.ResponseWriter, r *http.Request) {
-if validated{
-	db.WriteEntry()
-}
-}
+// // Creates a new entry to be securely stored on the database for
+// // a validated user
+// func createEntry(w http.ResponseWriter, r *http.Request) {
+// if validated{
+// 	db.WriteEntry()
+// }
+// }
 
-// Edits an entry for a validated user
-func edit(w http.ResponseWriter, r *http.Request) {
-if validated{
-	db.UpdateEntry()
+// // Edits an entry for a validated user
+// func edit(w http.ResponseWriter, r *http.Request) {
+// if validated{
+// 	db.UpdateEntry()
 
-}
-}
+// }
+// }
 
 // Display the homepage for a validated user
 func home(w http.ResponseWriter, r *http.Request) {
@@ -184,7 +184,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		home(w, r)
 		fmt.Println("should be a homepage")
 	case "/home/display":
-		readAll(w, r)
+		//readAll(w, r)
 		fmt.Println("Display all db entries")
 	case "/home/search":
 
@@ -196,7 +196,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	case "/home/edit":
 		fmt.Println("Edit here")
 	case "/createUser":
-		createUser(w,r)
+		createUser(w, r)
 		fmt.Print("just be a create user page")
 	default:
 		fmt.Println("Path not found?")
