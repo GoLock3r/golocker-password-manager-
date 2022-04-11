@@ -121,7 +121,8 @@ func searchByUsername(w http.ResponseWriter, r *http.Request) {
 // Deletes an entry from the database for a validated user
 func delete(w http.ResponseWriter, r *http.Request) {
 if validated{
-
+	title := r.FormValue("title")
+	db.DeleteEntry(title)
 }
 }
 
@@ -129,13 +130,14 @@ if validated{
 // a validated user
 func createEntry(w http.ResponseWriter, r *http.Request) {
 if validated{
-
+	db.WriteEntry()
 }
 }
 
 // Edits an entry for a validated user
 func edit(w http.ResponseWriter, r *http.Request) {
 if validated{
+	db.UpdateEntry()
 
 }
 }
