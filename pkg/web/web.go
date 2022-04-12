@@ -137,27 +137,35 @@ func readAll(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Println("Template execution error")
 		}
+	} else {
+		w.WriteHeader(http.StatusNotFound)
+		fmt.Fprintf(w, "Oh no maybe log in first")
 	}
 }
 
 // Searches entry titles and usernames and displays the results
 // for a validated user
-func searchByTitle(w http.ResponseWriter, r *http.Request){
-	var fileName = "searchTitle.html"
-	t, err := template.ParseFiles(fileName)
-	if err != nil {
-		fmt.Println("Parse error")
-		return
-	}
-	err = t.ExecuteTemplate(w, fileName, nil)
-	if err != nil {
-		fmt.Println("Template execution error")
+func searchByTitle(w http.ResponseWriter, r *http.Request) {
+	if validated {
+
+		var fileName = "searchTitle.html"
+		t, err := template.ParseFiles(fileName)
+		if err != nil {
+			fmt.Println("Parse error")
+			return
+		}
+		err = t.ExecuteTemplate(w, fileName, nil)
+		if err != nil {
+			fmt.Println("Template execution error")
+		}
+	} else {
+		w.WriteHeader(http.StatusNotFound)
+		fmt.Fprintf(w, "Oh no maybe log in first")
 	}
 }
-
 func searchByTitle_submit(w http.ResponseWriter, r *http.Request) {
 	if validated {
-		
+
 		var display = ""
 		var fileName = "searchByTitle.html"
 		display = formatEntryString(db.ReadFromTitle(r.FormValue("title")))
@@ -171,22 +179,29 @@ func searchByTitle_submit(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Println("Template execution error")
 		}
+	} else {
+		w.WriteHeader(http.StatusNotFound)
+		fmt.Fprintf(w, "Oh no maybe log in first")
 	}
 }
 
-func searchByUsername(w http.ResponseWriter, r *http.Request){
-	var fileName = "searchUsername.html"
-	t, err := template.ParseFiles(fileName)
-	if err != nil {
-		fmt.Println("Parse error")
-		return
-	}
-	err = t.ExecuteTemplate(w, fileName, nil)
-	if err != nil {
-		fmt.Println("Template execution error")
+func searchByUsername(w http.ResponseWriter, r *http.Request) {
+	if validated {
+		var fileName = "searchUsername.html"
+		t, err := template.ParseFiles(fileName)
+		if err != nil {
+			fmt.Println("Parse error")
+			return
+		}
+		err = t.ExecuteTemplate(w, fileName, nil)
+		if err != nil {
+			fmt.Println("Template execution error")
+		}
+	} else {
+		w.WriteHeader(http.StatusNotFound)
+		fmt.Fprintf(w, "Oh no maybe log in first")
 	}
 }
-
 func searchByUsername_submit(w http.ResponseWriter, r *http.Request) {
 	if validated {
 		var display = ""
@@ -202,6 +217,9 @@ func searchByUsername_submit(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Println("Template execution error")
 		}
+	} else {
+		w.WriteHeader(http.StatusNotFound)
+		fmt.Fprintf(w, "Oh no maybe log in first")
 	}
 }
 
@@ -209,29 +227,38 @@ func searchByUsername_submit(w http.ResponseWriter, r *http.Request) {
 func delete_submit(w http.ResponseWriter, r *http.Request) {
 	if validated {
 		var fileName = "delete-submit.html"
-	t, err := template.ParseFiles(fileName)
-	if err != nil {
-		fmt.Println("Parse error")
-		return
-	}
-	err = t.ExecuteTemplate(w, fileName, nil)
-	if err != nil {
-		fmt.Println("Template execution error")
-	}
+		t, err := template.ParseFiles(fileName)
+		if err != nil {
+			fmt.Println("Parse error")
+			return
+		}
+		err = t.ExecuteTemplate(w, fileName, nil)
+		if err != nil {
+			fmt.Println("Template execution error")
+		}
 		title := r.FormValue("title")
 		db.DeleteEntry(title)
+	} else {
+		w.WriteHeader(http.StatusNotFound)
+		fmt.Fprintf(w, "Oh no maybe log in first")
 	}
 }
+
 func delete(w http.ResponseWriter, r *http.Request) {
-	var fileName = "delete.html"
-	t, err := template.ParseFiles(fileName)
-	if err != nil {
-		fmt.Println("Parse error")
-		return
-	}
-	err = t.ExecuteTemplate(w, fileName, nil)
-	if err != nil {
-		fmt.Println("Template execution error")
+	if validated {
+		var fileName = "delete.html"
+		t, err := template.ParseFiles(fileName)
+		if err != nil {
+			fmt.Println("Parse error")
+			return
+		}
+		err = t.ExecuteTemplate(w, fileName, nil)
+		if err != nil {
+			fmt.Println("Template execution error")
+		}
+	} else {
+		w.WriteHeader(http.StatusNotFound)
+		fmt.Fprintf(w, "Oh no maybe log in first")
 	}
 }
 
@@ -249,6 +276,9 @@ func createEntry(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Println("Template execution error")
 		}
+	} else {
+		w.WriteHeader(http.StatusNotFound)
+		fmt.Fprintf(w, "Oh no maybe log in first")
 	}
 }
 
@@ -272,28 +302,36 @@ func createEntrySubmit(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Println("Template execution error")
 		}
+	} else {
+		w.WriteHeader(http.StatusNotFound)
+		fmt.Fprintf(w, "Oh no maybe log in first")
 	}
 }
 
 // Edits an entry for a validated user
 func edit(w http.ResponseWriter, r *http.Request) {
-	var fileName = "edit.html"
-	t, err := template.ParseFiles(fileName)
-	if err != nil {
-		fmt.Println("Parse error")
-		return
-	}
-	err = t.ExecuteTemplate(w, fileName, nil)
-	if err != nil {
-		fmt.Println("Template execution error")
+	if validated {
+		var fileName = "edit.html"
+		t, err := template.ParseFiles(fileName)
+		if err != nil {
+			fmt.Println("Parse error")
+			return
+		}
+		err = t.ExecuteTemplate(w, fileName, nil)
+		if err != nil {
+			fmt.Println("Template execution error")
+		}
+	} else {
+		w.WriteHeader(http.StatusNotFound)
+		fmt.Fprintf(w, "Oh no maybe log in first")
 	}
 }
 
 func edit_submit(w http.ResponseWriter, r *http.Request) {
 	if validated {
-		var success = db.UpdateEntry(r.FormValue("title"), r.FormValue("update_Key"), r.FormValue("update_Value"))
-		if success {
-			var fileName = "edit.html"
+		db.UpdateEntry(r.FormValue("title"), r.FormValue("update_Key"), r.FormValue("update_Value"))
+		if validated {
+			var fileName = "delete-submit.html"
 			t, err := template.ParseFiles(fileName)
 			if err != nil {
 				fmt.Println("Parse error")
@@ -304,6 +342,9 @@ func edit_submit(w http.ResponseWriter, r *http.Request) {
 				fmt.Println("Template execution error")
 			}
 		}
+	} else {
+		w.WriteHeader(http.StatusNotFound)
+		fmt.Fprintf(w, "Oh no maybe log in first")
 	}
 }
 
@@ -324,7 +365,7 @@ func home(w http.ResponseWriter, r *http.Request) {
 		}
 	} else {
 		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, "Well this isn't good. Your homepage should be here!")
+		fmt.Fprintf(w, "Oh no maybe log in first")
 	}
 }
 
@@ -362,10 +403,10 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	case "/home/searchUser-Submit":
 		searchByUsername_submit(w, r)
 	case "/home/delete":
-		delete(w,r)
+		delete(w, r)
 		//fmt.Println("Delete here")
 	case "/home/delete-submit":
-		delete_submit(w,r)
+		delete_submit(w, r)
 	case "/home/create":
 		createEntry(w, r)
 		//fmt.Println("Create here")

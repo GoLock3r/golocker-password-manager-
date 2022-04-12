@@ -1,9 +1,13 @@
 
  <html>
-    <h1>Delete!</h1>
-    <form action="/home/delete-submit" method="POST">
+    <h1>Edit your entry give us the title you want to search by!</h1>
+    <form action="/home/edit-submit" method="POST">
         <label for="title">Title:</label><br>
         <input type="text" id="title" name="title" value=""><br>
-        <input type="submit" value="Delete">
+        <label for="title">What would you like to update:</label><br>
+        <input type="text" id="update_key" name="update_key" value=""><br>
+        <label for="title">What would you like to replace:</label><br>
+        <input type="text" id="update_value" name="update_value" value=""><br>
+        <input type="submit" value="update">
     </form>
 </html>
