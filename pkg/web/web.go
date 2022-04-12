@@ -169,7 +169,6 @@ func searchByTitle_submit(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Println("Template execution error")
 		}
-		
 	}
 }
 
@@ -188,7 +187,6 @@ func searchByUsername(w http.ResponseWriter, r *http.Request){
 
 func searchByUsername_submit(w http.ResponseWriter, r *http.Request) {
 	if validated {
-		
 		var display = ""
 		var fileName = "searchByUsername.html"
 		display = formatEntryString(db.ReadFromUsername(r.FormValue("username")))
@@ -202,18 +200,38 @@ func searchByUsername_submit(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Println("Template execution error")
 		}
-		
 	}
-	
 }
 
 // Deletes an entry from the database for a validated user
-func delete(w http.ResponseWriter, r *http.Request) {
+func delete_submit(w http.ResponseWriter, r *http.Request) {
 	if validated {
+		var fileName = "delete-submit.html"
+	t, err := template.ParseFiles(fileName)
+	if err != nil {
+		fmt.Println("Parse error")
+		return
+	}
+	err = t.ExecuteTemplate(w, fileName, nil)
+	if err != nil {
+		fmt.Println("Template execution error")
+	}
 		title := r.FormValue("title")
 		db.DeleteEntry(title)
 	}
 }
+func delete(w http.ResponseWriter, r *http.Request) {
+	var fileName = "delete.html"
+	t, err := template.ParseFiles(fileName)
+	if err != nil {
+		fmt.Println("Parse error")
+		return
+	}
+	err = t.ExecuteTemplate(w, fileName, nil)
+	if err != nil {
+		fmt.Println("Template execution error")
+	}
+	}
 
 // Creates a new entry to be securely stored on the database for
 // a validated user
@@ -257,8 +275,33 @@ func createEntrySubmit(w http.ResponseWriter, r *http.Request) {
 
 // Edits an entry for a validated user
 func edit(w http.ResponseWriter, r *http.Request) {
+	var fileName = "edit.html"
+	t, err := template.ParseFiles(fileName)
+	if err != nil {
+		fmt.Println("Parse error")
+		return
+	}
+	err = t.ExecuteTemplate(w, fileName, nil)
+	if err != nil {
+		fmt.Println("Template execution error")
+	}
+}
+
+func edit_submit(w http.ResponseWriter, r *http.Request) {
 	if validated {
-		db.UpdateEntry(r.FormValue("title"), r.FormValue("update_Key"), r.FormValue("update_Value"))
+		var success = db.UpdateEntry(r.FormValue("title"), r.FormValue("update_Key"), r.FormValue("update_Value"))
+		if success {
+			var fileName = "edit.html"
+			t, err := template.ParseFiles(fileName)
+			if err != nil {
+				fmt.Println("Parse error")
+				return
+			}
+			err = t.ExecuteTemplate(w, fileName, nil)
+			if err != nil {
+				fmt.Println("Template execution error")
+			}
+		}
 	}
 }
 
@@ -317,7 +360,10 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	case "/home/searchUser-Submit":
 		searchByUsername_submit(w, r)
 	case "/home/delete":
+		delete(w,r)
 		//fmt.Println("Delete here")
+	case "/home/delete-submit":
+		delete_submit(w,r)
 	case "/home/create":
 		createEntry(w, r)
 		//fmt.Println("Create here")
@@ -325,6 +371,9 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		createEntrySubmit(w, r)
 		//fmt.Println("Create here")
 	case "/home/edit":
+		edit(w, r)
+	case "/home/edit-submit":
+		edit_submit(w, r)
 		//fmt.Println("Edit here")
 	case "/createUser":
 		createUser(w, r)
