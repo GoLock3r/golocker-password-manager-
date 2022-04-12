@@ -55,13 +55,11 @@ func loginSubmit(w http.ResponseWriter, r *http.Request) {
 		err = t.ExecuteTemplate(w, fileName, username)
 		if err != nil {
 			fmt.Println("Template execution error")
-
 		}
 		valid_username = username
-
 	} else {
 		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, "Login was unsuccessful, sit tight or try again who am I to tell you what to do.")
+		fmt.Fprintf(w, "Login was unsuccessful, sit tight or try again; who am I to tell you what to do?")
 	}
 
 }
@@ -73,8 +71,7 @@ func logout(w http.ResponseWriter, r *http.Request) {
 	validated = db.CloseClientDB()
 	if validated {
 		w.WriteHeader(http.StatusOK)
-
-		fmt.Fprintf(w, "Your logout was successful. From us at GoLoc3r goodbye!")
+		fmt.Fprintf(w, "Your logout was successful. From us at GoLock3r, goodbye!")
 	} else {
 		w.WriteHeader(http.StatusNotFound)
 		fmt.Fprintf(w, "Unexpected error. Logout was unsuccessful.")
@@ -99,15 +96,12 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 		err = t.ExecuteTemplate(w, fileName, username)
 		if err != nil {
 			fmt.Println("Template execution error")
-
 		}
 		fmt.Fprintf(w, "Account was created successfully")
 	} else {
 		w.WriteHeader(http.StatusNotFound)
 		fmt.Fprintf(w, "Unable to create acount ")
-
 	}
-
 }
 
 // Reads all database entries for a validated user
@@ -149,37 +143,46 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 func createEntry(w http.ResponseWriter, r *http.Request) {
 	if validated {
 		var fileName = "create.html"
-	t, err := template.ParseFiles(fileName)
-	if err != nil {
-		fmt.Println("Parse error")
-		return
-	}
-	err = t.ExecuteTemplate(w, fileName, nil)
-	if err != nil {
-		fmt.Println("Template execution error")
-	}
-
-		
+		t, err := template.ParseFiles(fileName)
+		if err != nil {
+			fmt.Println("Parse error")
+			return
+		}
+		err = t.ExecuteTemplate(w, fileName, nil)
+		if err != nil {
+			fmt.Println("Template execution error")
+		}
 	}
 }
 
-func createEntrySubmit(w http.ResponseWriter, r *http.Request){
-	if validated{
+func createEntrySubmit(w http.ResponseWriter, r *http.Request) {
+	if validated {
 		entry := map[string]string{
 			"title":        r.FormValue("title"),
 			"password":     r.FormValue("password"),
 			"username":     r.FormValue("username"),
 			"private_note": r.FormValue("private_note"),
 			"public_note":  r.FormValue("public_note"),
+		}
+		db.WriteEntry(entry)
+		var fileName = "createsubmit.html"
+		t, err := template.ParseFiles(fileName)
+		if err != nil {
+			fmt.Println("Parse error")
+			return
+		}
+		err = t.ExecuteTemplate(w, fileName, nil)
+		if err != nil {
+			fmt.Println("Template execution error")
+		}
 	}
-	db.WriteEntry(entry)
 }
-}
+
 // Edits an entry for a validated user
 func edit(w http.ResponseWriter, r *http.Request) {
-if validated{
-	db.UpdateEntry(r.FormValue("title"),r.FormValue("update_Key"),r.FormValue("update_Value"))
-}
+	if validated {
+		db.UpdateEntry(r.FormValue("title"), r.FormValue("update_Key"), r.FormValue("update_Value"))
+	}
 }
 
 // Display the homepage for a validated user
@@ -199,7 +202,7 @@ func home(w http.ResponseWriter, r *http.Request) {
 		}
 	} else {
 		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, "well this isn't good your homepage should be here")
+		fmt.Fprintf(w, "Well this isn't good. Your homepage should be here!")
 	}
 }
 
@@ -209,6 +212,10 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	case "/":
 		login(w, r)
 		fmt.Println("A login page should be here")
+	case "":
+		login(w, r)
+		fmt.Println("A login page should be here")
+
 	case "/login-submit":
 		loginSubmit(w, r)
 		fmt.Println("Submit login")
@@ -227,10 +234,10 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	case "/home/delete":
 		fmt.Println("Delete here")
 	case "/home/create":
-		createEntry(w,r)
+		createEntry(w, r)
 		fmt.Println("Create here")
 	case "/home/create-Submit":
-		createEntrySubmit(w,r)
+		createEntrySubmit(w, r)
 		fmt.Println("Create here")
 	case "/home/edit":
 		fmt.Println("Edit here")
