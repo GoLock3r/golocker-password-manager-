@@ -104,38 +104,62 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func formatEntryString(entryTable []map[string]string) string {
+	var display = ""
+	for _, entry := range entryTable {
+		display += "Website: " + entry["title"] + "\n"
+		display += "Username: " + entry["username"] + "\n"
+		display += "Password: " + entry["password"] + "\n"
+		display += "Public note: " + entry["public_note"] + "\n"
+		display += "Private note: " + entry["private_note"] + "\n"
+		display += "\n"
+	}
+	return display
+}
+
 // Reads all database entries for a validated user
 // displays all of the entries in user database
-// func readAll(w http.ResponseWriter, r *http.Request) {
-// if validated{
-// 	rA = db.ReadAll()
-// }
-// }
+func readAll(w http.ResponseWriter, r *http.Request) {
+	if validated {
+		var display = ""
+		var fileName = "display.html"
+		display = formatEntryString(db.ReadAll())
 
-// // Searches entry titles and usernames and displays the results
-// // for a validated user
+		t, err := template.ParseFiles(fileName)
+		if err != nil {
+			fmt.Println("Parse error")
+			return
+		}
+		err = t.ExecuteTemplate(w, fileName, display)
+		if err != nil {
+			fmt.Println("Template execution error")
+		}
+	}
+}
+
+// Searches entry titles and usernames and displays the results
+// for a validated user
 // func searchByTitle(w http.ResponseWriter, r *http.Request) {
-// if validated{
-// 	title := r.FormValue("title")
-// 	var sBT = db.ReadFromTitle(title)
-// }
+// 	if validated {
+// 		title := r.FormValue("title")
+// 		var entryTable = db.ReadFromTitle(title)
+// 	}
 // }
 // func searchByUsername(w http.ResponseWriter, r *http.Request) {
-// 	if validated{
-// 	username := r.FormValue("username")
-// 	var sBU = db.ReadFromUsername(username)
+// 	if validated {
+// 		username := r.FormValue("username")
+// 		var entryTable = db.ReadFromUsername(username)
+// 		w.WriteHeader(http.StatusOK)
 
-// 	w.WriteHeader(http.StatusOK)
-// 	fmt.Fprint(w,sBU)
 // 	}
 // }
 
 // // Deletes an entry from the database for a validated user
 // func delete(w http.ResponseWriter, r *http.Request) {
-// if validated{
-// 	title := r.FormValue("title")
-// 	db.DeleteEntry(title)
-// }
+// 	if validated {
+// 		title := r.FormValue("title")
+// 		db.DeleteEntry(title)
+// 	}
 // }
 
 // Creates a new entry to be securely stored on the database for
@@ -214,38 +238,41 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("A login page should be here")
 	case "":
 		login(w, r)
-		fmt.Println("A login page should be here")
+		//fmt.Println("A login page should be here")
 
 	case "/login-submit":
 		loginSubmit(w, r)
-		fmt.Println("Submit login")
+		//fmt.Println("Submit login")
 	case "/logout":
 		logout(w, r)
-		fmt.Println("Submit logout")
+		//fmt.Println("Submit logout")
 	case "/home":
 		home(w, r)
-		fmt.Println("should be a homepage")
+		//fmt.Println("should be a homepage")
 	case "/home/display":
-		//readAll(w, r)
-		fmt.Println("Display all db entries")
-	case "/home/search":
+		readAll(w, r)
 
-		fmt.Println("Search here")
+		//fmt.Println("Display all db entries")
+	case "/home/searchTitle":
+
+		//fmt.Println("Search here")
+	case "/home/searchUser":
+
 	case "/home/delete":
-		fmt.Println("Delete here")
+		//fmt.Println("Delete here")
 	case "/home/create":
 		createEntry(w, r)
-		fmt.Println("Create here")
+		//fmt.Println("Create here")
 	case "/home/create-Submit":
 		createEntrySubmit(w, r)
-		fmt.Println("Create here")
+		//fmt.Println("Create here")
 	case "/home/edit":
-		fmt.Println("Edit here")
+		//fmt.Println("Edit here")
 	case "/createUser":
 		createUser(w, r)
-		fmt.Print("just be a create user page")
+		//fmt.Print("just be a create user page")
 	default:
-		fmt.Println("Path not found?")
+		//fmt.Println("Path not found?")
 	}
 }
 
