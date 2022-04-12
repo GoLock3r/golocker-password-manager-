@@ -106,6 +106,9 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 
 func formatEntryString(entryTable []map[string]string) string {
 	var display = ""
+	if entryTable == nil {
+		display = "No entries"
+	}
 	for _, entry := range entryTable {
 		display += "Website: " + entry["title"] + "\n"
 		display += "Username: " + entry["username"] + "\n"
@@ -150,7 +153,6 @@ func searchByTitle(w http.ResponseWriter, r *http.Request){
 	if err != nil {
 		fmt.Println("Template execution error")
 	}
-	
 }
 
 func searchByTitle_submit(w http.ResponseWriter, r *http.Request) {
@@ -231,7 +233,7 @@ func delete(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println("Template execution error")
 	}
-	}
+}
 
 // Creates a new entry to be securely stored on the database for
 // a validated user
