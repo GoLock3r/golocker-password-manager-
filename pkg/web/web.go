@@ -73,6 +73,7 @@ func logout(w http.ResponseWriter, r *http.Request) {
 	validated = db.CloseClientDB()
 	if validated {
 		w.WriteHeader(http.StatusOK)
+
 		fmt.Fprintf(w, "Your logout was successful. From us at GoLoc3r goodbye!")
 	} else {
 		w.WriteHeader(http.StatusNotFound)
@@ -85,6 +86,27 @@ func logout(w http.ResponseWriter, r *http.Request) {
 func createUser(w http.ResponseWriter, r *http.Request) {
 	username := r.FormValue("username")
 	password := r.FormValue("password")
+
+	var userCreated = authtool.CreateUser(username, password)
+	if userCreated {
+		w.WriteHeader(http.StatusOK)
+		var fileName = "createUser-submit.html"
+		t, err := template.ParseFiles(fileName)
+		if err != nil {
+			fmt.Println("Parse error")
+			return
+		}
+		err = t.ExecuteTemplate(w, fileName, username)
+		if err != nil {
+			fmt.Println("Template execution error")
+
+		}
+		fmt.Fprintf(w, "Account was created successfully")
+	} else {
+		w.WriteHeader(http.StatusNotFound)
+		fmt.Fprintf(w, "Unable to create acount ")
+
+	}
 
 }
 
@@ -122,21 +144,43 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 // }
 // }
 
-// // Creates a new entry to be securely stored on the database for
-// // a validated user
-// func createEntry(w http.ResponseWriter, r *http.Request) {
-// if validated{
-// 	db.WriteEntry()
-// }
-// }
+// Creates a new entry to be securely stored on the database for
+// a validated user
+func createEntry(w http.ResponseWriter, r *http.Request) {
+	if validated {
+		var fileName = "create.html"
+	t, err := template.ParseFiles(fileName)
+	if err != nil {
+		fmt.Println("Parse error")
+		return
+	}
+	err = t.ExecuteTemplate(w, fileName, nil)
+	if err != nil {
+		fmt.Println("Template execution error")
+	}
 
-// // Edits an entry for a validated user
-// func edit(w http.ResponseWriter, r *http.Request) {
-// if validated{
-// 	db.UpdateEntry()
+		
+	}
+}
 
-// }
-// }
+func createEntrySubmit(w http.ResponseWriter, r *http.Request){
+	if validated{
+		entry := map[string]string{
+			"title":        r.FormValue("title"),
+			"password":     r.FormValue("password"),
+			"username":     r.FormValue("username"),
+			"private_note": r.FormValue("private_note"),
+			"public_note":  r.FormValue("public_note"),
+	}
+	db.WriteEntry(entry)
+}
+}
+// Edits an entry for a validated user
+func edit(w http.ResponseWriter, r *http.Request) {
+if validated{
+	db.UpdateEntry(r.FormValue("title"),r.FormValue("update_Key"),r.FormValue("update_Value"))
+}
+}
 
 // Display the homepage for a validated user
 func home(w http.ResponseWriter, r *http.Request) {
@@ -183,11 +227,15 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	case "/home/delete":
 		fmt.Println("Delete here")
 	case "/home/create":
+		createEntry(w,r)
+		fmt.Println("Create here")
+	case "/home/create-Submit":
+		createEntry(w,r)
 		fmt.Println("Create here")
 	case "/home/edit":
 		fmt.Println("Edit here")
-
 	case "/createUser":
+		createUser(w, r)
 		fmt.Print("just be a create user page")
 	default:
 		fmt.Println("Path not found?")
