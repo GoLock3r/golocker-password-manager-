@@ -139,28 +139,81 @@ func readAll(w http.ResponseWriter, r *http.Request) {
 
 // Searches entry titles and usernames and displays the results
 // for a validated user
-// func searchByTitle(w http.ResponseWriter, r *http.Request) {
-// 	if validated {
-// 		title := r.FormValue("title")
-// 		var entryTable = db.ReadFromTitle(title)
-// 	}
-// }
-// func searchByUsername(w http.ResponseWriter, r *http.Request) {
-// 	if validated {
-// 		username := r.FormValue("username")
-// 		var entryTable = db.ReadFromUsername(username)
-// 		w.WriteHeader(http.StatusOK)
+func searchByTitle(w http.ResponseWriter, r *http.Request){
+	var fileName = "searchTitle.html"
+	t, err := template.ParseFiles(fileName)
+	if err != nil {
+		fmt.Println("Parse error")
+		return
+	}
+	err = t.ExecuteTemplate(w, fileName, nil)
+	if err != nil {
+		fmt.Println("Template execution error")
+	}
+	
+}
 
-// 	}
-// }
+func searchByTitle_submit(w http.ResponseWriter, r *http.Request) {
+	if validated {
+		
+		var display = ""
+		var fileName = "searchByTitle.html"
+		display = formatEntryString(db.ReadFromTitle(r.FormValue("title")))
 
-// // Deletes an entry from the database for a validated user
-// func delete(w http.ResponseWriter, r *http.Request) {
-// 	if validated {
-// 		title := r.FormValue("title")
-// 		db.DeleteEntry(title)
-// 	}
-// }
+		t, err := template.ParseFiles(fileName)
+		if err != nil {
+			fmt.Println("Parse error")
+			return
+		}
+		err = t.ExecuteTemplate(w, fileName, display)
+		if err != nil {
+			fmt.Println("Template execution error")
+		}
+		
+	}
+}
+
+func searchByUsername(w http.ResponseWriter, r *http.Request){
+	var fileName = "searchUsername.html"
+	t, err := template.ParseFiles(fileName)
+	if err != nil {
+		fmt.Println("Parse error")
+		return
+	}
+	err = t.ExecuteTemplate(w, fileName, nil)
+	if err != nil {
+		fmt.Println("Template execution error")
+	}
+}
+
+func searchByUsername_submit(w http.ResponseWriter, r *http.Request) {
+	if validated {
+		
+		var display = ""
+		var fileName = "searchByUsername.html"
+		display = formatEntryString(db.ReadFromUsername(r.FormValue("username")))
+
+		t, err := template.ParseFiles(fileName)
+		if err != nil {
+			fmt.Println("Parse error")
+			return
+		}
+		err = t.ExecuteTemplate(w, fileName, display)
+		if err != nil {
+			fmt.Println("Template execution error")
+		}
+		
+	}
+	
+}
+
+// Deletes an entry from the database for a validated user
+func delete(w http.ResponseWriter, r *http.Request) {
+	if validated {
+		title := r.FormValue("title")
+		db.DeleteEntry(title)
+	}
+}
 
 // Creates a new entry to be securely stored on the database for
 // a validated user
@@ -254,10 +307,15 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 		//fmt.Println("Display all db entries")
 	case "/home/searchTitle":
+		searchByTitle(w, r)
 
+	case "/home/searchTitle-Submit":
+		searchByTitle_submit(w, r)
 		//fmt.Println("Search here")
 	case "/home/searchUser":
-
+		searchByUsername(w, r)
+	case "/home/searchUser-Submit":
+		searchByUsername_submit(w, r)
 	case "/home/delete":
 		//fmt.Println("Delete here")
 	case "/home/create":
