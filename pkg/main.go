@@ -7,6 +7,7 @@ import (
 	"golock3r/server/crypt"
 	"golock3r/server/db"
 	"golock3r/server/logger"
+	"golock3r/server/web"
 	"os"
 	"strings"
 
@@ -15,7 +16,7 @@ import (
 
 func main() {
 	// Flow: Authenticate -> Show entries and perform queries -> Create entries with generated passwords -> Logout and iterate
-
+	
 	loggers := logger.CreateLoggers("logs.txt") // Instantiate Loggers
 
 	db.Loggers = loggers
@@ -23,6 +24,7 @@ func main() {
 
 	authtool.Loggers = loggers
 	authtool.LoginFile = "logins.txt"
+	web.Run()
 
 	fmt.Println("Welcome to GoLock3r, extremely rudimentary CLI edition")
 
