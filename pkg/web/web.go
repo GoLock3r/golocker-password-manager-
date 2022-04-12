@@ -230,7 +230,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		createEntry(w,r)
 		fmt.Println("Create here")
 	case "/home/create-Submit":
-		createEntry(w,r)
+		createEntrySubmit(w,r)
 		fmt.Println("Create here")
 	case "/home/edit":
 		fmt.Println("Edit here")
