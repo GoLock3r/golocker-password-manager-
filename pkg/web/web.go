@@ -329,9 +329,9 @@ func edit(w http.ResponseWriter, r *http.Request) {
 
 func edit_submit(w http.ResponseWriter, r *http.Request) {
 	if validated {
-		db.UpdateEntry(r.FormValue("title"), r.FormValue("update_Key"), r.FormValue("update_Value"))
+		db.UpdateEntry(r.FormValue("title"), r.FormValue("update_key"), r.FormValue("update_value"))
 		if validated {
-			var fileName = "delete-submit.html"
+			var fileName = "edit-submit.html"
 			t, err := template.ParseFiles(fileName)
 			if err != nil {
 				fmt.Println("Parse error")
