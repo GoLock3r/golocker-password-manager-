@@ -22,9 +22,7 @@ jobs:
       run: cd pkg/ && go build -v ./...
       
     - name: Test
-      run: cd pkg/ && go test ./crypt ./authtool ./generator -v -cover
-
-      run: cd pkg/ && go test -coverprofile=./cov.out ./...
+      run: cd pkg/ && go test ./crypt ./authtool ./generator -coverprofile=./cov.out ./...
 
     sonarcloud:
     name: SonarCloud
