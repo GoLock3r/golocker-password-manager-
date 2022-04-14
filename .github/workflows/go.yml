@@ -24,6 +24,7 @@ jobs:
     - name: Test
       run: cd pkg/ && go test ./crypt ./authtool ./generator -v -cover
 
+    run: cd pkg/ && go test -coverprofile=./cov.out ./...
 
     sonarcloud:
     name: SonarCloud
