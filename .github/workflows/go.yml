@@ -35,6 +35,9 @@ jobs:
       
     - name: Test
       run: cd pkg/ && go test ./crypt ./authtool ./generator -v -cover
+    - name: Run unit Tests
+      run: |
+          go test -coverprofile=./cov.out ./...
 
 
     
