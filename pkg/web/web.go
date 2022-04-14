@@ -13,7 +13,7 @@ import (
 var Loggers *logger.Loggers
 
 var valid_username = ""
-var validated = true
+var validated = false
 
 // Serve a login page to the user and pass credentials off to the
 // loginSubmit function to verify these credentials
@@ -39,9 +39,9 @@ func loginSubmit(w http.ResponseWriter, r *http.Request) {
 	db.Loggers = loggers
 
 	username := r.FormValue("username")
-	//	password := r.FormValue("password")
+	password := r.FormValue("password")
 
-	//validated = authtool.ValidateUser(username, string(password))
+	validated = authtool.ValidateUser(username, string(password))
 	if validated {
 		var trimmedUser = strings.TrimSpace(username)
 		db.Connect(trimmedUser)
