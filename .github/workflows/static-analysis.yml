@@ -23,7 +23,7 @@ jobs:
 
       - name: Run unit Tests
         run: |
-          go test -coverprofile=./cov.out ./...
+         cd pkg/ && go test ./crypt ./authtool  -coverprofile=./cov.out ./...
       - name: Run Gosec Security Scanner
         run: |
           go get github.com/securego/gosec/cmd/gosec
