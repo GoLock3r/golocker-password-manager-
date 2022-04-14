@@ -39,7 +39,7 @@ func loginSubmit(w http.ResponseWriter, r *http.Request) {
 	db.Loggers = loggers
 
 	username := r.FormValue("username")
-//	password := r.FormValue("password")
+	//	password := r.FormValue("password")
 
 	//validated = authtool.ValidateUser(username, string(password))
 	if validated {
