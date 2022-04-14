@@ -1,6 +1,7 @@
+<!DOCTYPE html>
 <html>
     <head>
-        <h1>Welcome to GoLock3r, {{ . }}! This is your home page</h1>
+        <h1>Welcome to GoLock3r, {{ . }}! This is your homepage.</h1>
     </head>
     <form action="/home/display" method="POST">
         <input type="submit" value="display all">
@@ -18,6 +19,9 @@
           </button>
           <button type="submit" formaction="/home/edit">
             edit
+          </button>
+          <button type="submit" formaction="/logout">
+            logout
           </button>
     </form>
 
