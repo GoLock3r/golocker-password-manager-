@@ -2,7 +2,7 @@ name: Go
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, dev ]
   pull_request:
     branches: [ main ]
 
@@ -21,6 +21,6 @@ jobs:
       run: cd pkg/ && go build -v ./...
       
     - name: Test
-      run: cd pkg/ && go test ./crypt ./authtool  -v cover
+      run: cd pkg/ && go test ./crypt ./authtool ./generator -v cover
 
     
