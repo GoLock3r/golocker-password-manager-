@@ -68,7 +68,7 @@ func ToString(data [][]byte) string {
 	return str
 }
 
-// Encodes byte array data into a hexidecimal string for
+// Encodes byte array data into a hexadecimal string for
 // clean database storage
 func FormatHex(data [][]byte) string {
 	str := ""
@@ -79,7 +79,7 @@ func FormatHex(data [][]byte) string {
 	return str
 }
 
-// Decodes a hexidecimal string into a byte array of bytes
+// Decodes a hexadecimal string into a byte array of bytes
 // each of size 32 for decryption
 func FormatHexToRaw(data string) [][]byte {
 	var block []byte
