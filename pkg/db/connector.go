@@ -236,11 +236,11 @@ func CloseClientDB() bool {
 	if client == nil {
 		return false
 	}
-	err := client.Disconnect(context.TODO())
+	err := client.Disconnect(ctx)
 	if err != nil {
-		Loggers.LogError.Println("Fatal Error")
+		Loggers.LogError.Println("Fatal Error", err)
 		return false
 	}
-	fmt.Println("Connection to MongoDB closed.")
+	Loggers.LogInfo.Println("Connection to MongoDB closed.")
 	return true
 }
