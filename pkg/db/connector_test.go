@@ -135,3 +135,12 @@ func TestRemoveAll(t *testing.T) {
 	}
 	removeFiles()
 }
+
+func TestCloseClientConnection(t *testing.T){
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	Connect("test")
+	
+	if !CloseClientDB() {
+		t.Error("Unable to log out")
+	}
+}
