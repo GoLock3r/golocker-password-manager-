@@ -24,17 +24,20 @@ func Passwordstren(password string) int {
 	for _, c := range specialChars {
 		if strings.Contains(password, c) {
 			hasspec = 1
+			break
 		}
 	}
 	for _, c := range numbers {
 		if strings.Contains(password, c) {
 			hasnum = 1
+			break
 		}
 	}
 	for _, c := range capLet {
 		c = strings.ToUpper(c)
 		if strings.Contains(password, c) {
 			hascap = 1
+			break
 		}
 	}
 
