@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 )
-
+//tests zero length password with no special characters
 func Test_zero_password(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	GP := GenPassword(0, false)
@@ -13,7 +13,7 @@ func Test_zero_password(t *testing.T) {
 		t.Errorf("Expected empty string got something that wasnt an empty string %q ", GP)
 	}
 }
-
+// tests an unallowed size 
 func Test_outofsize_password(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	GP := GenPassword(18, false)
@@ -21,7 +21,7 @@ func Test_outofsize_password(t *testing.T) {
 		t.Errorf("Expected an empty string got somthing that wasnt an empty string %q", GP)
 	}
 }
-
+//Tests if the password is generating the correct length of password with dashes 
 func Test_password_gen_length(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	GP := GenPassword(16, false)
@@ -29,7 +29,7 @@ func Test_password_gen_length(t *testing.T) {
 		t.Errorf("Length of password was expected to be 16 instead it was %q", GP)
 	}
 }
-
+//tests that password generator is able to add special characters bassed off boolean passed in 
 func Test_password_gen_spec(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	GP := GenPassword(16, true)

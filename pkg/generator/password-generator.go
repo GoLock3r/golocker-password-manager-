@@ -16,7 +16,8 @@ import (
 )
 
 var Loggers *logger.Loggers
-
+//Generates a password based on  the number of characters you want plus the amount of dashes not specified by user as well as asks user if they would like
+//to use special characters or not in the password
 func GenPassword(n int, allow bool) string { // n is length of password without dashes expect password length to add anywhere from 0-3 dashes depending on length
 	var password = ""
 	var letters = [26]string{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"}

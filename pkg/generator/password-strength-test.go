@@ -3,7 +3,7 @@ package generator
 import (
 	"strings"
 )
-
+//Tests the strength of the password based off of length, contains capital letters, contains numbers, and special characters. Will have a dictonary implimented at somepoint to detect dictionary words
 func Passwordstren(password string) int {
 	var strength int
 	var length int
