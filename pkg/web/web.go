@@ -69,6 +69,7 @@ func loginSubmit(w http.ResponseWriter, r *http.Request) {
 func logout(w http.ResponseWriter, r *http.Request) {
 	loggers := logger.CreateLoggers("testlogs.txt")
 	authtool.Loggers = loggers
+	key = nil
 	validated = db.CloseClientDB()
 	if validated {
 		w.WriteHeader(http.StatusOK)
