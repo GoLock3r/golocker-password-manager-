@@ -14,7 +14,7 @@ var Loggers *logger.Loggers
 
 var valid_username = ""
 var validated = false
-
+var key []byte
 // Serve a login page to the user and pass credentials off to the
 // loginSubmit function to verify these credentials
 func login(w http.ResponseWriter, r *http.Request) {
@@ -37,10 +37,10 @@ func loginSubmit(w http.ResponseWriter, r *http.Request) {
 	authtool.Loggers = loggers
 	authtool.LoginFile = "logins.txt"
 	db.Loggers = loggers
-
+	
 	username := r.FormValue("username")
 	password := r.FormValue("password")
-
+	key = authtool.GetKey(username,password)
 	validated = authtool.ValidateUser(username, string(password))
 	if validated {
 		var trimmedUser = strings.TrimSpace(username)
@@ -57,6 +57,7 @@ func loginSubmit(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("Template execution error")
 		}
 		valid_username = username
+		
 	} else {
 		w.WriteHeader(http.StatusNotFound)
 		fmt.Fprintf(w, "Login was unsuccessful, sit tight or try again; who am I to tell you what to do?")
@@ -291,6 +292,7 @@ func createEntrySubmit(w http.ResponseWriter, r *http.Request) {
 			"private_note": r.FormValue("private_note"),
 			"public_note":  r.FormValue("public_note"),
 		}
+		entry = db.EncryptEntry(key,entry)
 		db.WriteEntry(entry)
 		var fileName = "createsubmit.html"
 		t, err := template.ParseFiles(fileName)
