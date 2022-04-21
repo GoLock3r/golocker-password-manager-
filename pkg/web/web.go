@@ -129,6 +129,7 @@ func readAll(w http.ResponseWriter, r *http.Request) {
 	if validated {
 		var display = ""
 		var fileName = "display.html"
+		entries = db.ReadAll()
 		for i := 0; i < len(entries); i++ {
 			entries[i] = db.DecryptEntry(key,entries[i])
 		}
