@@ -124,11 +124,14 @@ func formatEntryString(entryTable []map[string]string) string {
 // Reads all database entries for a validated user
 // displays all of the entries in user database
 func readAll(w http.ResponseWriter, r *http.Request) {
+	var entries []map[string]string
 	if validated {
 		var display = ""
 		var fileName = "display.html"
-		display = formatEntryString(db.ReadAll())
-
+		for i := 0; i < len(entries); i++ {
+			entries[i] = db.DecryptEntry(key,entries[i])
+		}
+		display = formatEntryString(entries)
 		t, err := template.ParseFiles(fileName)
 		if err != nil {
 			fmt.Println("Parse error")
