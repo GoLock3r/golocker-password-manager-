@@ -22,13 +22,9 @@ var URI = "mongodb://localhost:27017"
 
 // Connect to a user's collection identified by their unique username
 func Connect(collection string) bool {
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(URI))
+	client, _ = mongo.Connect(ctx, options.Client().ApplyURI(URI))
 
-	if err != nil {
-		Loggers.LogError.Println("Could not connect to database")
-	}
-
-	err = client.Ping(ctx, nil)
+	err := client.Ping(ctx, nil)
 	if err != nil {
 		Loggers.LogError.Println("Could not ping database")
 		return false
@@ -108,12 +104,12 @@ func WriteEntry(entry map[string]string) bool {
 // there are any matches, or return nothing if otherwise.
 func ReadFromTitle(entryTitle string) []map[string]string {
 	filter := bson.D{{Key: "title", Value: entryTitle}}
-	cursor, err := col.Find(context.TODO(), filter)
+	cursor, err := col.Find(ctx, filter)
 	if err != nil {
 		panic(err)
 	}
 	var results []bson.D
-	if err = cursor.All(context.TODO(), &results); err != nil {
+	if err = cursor.All(ctx, &results); err != nil {
 		panic(err)
 	}
 
@@ -133,12 +129,12 @@ func ReadFromTitle(entryTitle string) []map[string]string {
 // there are any matches, or return nothing if otherwise.
 func ReadFromUsername(entryUsername string) []map[string]string {
 	filter := bson.D{{Key: "username", Value: entryUsername}}
-	cursor, err := col.Find(context.TODO(), filter)
+	cursor, err := col.Find(ctx, filter)
 	if err != nil {
 		panic(err)
 	}
 	var results []bson.D
-	if err = cursor.All(context.TODO(), &results); err != nil {
+	if err = cursor.All(ctx, &results); err != nil {
 		panic(err)
 	}
 
@@ -197,7 +193,7 @@ func UpdateEntry(entryTitle string, updateField string, updateEntry string) bool
 
 	update := bson.D{{Key: "$set", Value: bson.D{{Key: input1, Value: input2}}}}
 
-	_, err := col.UpdateOne(context.TODO(), filter, update)
+	_, err := col.UpdateOne(ctx, filter, update)
 	if err != nil {
 		Loggers.LogError.Println("Entry couldn't be updated", err)
 		return false
@@ -208,7 +204,7 @@ func UpdateEntry(entryTitle string, updateField string, updateEntry string) bool
 // Given an entries title, delete that entry. Returns true if the operation
 // was successful, or false if otherwise.
 func DeleteEntry(entryTitle string) bool {
-	_, err := col.DeleteOne(context.TODO(), bson.D{{Key: "title", Value: entryTitle}})
+	_, err := col.DeleteOne(ctx, bson.D{{Key: "title", Value: entryTitle}})
 	if err != nil {
 		Loggers.LogError.Println("Entry couldn't be deleted", err)
 		return false
@@ -221,7 +217,7 @@ func DeleteEntry(entryTitle string) bool {
 // Remove all entries that exist in the database. Use this with caution!
 // Returns true if the operation was successful, or false if otherwise.
 func RemoveAll() bool {
-	_, err := col.DeleteMany(context.TODO(), bson.D{{}})
+	_, err := col.DeleteMany(ctx, bson.D{{}})
 	if err != nil {
 		Loggers.LogError.Println("Entries not deleted", err)
 		return false
@@ -236,6 +232,7 @@ func CloseClientDB() bool {
 	if client == nil {
 		return false
 	}
+
 	err := client.Disconnect(ctx)
 	if err != nil {
 		Loggers.LogError.Println("Fatal Error", err)

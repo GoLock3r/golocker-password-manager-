@@ -10,13 +10,12 @@ import (
 	"golock3r/server/web"
 	//"os"
 	//"strings"
-
 	//"golang.org/x/crypto/ssh/terminal"
 )
 
 func main() {
 	// Flow: Authenticate -> Show entries and perform queries -> Create entries with generated passwords -> Logout and iterate
-	
+
 	loggers := logger.CreateLoggers("logs.txt") // Instantiate Loggers
 
 	db.Loggers = loggers
@@ -24,7 +23,6 @@ func main() {
 
 	authtool.Loggers = loggers
 	authtool.LoginFile = "logins.txt"
-	
 
 	// fmt.Println("Welcome to GoLock3r, extremely rudimentary CLI edition")
 
