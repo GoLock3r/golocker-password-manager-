@@ -15,6 +15,7 @@ var Loggers *logger.Loggers
 var valid_username = ""
 var validated = false
 var key []byte
+
 // Serve a login page to the user and pass credentials off to the
 // loginSubmit function to verify these credentials
 func login(w http.ResponseWriter, r *http.Request) {
@@ -37,10 +38,10 @@ func loginSubmit(w http.ResponseWriter, r *http.Request) {
 	authtool.Loggers = loggers
 	authtool.LoginFile = "logins.txt"
 	db.Loggers = loggers
-	
+
 	username := r.FormValue("username")
 	password := r.FormValue("password")
-	key = authtool.GetKey(username,password)
+	key = authtool.GetKey(username, password)
 	validated = authtool.ValidateUser(username, string(password))
 	if validated {
 		var trimmedUser = strings.TrimSpace(username)
@@ -57,7 +58,7 @@ func loginSubmit(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("Template execution error")
 		}
 		valid_username = username
-		
+
 	} else {
 		w.WriteHeader(http.StatusNotFound)
 		fmt.Fprintf(w, "Login was unsuccessful, sit tight or try again; who am I to tell you what to do?")
@@ -69,9 +70,13 @@ func loginSubmit(w http.ResponseWriter, r *http.Request) {
 func logout(w http.ResponseWriter, r *http.Request) {
 	loggers := logger.CreateLoggers("testlogs.txt")
 	authtool.Loggers = loggers
-	key = nil
-	validated = db.CloseClientDB()
+
 	if validated {
+		db.CloseClientDB()
+		validated = false
+		key = nil
+		valid_username = ""
+
 		w.WriteHeader(http.StatusOK)
 		fmt.Fprintf(w, "Your logout was successful. From us at GoLock3r, goodbye!")
 	} else {
@@ -131,7 +136,7 @@ func readAll(w http.ResponseWriter, r *http.Request) {
 		var fileName = "display.html"
 		entries = db.ReadAll()
 		for i := 0; i < len(entries); i++ {
-			entries[i] = db.DecryptEntry(key,entries[i])
+			entries[i] = db.DecryptEntry(key, entries[i])
 		}
 		display = formatEntryString(entries)
 		t, err := template.ParseFiles(fileName)
@@ -297,7 +302,7 @@ func createEntrySubmit(w http.ResponseWriter, r *http.Request) {
 			"private_note": r.FormValue("private_note"),
 			"public_note":  r.FormValue("public_note"),
 		}
-		entry = db.EncryptEntry(key,entry)
+		entry = db.EncryptEntry(key, entry)
 		db.WriteEntry(entry)
 		var fileName = "createsubmit.html"
 		t, err := template.ParseFiles(fileName)
@@ -381,53 +386,38 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	switch r.URL.Path {
 	case "/":
 		login(w, r)
-		fmt.Println("A login page should be here")
 	case "":
 		login(w, r)
-		//fmt.Println("A login page should be here")
-
 	case "/login-submit":
 		loginSubmit(w, r)
-		//fmt.Println("Submit login")
 	case "/logout":
 		logout(w, r)
-		//fmt.Println("Submit logout")
 	case "/home":
 		home(w, r)
-		//fmt.Println("should be a homepage")
 	case "/home/display":
 		readAll(w, r)
-
-		//fmt.Println("Display all db entries")
 	case "/home/searchTitle":
 		searchByTitle(w, r)
-
 	case "/home/searchTitle-Submit":
 		searchByTitle_submit(w, r)
-		//fmt.Println("Search here")
 	case "/home/searchUser":
 		searchByUsername(w, r)
 	case "/home/searchUser-Submit":
 		searchByUsername_submit(w, r)
 	case "/home/delete":
 		delete(w, r)
-		//fmt.Println("Delete here")
 	case "/home/delete-submit":
 		delete_submit(w, r)
 	case "/home/create":
 		createEntry(w, r)
-		//fmt.Println("Create here")
 	case "/home/create-Submit":
 		createEntrySubmit(w, r)
-		//fmt.Println("Create here")
 	case "/home/edit":
 		edit(w, r)
 	case "/home/edit-submit":
 		edit_submit(w, r)
-		//fmt.Println("Edit here")
 	case "/createUser":
 		createUser(w, r)
-		//fmt.Print("just be a create user page")
 	default:
 		//fmt.Println("Path not found?")
 	}
