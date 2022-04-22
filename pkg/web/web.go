@@ -72,7 +72,7 @@ func loginSubmit(w http.ResponseWriter, r *http.Request) bool{
 }
 
 // Strip validation from the users database and dissconects from said data base\
-func logout(w http.ResponseWriter, r *http.Request) {
+func logout(w http.ResponseWriter, r *http.Request) bool {
 	loggers := logger.CreateLoggers("testlogs.txt")
 	authtool.Loggers = loggers
 
@@ -84,15 +84,17 @@ func logout(w http.ResponseWriter, r *http.Request) {
 
 		w.WriteHeader(http.StatusOK)
 		fmt.Fprintf(w, "Your logout was successful. From us at GoLock3r, goodbye!")
+		return true
 	} else {
 		w.WriteHeader(http.StatusNotFound)
 		fmt.Fprintf(w, "Unexpected error. Logout was unsuccessful.")
+		return false
 	}
 }
 
 // Creates a new valid user account
 //Utilizes authtool package
-func createUser(w http.ResponseWriter, r *http.Request) {
+func createUser(w http.ResponseWriter, r *http.Request) bool{
 	username := r.FormValue("username")
 	password := r.FormValue("password")
 
@@ -103,17 +105,21 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 		t, err := template.ParseFiles(fileName)
 		if err != nil {
 			fmt.Println("Parse error")
-			return
+			return false
 		}
 		err = t.ExecuteTemplate(w, fileName, username)
 		if err != nil {
 			fmt.Println("Template execution error")
+			return false
 		}
+		
 		fmt.Fprintf(w, "Account was created successfully")
 	} else {
 		w.WriteHeader(http.StatusNotFound)
 		fmt.Fprintf(w, "Unable to create acount ")
+		return false
 	}
+	return true 
 }
 
 func formatEntryString(entryTable []map[string]string) string {
