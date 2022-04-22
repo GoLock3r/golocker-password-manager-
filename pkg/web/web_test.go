@@ -24,7 +24,7 @@ func TestLoginSubmit(t *testing.T){
 	form := url.Values{} 
 	form.Add("username", "demo")
 	form.Add("password", "demo123")
-	req := httptest.NewRequest("POST", "/",strings.NewReader(form.Encode()))
+	req := httptest.NewRequest(http.MethodPost, "/login-submit",strings.NewReader(form.Encode()))
 	req.Form = form 
 	var loginSubmit = loginSubmit(w,req)
 	if !loginSubmit{
@@ -34,5 +34,17 @@ func TestLoginSubmit(t *testing.T){
 }
 func TestCreateUser(t *testing.T) {
 	os.Chdir("../")
+	w := httptest.NewRecorder()
+	form := url.Values{} 
+	form.Add("username", "demo")
+	form.Add("password", "demo123")
+	req := httptest.NewRequest(http.MethodPost, "/createUser",strings.NewReader(form.Encode()))
+	req.Form = form 
+	var createUser = createUser(w,req)
+	if !createUser{
+		t.Error("this didnt work")
+	}
+	
+
 	
 }

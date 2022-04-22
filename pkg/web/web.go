@@ -62,13 +62,13 @@ func loginSubmit(w http.ResponseWriter, r *http.Request) bool{
 			return false
 		}
 		valid_username = username
-
-	} else {
+		return true
+	}else {
 		w.WriteHeader(http.StatusNotFound)
 		fmt.Fprintf(w, "Login was unsuccessful, sit tight or try again; who am I to tell you what to do?")
 		return false
 	}
-	return true
+	
 }
 
 // Strip validation from the users database and dissconects from said data base\
@@ -114,12 +114,13 @@ func createUser(w http.ResponseWriter, r *http.Request) bool{
 		}
 		
 		fmt.Fprintf(w, "Account was created successfully")
-	} else {
+		return true
+		} else {
 		w.WriteHeader(http.StatusNotFound)
 		fmt.Fprintf(w, "Unable to create acount ")
 		return false
 	}
-	return true 
+	
 }
 
 func formatEntryString(entryTable []map[string]string) string {
