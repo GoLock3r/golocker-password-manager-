@@ -18,22 +18,25 @@ var key []byte
 
 // Serve a login page to the user and pass credentials off to the
 // loginSubmit function to verify these credentials
-func login(w http.ResponseWriter, r *http.Request) {
+func login(w http.ResponseWriter, r *http.Request) bool{
 	var fileName = "login.html"
+	
 	t, err := template.ParseFiles(fileName)
 	if err != nil {
 		fmt.Println("Parse error")
-		return
+		return false
 	}
 	err = t.ExecuteTemplate(w, fileName, nil)
 	if err != nil {
 		fmt.Println("Template execution error")
+		return false
 	}
+	return true
 }
 
 // Process user credentials given from the login function.
 // Utilizes authtool package functionality to validate credentials.
-func loginSubmit(w http.ResponseWriter, r *http.Request) {
+func loginSubmit(w http.ResponseWriter, r *http.Request) bool{
 	loggers := logger.CreateLoggers("testlogs.txt")
 	authtool.Loggers = loggers
 	authtool.LoginFile = "logins.txt"
@@ -51,19 +54,21 @@ func loginSubmit(w http.ResponseWriter, r *http.Request) {
 		t, err := template.ParseFiles(fileName)
 		if err != nil {
 			fmt.Println("Parse error")
-			return
+			return false
 		}
 		err = t.ExecuteTemplate(w, fileName, username)
 		if err != nil {
 			fmt.Println("Template execution error")
+			return false
 		}
 		valid_username = username
 
 	} else {
 		w.WriteHeader(http.StatusNotFound)
 		fmt.Fprintf(w, "Login was unsuccessful, sit tight or try again; who am I to tell you what to do?")
+		return false
 	}
-
+	return true
 }
 
 // Strip validation from the users database and dissconects from said data base\
