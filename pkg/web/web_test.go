@@ -1,17 +1,19 @@
 package web
 
 import (
+	"golock3r/server/db"
+	"golock3r/server/logger"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
 	"os"
 	"strings"
 	"testing"
-	"golock3r/server/db"
 )
 
 func TestLandingPage(t *testing.T) {
 	os.Chdir("../")
+	Loggers = logger.CreateLoggers("testlogs.txt")
 	req := httptest.NewRequest(http.MethodGet, "/", nil)
 	w := httptest.NewRecorder()
 	var landingpage = login(w, req)
@@ -21,6 +23,7 @@ func TestLandingPage(t *testing.T) {
 }
 func TestLoginSubmit(t *testing.T){
 	os.Chdir("../")
+	Loggers = logger.CreateLoggers("testlogs.txt")
 	w := httptest.NewRecorder()
 	form := url.Values{} 
 	form.Add("username", "demo")
@@ -35,11 +38,12 @@ func TestLoginSubmit(t *testing.T){
 }
 func TestCreateUser(t *testing.T) {
 	os.Chdir("../")
+	Loggers = logger.CreateLoggers("testlogs.txt")
 	w := httptest.NewRecorder()
 	form := url.Values{} 
 	form.Add("username", "demo")
 	form.Add("password", "demo123")
-	req := httptest.NewRequest(http.MethodPost, "/createUser",strings.NewReader(form.Encode()))
+	req := httptest.NewRequest(http.MethodGet, "/createUser",strings.NewReader(form.Encode()))
 	req.Form = form 
 	var createUser = createUser(w,req)
 	if !createUser{
@@ -51,6 +55,7 @@ func TestCreateUser(t *testing.T) {
 }
 func TestLogout(t *testing.T) {
 	db.Connect("demo")
+	Loggers = logger.CreateLoggers("testlogs.txt")
 	os.Chdir("../")
 	req := httptest.NewRequest(http.MethodGet, "/logout", nil)
 	w := httptest.NewRecorder()
@@ -60,7 +65,9 @@ func TestLogout(t *testing.T) {
 	}
 }
 func TestReadall(t *testing.T) {
+	db.Connect("demo")
 	os.Chdir("../")
+	Loggers = logger.CreateLoggers("testlogs.txt")
 	req := httptest.NewRequest(http.MethodGet, "/home/display", nil)
 	w := httptest.NewRecorder()
 	var readAll = readAll(w,req)
@@ -71,6 +78,7 @@ func TestReadall(t *testing.T) {
 }
 func TestSearchByTitle(t *testing.T){
 	os.Chdir("../")
+	Loggers = logger.CreateLoggers("testlogs.txt")
 	req := httptest.NewRequest(http.MethodGet, "/home/searchTitle", nil)
 	w := httptest.NewRecorder()
 	var landingpage = searchByTitle(w, req)
@@ -84,6 +92,7 @@ func TestSearchByTitleSubmit(t *testing.T){
 }
 func TestSearchByUsername(t *testing.T){
 	os.Chdir("../")
+	Loggers = logger.CreateLoggers("testlogs.txt")
 	req := httptest.NewRequest(http.MethodGet, "/home/searchUser", nil)
 	w := httptest.NewRecorder()
 	var landingpage = searchByUsername(w, req)
@@ -97,6 +106,7 @@ func TestSearchByUsernameSubmit(t *testing.T){
 
 func TestDelete(t *testing.T){
 	os.Chdir("../")
+	Loggers = logger.CreateLoggers("testlogs.txt")
 	req := httptest.NewRequest(http.MethodGet, "/home/delete", nil)
 	w := httptest.NewRecorder()
 	var landingpage = login(w, req)
@@ -111,6 +121,7 @@ func TestDeleteSubmit(t *testing.T){
 
 func TestCreateEntry(t *testing.T){
 	os.Chdir("../")
+	Loggers = logger.CreateLoggers("testlogs.txt")
 	req := httptest.NewRequest(http.MethodGet, "/home/create", nil)
 	w := httptest.NewRecorder()
 	var landingpage = login(w, req)
@@ -124,6 +135,7 @@ func TestCreateEntrySubmit(t* testing.T){
 }
 func TestEdit(t *testing.T){
 	os.Chdir("../")
+	Loggers = logger.CreateLoggers("testlogs.txt")
 	req := httptest.NewRequest(http.MethodGet, "/home/edit", nil)
 	w := httptest.NewRecorder()
 	var landingpage = login(w, req)
@@ -138,6 +150,7 @@ func TestEditSubmit(t *testing.T){
 
 func TestHome(t *testing.T){
 	os.Chdir("../")
+	Loggers = logger.CreateLoggers("testlogs.txt")
 	req := httptest.NewRequest(http.MethodGet, "/home", nil)
 	w := httptest.NewRecorder()
 	var landingpage = home(w, req)
