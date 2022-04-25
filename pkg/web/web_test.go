@@ -22,8 +22,8 @@ func TestLandingPage(t *testing.T) {
 	}
 }
 func TestLoginSubmit(t *testing.T){
-	os.Chdir("../")
 	Loggers = logger.CreateLoggers("testlogs.txt")
+	os.Chdir("../")
 	w := httptest.NewRecorder()
 	form := url.Values{} 
 	form.Add("username", "demo")
@@ -55,7 +55,7 @@ func TestCreateUser(t *testing.T) {
 }
 func TestLogout(t *testing.T) {
 	db.Connect("demo")
-	Loggers = logger.CreateLoggers("testlogs.txt")
+	
 	os.Chdir("../")
 	req := httptest.NewRequest(http.MethodGet, "/logout", nil)
 	w := httptest.NewRecorder()
