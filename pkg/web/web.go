@@ -18,9 +18,9 @@ var key []byte
 
 // Serve a login page to the user and pass credentials off to the
 // loginSubmit function to verify these credentials
-func login(w http.ResponseWriter, r *http.Request) bool{
+func login(w http.ResponseWriter, r *http.Request) bool {
 	var fileName = "login.html"
-	
+
 	t, err := template.ParseFiles(fileName)
 	if err != nil {
 		fmt.Println("Parse error")
@@ -36,7 +36,7 @@ func login(w http.ResponseWriter, r *http.Request) bool{
 
 // Process user credentials given from the login function.
 // Utilizes authtool package functionality to validate credentials.
-func loginSubmit(w http.ResponseWriter, r *http.Request) bool{
+func loginSubmit(w http.ResponseWriter, r *http.Request) bool {
 	loggers := logger.CreateLoggers("testlogs.txt")
 	authtool.Loggers = loggers
 	authtool.LoginFile = "logins.txt"
@@ -94,7 +94,7 @@ func logout(w http.ResponseWriter, r *http.Request) bool {
 
 // Creates a new valid user account
 //Utilizes authtool package
-func createUser(w http.ResponseWriter, r *http.Request) bool{
+func createUser(w http.ResponseWriter, r *http.Request) bool {
 	username := r.FormValue("username")
 	password := r.FormValue("password")
 
@@ -112,15 +112,19 @@ func createUser(w http.ResponseWriter, r *http.Request) bool{
 			fmt.Println("Template execution error")
 			return false
 		}
-		
+
 		fmt.Fprintf(w, "Account was created successfully")
 		return true
 		} else {
 		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, "Unable to create acount ")
+		fmt.Fprintf(w, "Unable to create account ")
 		return false
 	}
+<<<<<<< Updated upstream
 	
+=======
+	return true
+>>>>>>> Stashed changes
 }
 
 func formatEntryString(entryTable []map[string]string) string {
