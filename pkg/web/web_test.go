@@ -65,9 +65,9 @@ func TestLogout(t *testing.T) {
 	}
 }
 func TestReadall(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Connect("demo")
 	os.Chdir("../")
-	Loggers = logger.CreateLoggers("testlogs.txt")
 	req := httptest.NewRequest(http.MethodGet, "/home/display", nil)
 	w := httptest.NewRecorder()
 	var readAll = readAll(w,req)
