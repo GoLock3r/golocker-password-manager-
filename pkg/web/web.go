@@ -8,6 +8,7 @@ import (
 	"html/template"
 	"net/http"
 	"strings"
+	"os"
 )
 
 var Loggers *logger.Loggers
@@ -23,8 +24,8 @@ var key []byte
 // Serve a login page to the user and pass credentials off to the
 // loginSubmit function to verify these credentials
 func login(w http.ResponseWriter, r *http.Request) bool {
+	os.Chdir("assets/")
 	var fileName = "login.html"
-
 	t, err := template.ParseFiles(fileName)
 	if err != nil {
 		fmt.Println("Parse error")
@@ -41,6 +42,7 @@ func login(w http.ResponseWriter, r *http.Request) bool {
 // Process user credentials given from the login function.
 // Utilizes authtool package functionality to validate credentials.
 func loginSubmit(w http.ResponseWriter, r *http.Request) bool {
+	os.Chdir("assets/")
 	loggers := logger.CreateLoggers("testlogs.txt")
 	authtool.Loggers = loggers
 	authtool.LoginFile = "logins.txt"
@@ -77,9 +79,9 @@ func loginSubmit(w http.ResponseWriter, r *http.Request) bool {
 
 // Strip validation from the users database and dissconects from said data base\
 func logout(w http.ResponseWriter, r *http.Request) bool {
+	os.Chdir("assets/")
 	loggers := logger.CreateLoggers("testlogs.txt")
 	authtool.Loggers = loggers
-
 	if validated {
 		db.CloseClientDB()
 		validated = false
@@ -101,7 +103,7 @@ func logout(w http.ResponseWriter, r *http.Request) bool {
 func createUser(w http.ResponseWriter, r *http.Request) bool {
 	username := r.FormValue("username")
 	password := r.FormValue("password")
-
+	os.Chdir("assets/")
 	var userCreated = authtool.CreateUser(username, password)
 	if userCreated {
 		w.WriteHeader(http.StatusOK)
@@ -147,6 +149,7 @@ func formatEntryString(entryTable []map[string]string) string {
 // displays all of the entries in user database
 func readAll(w http.ResponseWriter, r *http.Request) bool {
 	var entries []map[string]string
+	os.Chdir("assets/")
 	if validated {
 		var display = ""
 		var fileName = "display.html"
@@ -177,6 +180,7 @@ func readAll(w http.ResponseWriter, r *http.Request) bool {
 // Searches entry titles and usernames and displays the results
 // for a validated user
 func searchByTitle(w http.ResponseWriter, r *http.Request) bool {
+	os.Chdir("assets/")
 	if validated {
 
 		var fileName = "searchTitle.html"
@@ -198,6 +202,7 @@ func searchByTitle(w http.ResponseWriter, r *http.Request) bool {
 	}
 }
 func searchByTitle_submit(w http.ResponseWriter, r *http.Request) {
+	os.Chdir("assets/")
 	if validated {
 
 		var display = ""
@@ -220,6 +225,7 @@ func searchByTitle_submit(w http.ResponseWriter, r *http.Request) {
 }
 
 func searchByUsername(w http.ResponseWriter, r *http.Request) bool {
+	os.Chdir("assets/")
 	if validated {
 		var fileName = "searchUsername.html"
 		t, err := template.ParseFiles(fileName)
@@ -240,6 +246,7 @@ func searchByUsername(w http.ResponseWriter, r *http.Request) bool {
 	}
 }
 func searchByUsername_submit(w http.ResponseWriter, r *http.Request) {
+	os.Chdir("assets/")
 	if validated {
 		var display = ""
 		var fileName = "searchByUsername.html"
@@ -262,6 +269,7 @@ func searchByUsername_submit(w http.ResponseWriter, r *http.Request) {
 
 // Deletes an entry from the database for a validated user
 func delete_submit(w http.ResponseWriter, r *http.Request) {
+	os.Chdir("assets/")
 	if validated {
 		var fileName = "delete-submit.html"
 		t, err := template.ParseFiles(fileName)
@@ -282,6 +290,7 @@ func delete_submit(w http.ResponseWriter, r *http.Request) {
 }
 
 func delete(w http.ResponseWriter, r *http.Request) bool {
+	os.Chdir("assets/")
 	if validated {
 		var fileName = "delete.html"
 		t, err := template.ParseFiles(fileName)
@@ -307,6 +316,7 @@ func delete(w http.ResponseWriter, r *http.Request) bool {
 // Creates a new entry to be securely stored on the database for
 // a validated user
 func createEntry(w http.ResponseWriter, r *http.Request) bool {
+	os.Chdir("assets/")
 	if validated {
 		var fileName = "create.html"
 		t, err := template.ParseFiles(fileName)
@@ -329,6 +339,7 @@ func createEntry(w http.ResponseWriter, r *http.Request) bool {
 }
 
 func createEntrySubmit(w http.ResponseWriter, r *http.Request) {
+	os.Chdir("assets/")
 	if validated {
 		entry := map[string]string{
 			"title":        r.FormValue("title"),
@@ -357,6 +368,7 @@ func createEntrySubmit(w http.ResponseWriter, r *http.Request) {
 
 // Edits an entry for a validated user
 func edit(w http.ResponseWriter, r *http.Request) bool {
+	os.Chdir("assets/")
 	if validated {
 		var fileName = "edit.html"
 		t, err := template.ParseFiles(fileName)
@@ -378,6 +390,7 @@ func edit(w http.ResponseWriter, r *http.Request) bool {
 }
 
 func edit_submit(w http.ResponseWriter, r *http.Request) {
+	os.Chdir("assets/")
 	if validated {
 		db.UpdateEntry(r.FormValue("title"), r.FormValue("update_key"), r.FormValue("update_value"))
 		if validated {
@@ -400,6 +413,7 @@ func edit_submit(w http.ResponseWriter, r *http.Request) {
 
 // Display the homepage for a validated user
 func home(w http.ResponseWriter, r *http.Request) bool {
+	os.Chdir("assets/")
 	if validated {
 		w.WriteHeader(http.StatusOK)
 		var fileName = "home.html"

@@ -39,7 +39,7 @@ func Test_8lengthpassWithSpecial(t *testing.T) {
 	gp := GenPassword(8, true)
 	ps := Passwordstren(gp)
 
-	if ps < 3 {
+	if ps >=2 {
 		t.Errorf("Expected Strength of at least 3 got %q", ps)
 	}
 }
