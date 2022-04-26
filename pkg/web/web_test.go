@@ -21,9 +21,14 @@ func TestLandingPage(t *testing.T) {
 		t.Error("expected to have the landing page shown landing page didnt show ")
 	}
 }
+<<<<<<< HEAD
 func TestLoginSubmit(t *testing.T) {
 	os.Chdir("../")
+=======
+func TestLoginSubmit(t *testing.T){
+>>>>>>> 83a0beef0e6c6dfd2bd7d965ee6066195621b79f
 	Loggers = logger.CreateLoggers("testlogs.txt")
+	os.Chdir("../")
 	w := httptest.NewRecorder()
 	form := url.Values{}
 	form.Add("username", "demo")
@@ -54,7 +59,7 @@ func TestCreateUser(t *testing.T) {
 }
 func TestLogout(t *testing.T) {
 	db.Connect("demo")
-	Loggers = logger.CreateLoggers("testlogs.txt")
+	
 	os.Chdir("../")
 	req := httptest.NewRequest(http.MethodGet, "/logout", nil)
 	w := httptest.NewRecorder()
@@ -65,9 +70,9 @@ func TestLogout(t *testing.T) {
 }
 
 func TestReadall(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Connect("demo")
 	os.Chdir("../")
-	Loggers = logger.CreateLoggers("testlogs.txt")
 	req := httptest.NewRequest(http.MethodGet, "/home/display", nil)
 	w := httptest.NewRecorder()
 	var readAll = readAll(w, req)
