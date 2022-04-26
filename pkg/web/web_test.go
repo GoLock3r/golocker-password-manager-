@@ -21,12 +21,7 @@ func TestLandingPage(t *testing.T) {
 		t.Error("expected to have the landing page shown landing page didnt show ")
 	}
 }
-<<<<<<< HEAD
 func TestLoginSubmit(t *testing.T) {
-	os.Chdir("../")
-=======
-func TestLoginSubmit(t *testing.T){
->>>>>>> 83a0beef0e6c6dfd2bd7d965ee6066195621b79f
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	os.Chdir("../")
 	w := httptest.NewRecorder()
@@ -59,7 +54,7 @@ func TestCreateUser(t *testing.T) {
 }
 func TestLogout(t *testing.T) {
 	db.Connect("demo")
-	
+
 	os.Chdir("../")
 	req := httptest.NewRequest(http.MethodGet, "/logout", nil)
 	w := httptest.NewRecorder()
