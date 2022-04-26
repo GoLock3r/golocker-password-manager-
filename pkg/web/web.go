@@ -14,23 +14,23 @@ var Loggers *logger.Loggers
 
 var valid_username = ""
 
-// true for testing false for final use
-var validated = true
+var validated = false
 
-//var validated = false
 var key []byte
+
+var Path = "/web/assests"
 
 // Serve a login page to the user and pass credentials off to the
 // loginSubmit function to verify these credentials
 func login(w http.ResponseWriter, r *http.Request) bool {
 	
-	var fileName = "web/assets/login.html"
+	var fileName = Path + "login.html"
 	t, err := template.ParseFiles(fileName)
 	if err != nil {
 		fmt.Println("Parse error")
 		return false
 	}
-	err = t.ExecuteTemplate(w, fileName, nil)
+	err = t.ExecuteTemplate(w, "login.html", nil)
 	if err != nil {
 		fmt.Println("Template execution error")
 		return false
@@ -41,11 +41,6 @@ func login(w http.ResponseWriter, r *http.Request) bool {
 // Process user credentials given from the login function.
 // Utilizes authtool package functionality to validate credentials.
 func loginSubmit(w http.ResponseWriter, r *http.Request) bool {
-	loggers := logger.CreateLoggers("testlogs.txt")
-	authtool.Loggers = loggers
-	authtool.LoginFile = "logins.txt"
-	db.Loggers = loggers
-
 	username := r.FormValue("username")
 	password := r.FormValue("password")
 	key = authtool.GetKey(username, password)
@@ -54,13 +49,13 @@ func loginSubmit(w http.ResponseWriter, r *http.Request) bool {
 		var trimmedUser = strings.TrimSpace(username)
 		db.Connect(trimmedUser)
 		w.WriteHeader(http.StatusOK)
-		var fileName = "web/assets/login-submit.html"
+		var fileName = Path + "login-submit.html"
 		t, err := template.ParseFiles(fileName)
 		if err != nil {
 			fmt.Println("Parse error")
 			return false
 		}
-		err = t.ExecuteTemplate(w, fileName, username)
+		err = t.ExecuteTemplate(w, "login-submit.html", username)
 		if err != nil {
 			fmt.Println("Template execution error")
 			return false
@@ -77,8 +72,7 @@ func loginSubmit(w http.ResponseWriter, r *http.Request) bool {
 
 // Strip validation from the users database and dissconects from said data base\
 func logout(w http.ResponseWriter, r *http.Request) bool {
-	loggers := logger.CreateLoggers("testlogs.txt")
-	authtool.Loggers = loggers
+	
 	if validated {
 		db.CloseClientDB()
 		validated = false
@@ -103,13 +97,13 @@ func createUser(w http.ResponseWriter, r *http.Request) bool {
 	var userCreated = authtool.CreateUser(username, password)
 	if userCreated {
 		w.WriteHeader(http.StatusOK)
-		var fileName = "web/assets/createUser-submit.html"
+		var fileName = Path + "createUser-submit.html"
 		t, err := template.ParseFiles(fileName)
 		if err != nil {
 			fmt.Println("Parse error")
 			return false
 		}
-		err = t.ExecuteTemplate(w, fileName, username)
+		err = t.ExecuteTemplate(w, "creatUser-submit.html", username)
 		if err != nil {
 			fmt.Println("Template execution error")
 			return false
@@ -122,7 +116,6 @@ func createUser(w http.ResponseWriter, r *http.Request) bool {
 		fmt.Fprintf(w, "Unable to create account ")
 		return false
 	}
-	return true
 }
 
 func formatEntryString(entryTable []map[string]string) string {
@@ -147,7 +140,7 @@ func readAll(w http.ResponseWriter, r *http.Request) bool {
 	var entries []map[string]string
 	if validated {
 		var display = ""
-		var fileName = "web/assets/display.html"
+		var fileName = Path + "display.html"
 		entries = db.ReadAll()
 		for i := 0; i < len(entries); i++ {
 			entries[i] = db.DecryptEntry(key, entries[i])
@@ -158,12 +151,13 @@ func readAll(w http.ResponseWriter, r *http.Request) bool {
 			fmt.Println("Parse error")
 			return false
 		}
-		err = t.ExecuteTemplate(w, fileName, display)
+		err = t.ExecuteTemplate(w, "display.html", display)
 		if err != nil {
 			fmt.Println("Template execution error")
 			return false
 
 		}
+		w.WriteHeader(http.StatusOK)
 		return true
 	} else {
 		w.WriteHeader(http.StatusNotFound)
@@ -177,13 +171,13 @@ func readAll(w http.ResponseWriter, r *http.Request) bool {
 func searchByTitle(w http.ResponseWriter, r *http.Request) bool {
 	if validated {
 
-		var fileName = "web/assets/searchTitle.html"
+		var fileName = Path + "searchTitle.html"
 		t, err := template.ParseFiles(fileName)
 		if err != nil {
 			fmt.Println("Parse error")
 			return false
 		}
-		err = t.ExecuteTemplate(w, fileName, nil)
+		err = t.ExecuteTemplate(w, "searchTitle.html", nil)
 		if err != nil {
 			fmt.Println("Template execution error")
 			return false
@@ -199,7 +193,7 @@ func searchByTitle_submit(w http.ResponseWriter, r *http.Request) {
 	if validated {
 
 		var display = ""
-		var fileName = "web/assets/searchByTitle.html"
+		var fileName = Path + "searchByTitle.html"
 		display = formatEntryString(db.ReadFromTitle(r.FormValue("title")))
 
 		t, err := template.ParseFiles(fileName)
@@ -207,7 +201,7 @@ func searchByTitle_submit(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("Parse error")
 			return
 		}
-		err = t.ExecuteTemplate(w, fileName, display)
+		err = t.ExecuteTemplate(w, "searchByTitle.html", display)
 		if err != nil {
 			fmt.Println("Template execution error")
 		}
@@ -219,13 +213,13 @@ func searchByTitle_submit(w http.ResponseWriter, r *http.Request) {
 
 func searchByUsername(w http.ResponseWriter, r *http.Request) bool {
 	if validated {
-		var fileName = "web/assets/searchUsername.html"
+		var fileName =  Path + "searchUsername.html"
 		t, err := template.ParseFiles(fileName)
 		if err != nil {
 			fmt.Println("Parse error")
 			return false
 		}
-		err = t.ExecuteTemplate(w, fileName, nil)
+		err = t.ExecuteTemplate(w, "searchUsername.html", nil)
 		if err != nil {
 			fmt.Println("Template execution error")
 			return false
@@ -241,7 +235,7 @@ func searchByUsername_submit(w http.ResponseWriter, r *http.Request) {
 	
 	if validated {
 		var display = ""
-		var fileName = "web/assets/searchByUsername.html"
+		var fileName = Path + "searchByUsername.html"
 		display = formatEntryString(db.ReadFromUsername(r.FormValue("username")))
 
 		t, err := template.ParseFiles(fileName)
@@ -249,7 +243,7 @@ func searchByUsername_submit(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("Parse error")
 			return
 		}
-		err = t.ExecuteTemplate(w, fileName, display)
+		err = t.ExecuteTemplate(w, "searchByUsername.html", display)
 		if err != nil {
 			fmt.Println("Template execution error")
 		}
@@ -284,14 +278,14 @@ func delete_submit(w http.ResponseWriter, r *http.Request) {
 func delete(w http.ResponseWriter, r *http.Request) bool {
 	
 	if validated {
-		var fileName = "web/assets/delete.html"
+		var fileName = Path + "delete.html"
 		t, err := template.ParseFiles(fileName)
 		if err != nil {
 			fmt.Println("Parse error")
 			return false
 		}
 
-		err = t.ExecuteTemplate(w, fileName, nil)
+		err = t.ExecuteTemplate(w, "delete.html", nil)
 		if err != nil {
 			fmt.Println("Template execution error")
 			return false
@@ -310,13 +304,13 @@ func delete(w http.ResponseWriter, r *http.Request) bool {
 func createEntry(w http.ResponseWriter, r *http.Request) bool {
 
 	if validated {
-		var fileName = "web/assets/create.html"
+		var fileName = Path + "create.html"
 		t, err := template.ParseFiles(fileName)
 		if err != nil {
 			fmt.Println("Parse error")
 			return false
 		}
-		err = t.ExecuteTemplate(w, fileName, nil)
+		err = t.ExecuteTemplate(w, "create.html", nil)
 		if err != nil {
 			fmt.Println("Template execution error")
 			return false
@@ -342,13 +336,13 @@ func createEntrySubmit(w http.ResponseWriter, r *http.Request) {
 		}
 		entry = db.EncryptEntry(key, entry)
 		db.WriteEntry(entry)
-		var fileName = "web/assets/createsubmit.html"
+		var fileName = Path + "createsubmit.html"
 		t, err := template.ParseFiles(fileName)
 		if err != nil {
 			fmt.Println("Parse error")
 			return
 		}
-		err = t.ExecuteTemplate(w, fileName, nil)
+		err = t.ExecuteTemplate(w,"createsubmit.html", nil)
 		if err != nil {
 			fmt.Println("Template execution error")
 		}
@@ -362,13 +356,13 @@ func createEntrySubmit(w http.ResponseWriter, r *http.Request) {
 func edit(w http.ResponseWriter, r *http.Request) bool {
 	
 	if validated {
-		var fileName = "web/assets/edit.html"
+		var fileName = Path + "edit.html"
 		t, err := template.ParseFiles(fileName)
 		if err != nil {
 			fmt.Println("Parse error")
 			return false
 		}
-		err = t.ExecuteTemplate(w, fileName, nil)
+		err = t.ExecuteTemplate(w,"edit.html", nil)
 		if err != nil {
 			fmt.Println("Template execution error")
 			return false
@@ -386,13 +380,13 @@ func edit_submit(w http.ResponseWriter, r *http.Request) {
 	if validated {
 		db.UpdateEntry(r.FormValue("title"), r.FormValue("update_key"), r.FormValue("update_value"))
 		if validated {
-			var fileName = "web/assets/edit-submit.html"
+			var fileName =Path +"edit-submit.html"
 			t, err := template.ParseFiles(fileName)
 			if err != nil {
 				fmt.Println("Parse error")
 				return
 			}
-			err = t.ExecuteTemplate(w, fileName, nil)
+			err = t.ExecuteTemplate(w, "edit-submit.html", nil)
 			if err != nil {
 				fmt.Println("Template execution error")
 			}
@@ -408,13 +402,13 @@ func home(w http.ResponseWriter, r *http.Request) bool {
 	
 	if validated {
 		w.WriteHeader(http.StatusOK)
-		var fileName = "web/assets/home.html"
+		var fileName = Path + "home.html"
 		t, err := template.ParseFiles(fileName)
 		if err != nil {
 			fmt.Println("Parse error")
 			return false
 		}
-		err = t.ExecuteTemplate(w, fileName, valid_username)
+		err = t.ExecuteTemplate(w, "home.html", valid_username)
 		if err != nil {
 			fmt.Println("Template execution error")
 			return false
