@@ -8,7 +8,6 @@ import (
 	"html/template"
 	"net/http"
 	"strings"
-	"os"
 )
 
 var Loggers *logger.Loggers
