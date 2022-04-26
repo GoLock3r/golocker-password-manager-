@@ -12,7 +12,7 @@ import (
 )
 
 func TestLandingPage(t *testing.T) {
-	os.Chdir("../")
+	os.Chdir("assets/")
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	req := httptest.NewRequest(http.MethodGet, "/", nil)
 	w := httptest.NewRecorder()
@@ -21,14 +21,8 @@ func TestLandingPage(t *testing.T) {
 		t.Error("expected to have the landing page shown landing page didnt show ")
 	}
 }
-<<<<<<< HEAD
 func TestLoginSubmit(t *testing.T) {
-	os.Chdir("../")
-=======
-func TestLoginSubmit(t *testing.T){
->>>>>>> 83a0beef0e6c6dfd2bd7d965ee6066195621b79f
 	Loggers = logger.CreateLoggers("testlogs.txt")
-	os.Chdir("../")
 	w := httptest.NewRecorder()
 	form := url.Values{}
 	form.Add("username", "demo")
@@ -43,7 +37,7 @@ func TestLoginSubmit(t *testing.T){
 
 }
 func TestCreateUser(t *testing.T) {
-	os.Chdir("../")
+	os.Chdir("assets/")
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	w := httptest.NewRecorder()
 	form := url.Values{}
@@ -59,7 +53,6 @@ func TestCreateUser(t *testing.T) {
 }
 func TestLogout(t *testing.T) {
 	db.Connect("demo")
-	
 	os.Chdir("../")
 	req := httptest.NewRequest(http.MethodGet, "/logout", nil)
 	w := httptest.NewRecorder()
@@ -70,9 +63,10 @@ func TestLogout(t *testing.T) {
 }
 
 func TestReadall(t *testing.T) {
+	os.Chdir("assets/")
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Connect("demo")
-	os.Chdir("../")
+	
 	req := httptest.NewRequest(http.MethodGet, "/home/display", nil)
 	w := httptest.NewRecorder()
 	var readAll = readAll(w, req)
@@ -82,7 +76,7 @@ func TestReadall(t *testing.T) {
 	}
 }
 func TestSearchByTitle(t *testing.T) {
-	os.Chdir("../")
+	os.Chdir("assets/")
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	req := httptest.NewRequest(http.MethodGet, "/home/searchTitle", nil)
 	w := httptest.NewRecorder()
@@ -96,7 +90,7 @@ func TestSearchByTitleSubmit(t *testing.T) {
 
 }
 func TestSearchByUsername(t *testing.T) {
-	os.Chdir("../")
+	os.Chdir("assets/")
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	req := httptest.NewRequest(http.MethodGet, "/home/searchUser", nil)
 	w := httptest.NewRecorder()
@@ -110,7 +104,7 @@ func TestSearchByUsernameSubmit(t *testing.T) {
 }
 
 func TestDelete(t *testing.T) {
-	os.Chdir("../")
+	os.Chdir("assets/")
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	req := httptest.NewRequest(http.MethodGet, "/home/delete", nil)
 	w := httptest.NewRecorder()
@@ -125,7 +119,7 @@ func TestDeleteSubmit(t *testing.T) {
 }
 
 func TestCreateEntry(t *testing.T) {
-	os.Chdir("../")
+	os.Chdir("assets/")
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	req := httptest.NewRequest(http.MethodGet, "/home/create", nil)
 	w := httptest.NewRecorder()
@@ -139,7 +133,7 @@ func TestCreateEntrySubmit(t *testing.T) {
 
 }
 func TestEdit(t *testing.T) {
-	os.Chdir("../")
+	os.Chdir("assets/")
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	req := httptest.NewRequest(http.MethodGet, "/home/edit", nil)
 	w := httptest.NewRecorder()
@@ -154,7 +148,7 @@ func TestEditSubmit(t *testing.T) {
 }
 
 func TestHome(t *testing.T) {
-	os.Chdir("../")
+	os.Chdir("assets/")
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	req := httptest.NewRequest(http.MethodGet, "/home", nil)
 	w := httptest.NewRecorder()
