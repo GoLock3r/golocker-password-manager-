@@ -18,7 +18,7 @@ var validated = false
 
 var key []byte
 
-var Path = "/web/assests"
+var Path = "web/assets/"
 
 // Serve a login page to the user and pass credentials off to the
 // loginSubmit function to verify these credentials
@@ -189,6 +189,7 @@ func searchByTitle(w http.ResponseWriter, r *http.Request) bool {
 		return false
 	}
 }
+
 func searchByTitle_submit(w http.ResponseWriter, r *http.Request) {
 	if validated {
 
@@ -231,6 +232,7 @@ func searchByUsername(w http.ResponseWriter, r *http.Request) bool {
 		return false
 	}
 }
+
 func searchByUsername_submit(w http.ResponseWriter, r *http.Request) {
 	
 	if validated {
