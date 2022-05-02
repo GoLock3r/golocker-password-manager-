@@ -47,8 +47,6 @@ func TestCreateUser(t *testing.T) {
 	}
 
 }
-<<<<<<< HEAD
-=======
 
 func TestLogout(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
@@ -62,7 +60,6 @@ func TestLogout(t *testing.T) {
 	if !logout {
 		t.Error("logout unsuccessful", w)
 	}
->>>>>>> 7cbe7da549c902efe1027306428a7c2e97757075
 
 }
 

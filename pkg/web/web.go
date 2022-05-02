@@ -25,7 +25,7 @@ var Url = "http://localhost:8010"
 // Serve a login page to the user and pass credentials off to the
 // loginSubmit function to verify these credentials
 func login(w http.ResponseWriter, r *http.Request) bool {
-
+if !validated{
 	var fileName = Path + "login.html"
 	t, err := template.ParseFiles(fileName)
 	if err != nil {
@@ -38,6 +38,20 @@ func login(w http.ResponseWriter, r *http.Request) bool {
 		return false
 	}
 	return true
+}else{
+	var fileName = Path + "redirect.html"
+	t, err := template.ParseFiles(fileName)
+	if err != nil {
+		fmt.Println("Parse error")
+		return false
+	}
+	err = t.ExecuteTemplate(w, "redirect.html", Url + "/home")
+	if err != nil {
+		fmt.Println("Template execution error")
+		return false 
+	}
+}
+return true
 }
 
 // Process user credentials given from the login function.
@@ -52,13 +66,13 @@ func loginSubmit(w http.ResponseWriter, r *http.Request) bool {
 		db.Loggers = Loggers
 		db.Connect(trimmedUser)
 		w.WriteHeader(http.StatusOK)
-		var fileName = Path + "login-submit.html"
+		var fileName = Path + "redirect.html"
 		t, err := template.ParseFiles(fileName)
 		if err != nil {
 			fmt.Println("Parse error")
 			return false
 		}
-		err = t.ExecuteTemplate(w, "login-submit.html", username)
+		err = t.ExecuteTemplate(w, "redirect.html", Url + "/home")
 		if err != nil {
 			fmt.Println("Template execution error")
 			return false
@@ -262,13 +276,13 @@ func searchByUsername_submit(w http.ResponseWriter, r *http.Request) {
 func delete_submit(w http.ResponseWriter, r *http.Request) {
 
 	if validated {
-		var fileName = "web/assets/delete-submit.html"
+		var fileName = Path + "redirect.html"
 		t, err := template.ParseFiles(fileName)
 		if err != nil {
 			fmt.Println("Parse error")
 			return
 		}
-		err = t.ExecuteTemplate(w, fileName, nil)
+		err = t.ExecuteTemplate(w, "redirect.html", Url + "/home")
 		if err != nil {
 			fmt.Println("Template execution error")
 		}
@@ -341,14 +355,14 @@ func createEntrySubmit(w http.ResponseWriter, r *http.Request) {
 		}
 		entry = db.EncryptEntry(key, entry)
 		db.WriteEntry(entry)
-		var fileName = Path + "createsubmit.html"
+		var fileName = Path + "redirect.html"
 		t, err := template.ParseFiles(fileName)
 		if err != nil {
 			fmt.Println("Parse error")
 			return
 		}
-		err = t.ExecuteTemplate(w, "createsubmit.html", Url)
-		if err != nil {
+		err = t.ExecuteTemplate(w, "redirect.html", Url + "/home")
+				if err != nil {
 			fmt.Println("Template execution error")
 		}
 	} else {
@@ -385,13 +399,13 @@ func edit_submit(w http.ResponseWriter, r *http.Request) {
 	if validated {
 		db.UpdateEntry(r.FormValue("title"), r.FormValue("update_key"), r.FormValue("update_value"))
 		if validated {
-			var fileName = Path + "edit-submit.html"
+			var fileName = Path + "redirect.html"
 			t, err := template.ParseFiles(fileName)
 			if err != nil {
 				fmt.Println("Parse error")
 				return
 			}
-			err = t.ExecuteTemplate(w, "edit-submit.html", nil)
+			err = t.ExecuteTemplate(w, "redirect.html", Url + "/home")
 			if err != nil {
 				fmt.Println("Template execution error")
 			}
