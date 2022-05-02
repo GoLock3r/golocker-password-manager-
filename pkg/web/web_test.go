@@ -152,6 +152,7 @@ func TestCreateEntrySubmit(t *testing.T) {
 	crypt.Loggers = Loggers
 	authtool.Loggers = Loggers
 	validated = true
+	key = authtool.GetKey("demo","demo123")
 	db.Connect("demo")
 	Path = "assets/"
 	w := httptest.NewRecorder()
