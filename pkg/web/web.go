@@ -103,19 +103,18 @@ func createUser(w http.ResponseWriter, r *http.Request) bool {
 			fmt.Println("Parse error")
 			return false
 		}
-		err = t.ExecuteTemplate(w, "creatUser-submit.html", username)
+		err = t.ExecuteTemplate(w, "createUser-submit.html", username)
 		if err != nil {
-			fmt.Println("Template execution error")
+			fmt.Println(err ,"Template execution error")
 			return false
 		}
-
-		fmt.Fprintf(w, "Account was created successfully")
-		return true
+		
 	} else {
 		w.WriteHeader(http.StatusNotFound)
 		fmt.Fprintf(w, "Unable to create account ")
 		return false
 	}
+	return true
 }
 
 func formatEntryString(entryTable []map[string]string) string {
