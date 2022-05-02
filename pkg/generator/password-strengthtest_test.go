@@ -39,8 +39,8 @@ func Test_8lengthpassWithSpecial(t *testing.T) {
 	gp := GenPassword(8, true)
 	ps := Passwordstren(gp)
 
-	if ps >=2 {
-		t.Errorf("Expected Strength of at least 3 got %q", ps)
+	if ps < 2 {
+		t.Errorf("Expected Strength of at least 2 got %q", ps)
 	}
 }
 //tests 16 length password with special characters

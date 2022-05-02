@@ -2,18 +2,15 @@ package web
 
 import (
 	//"golock3r/server/db"
+	"golock3r/server/authtool"
 	"golock3r/server/logger"
 	"net/http"
 	"net/http/httptest"
-
-	//"net/url"
-	"os"
-	//"strings"
 	"testing"
 )
 
 func TestLandingPage(t *testing.T) {
-	os.Chdir("assets/")
+	Path = "assets/"
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	req := httptest.NewRequest(http.MethodGet, "/", nil)
 	w := httptest.NewRecorder()
@@ -23,21 +20,20 @@ func TestLandingPage(t *testing.T) {
 	}
 }
 
-// func TestLoginSubmit(t *testing.T) {
-// 	Loggers = logger.CreateLoggers("testlogs.txt")
-// 	w := httptest.NewRecorder()
-// 	form := url.Values{}
-// 	form.Add("username", "demo")
-// 	form.Add("password", "demo123")
-// 	req := httptest.NewRequest("POST", "/login-submit", strings.NewReader(form.Encode()))
-// 	req.Form = form
-// 	loginSubmit := loginSubmit(w, req)
-// 	t.Error(w)
-// 	if !loginSubmit {
-// 		t.Error("login should have submitted succesfully it didnt")
-// 	}
+func TestLoginSubmit(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	authtool.Loggers = Loggers
+	authtool.CreateUser("test_username", "test_password")
+	Path = "assets/"
+	w := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
+	loginSubmit := loginSubmit(w, req)
+	if !loginSubmit {
+		t.Error("login should have submitted succesfully it didnt")
+	}
 
-// }
+}
+
 // func TestCreateUser(t *testing.T) {
 // 	os.Chdir("assets/")
 // 	Loggers = logger.CreateLoggers("testlogs.txt")
@@ -77,7 +73,8 @@ func TestLandingPage(t *testing.T) {
 // 	}
 // }
 func TestSearchByTitle(t *testing.T) {
-	os.Chdir("assets/")
+	Path = "assets/"
+	validated = true
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	req := httptest.NewRequest(http.MethodGet, "/home/searchTitle", nil)
 	w := httptest.NewRecorder()
@@ -92,7 +89,8 @@ func TestSearchByTitle(t *testing.T) {
 
 // }
 func TestSearchByUsername(t *testing.T) {
-	os.Chdir("assets/")
+	Path = "assets/"
+	validated = true
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	req := httptest.NewRequest(http.MethodGet, "/home/searchUser", nil)
 	w := httptest.NewRecorder()
@@ -107,7 +105,8 @@ func TestSearchByUsername(t *testing.T) {
 // }
 
 func TestDelete(t *testing.T) {
-	os.Chdir("assets/")
+	Path = "assets/"
+	validated = true
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	req := httptest.NewRequest(http.MethodGet, "/home/delete", nil)
 	w := httptest.NewRecorder()
@@ -122,7 +121,8 @@ func TestDelete(t *testing.T) {
 // }
 
 func TestCreateEntry(t *testing.T) {
-	os.Chdir("assets/")
+	Path = "assets/"
+	validated = true
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	req := httptest.NewRequest(http.MethodGet, "/home/create", nil)
 	w := httptest.NewRecorder()
@@ -136,7 +136,8 @@ func TestCreateEntry(t *testing.T) {
 
 // }
 func TestEdit(t *testing.T) {
-	os.Chdir("assets/")
+	Path = "assets/"
+	validated = true
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	req := httptest.NewRequest(http.MethodGet, "/home/edit", nil)
 	w := httptest.NewRecorder()
@@ -151,7 +152,8 @@ func TestEdit(t *testing.T) {
 // }
 
 func TestHome(t *testing.T) {
-	os.Chdir("assets/")
+	Path = "assets/"
+	validated = true
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	req := httptest.NewRequest(http.MethodGet, "/home", nil)
 	w := httptest.NewRecorder()
