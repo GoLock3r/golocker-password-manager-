@@ -1,11 +1,12 @@
 package web
 
 import (
-	//"golock3r/server/db"
 	"golock3r/server/authtool"
+	"golock3r/server/db"
 	"golock3r/server/logger"
 	"net/http"
 	"net/http/httptest"
+
 	//"os"
 	"testing"
 )
@@ -46,32 +47,41 @@ func TestCreateUser(t *testing.T) {
 	}
 
 }
+<<<<<<< HEAD
+=======
 
-// }
-// func TestLogout(t *testing.T) {
-// 	db.Connect("demo")
-// 	os.Chdir("../")
-// 	req := httptest.NewRequest(http.MethodGet, "/logout", nil)
-// 	w := httptest.NewRecorder()
-// 	var logout = logout(w, req)
-// 	if !logout {
-// 		t.Error("logout unseccessful")
-// 	}
-// }
+func TestLogout(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	//authtool.Loggers = Loggers
+	db.Loggers = Loggers
+	db.Connect("demo")
+	validated = true
+	req := httptest.NewRequest(http.MethodGet, "/logout", nil)
+	w := httptest.NewRecorder()
+	var logout = logout(w, req)
+	if !logout {
+		t.Error("logout unsuccessful", w)
+	}
+>>>>>>> 7cbe7da549c902efe1027306428a7c2e97757075
 
-// func TestReadall(t *testing.T) {
-// 	os.Chdir("assets/")
-// 	Loggers = logger.CreateLoggers("testlogs.txt")
-// 	db.Connect("demo")
-// 	req := httptest.NewRequest(http.MethodGet, "/home/display", nil)
-// 	w := httptest.NewRecorder()
-// 	var readAll = readAll(w, req)
-// 	if !readAll {
-// 		t.Error("unable to read all")
+}
 
-// 	}
-// }
+func TestReadall(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	db.Loggers = Loggers
+	validated = true
+	Path = "assets/"
+	db.Connect("test")
+	req := httptest.NewRequest(http.MethodGet, "/home/display", nil)
+	w := httptest.NewRecorder()
+	var readAll = readAll(w, req)
+	if !readAll {
+		t.Error("unable to read all")
+
+	}
+}
 func TestSearchByTitle(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
 	Path = "assets/"
 	validated = true
 	Loggers = logger.CreateLoggers("testlogs.txt")

@@ -20,6 +20,8 @@ var key []byte
 
 var Path = "web/assets/"
 
+var Url = "http://localhost:8010"
+
 // Serve a login page to the user and pass credentials off to the
 // loginSubmit function to verify these credentials
 func login(w http.ResponseWriter, r *http.Request) bool {
@@ -85,6 +87,7 @@ func logout(w http.ResponseWriter, r *http.Request) bool {
 		return true
 	} else {
 		w.WriteHeader(http.StatusNotFound)
+		Loggers.LogError.Println("Unexpected error. Logout was unsuccessful.")
 		fmt.Fprintf(w, "Unexpected error. Logout was unsuccessful.")
 		return false
 	}
@@ -106,10 +109,10 @@ func createUser(w http.ResponseWriter, r *http.Request) bool {
 		}
 		err = t.ExecuteTemplate(w, "createUser-submit.html", username)
 		if err != nil {
-			fmt.Println(err ,"Template execution error")
+			fmt.Println(err, "Template execution error")
 			return false
 		}
-		
+
 	} else {
 		w.WriteHeader(http.StatusNotFound)
 		fmt.Fprintf(w, "Unable to create account ")
@@ -344,7 +347,7 @@ func createEntrySubmit(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("Parse error")
 			return
 		}
-		err = t.ExecuteTemplate(w, "createsubmit.html", nil)
+		err = t.ExecuteTemplate(w, "createsubmit.html", Url)
 		if err != nil {
 			fmt.Println("Template execution error")
 		}
