@@ -6,7 +6,6 @@ import (
 	"golock3r/server/logger"
 	"net/http"
 	"net/http/httptest"
-
 	//"os"
 	"testing"
 )
@@ -122,9 +121,17 @@ func TestDelete(t *testing.T) {
 	}
 }
 
-// func TestDeleteSubmit(t *testing.T) {
-
-// }
+func TestDeleteSubmit(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	db.Loggers = Loggers
+	Path = "assets/"
+	w := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodGet, "/home/edit-submit?title=test&update_key=title&update_value=test2", nil)
+	loginSubmit := edit_submit(w, req)
+	if !loginSubmit {
+		t.Error("edit should have submitted succesfully it didnt")
+	}
+}
 
 func TestCreateEntry(t *testing.T) {
 	Path = "assets/"
@@ -138,9 +145,17 @@ func TestCreateEntry(t *testing.T) {
 	}
 }
 
-// func TestCreateEntrySubmit(t *testing.T) {
-
-// }
+func TestCreateEntrySubmit(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	db.Loggers = Loggers
+	Path = "assets/"
+	w := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodGet, "/home/create-Submit?title=test&password=title&username=test&private_note=test&public_note=test", nil)
+	loginSubmit := createEntrySubmit(w,req)
+	if !loginSubmit {
+		t.Error("create should have submitted succesfully it didnt")
+	}
+}
 func TestEdit(t *testing.T) {
 	Path = "assets/"
 	validated = true
@@ -153,9 +168,18 @@ func TestEdit(t *testing.T) {
 	}
 }
 
-// func TestEditSubmit(t *testing.T) {
+func TestEditSubmit(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	db.Loggers = Loggers
+	Path = "assets/"
+	w := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodGet, "/home/edit-submit?title=test&update_key=title&update_value=test2", nil)
+	loginSubmit := edit_submit(w, req)
+	if !loginSubmit {
+		t.Error("edit should have submitted succesfully it didnt")
+	}
 
-// }
+}
 
 func TestHome(t *testing.T) {
 	Path = "assets/"
