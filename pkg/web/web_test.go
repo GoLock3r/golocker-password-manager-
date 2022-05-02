@@ -6,10 +6,13 @@ import (
 	"golock3r/server/logger"
 	"net/http"
 	"net/http/httptest"
-	//"os"
+	"os"
 	"testing"
 )
-
+func removeFiles() {
+	os.Remove("logins.txt")
+	os.Remove("testlogs.txt")
+}
 func TestLandingPage(t *testing.T) {
 	Path = "assets/"
 	Loggers = logger.CreateLoggers("testlogs.txt")
@@ -206,4 +209,5 @@ func TestHome(t *testing.T) {
 	if !landingpage {
 		t.Error("expected to have the home page shown landing page didnt show ")
 	}
+	removeFiles()
 }
