@@ -4,6 +4,7 @@ import (
 	"golock3r/server/authtool"
 	"golock3r/server/db"
 	"golock3r/server/logger"
+	"golock3r/server/crypt"
 	"net/http"
 	"net/http/httptest"
 	//"os"
@@ -148,6 +149,10 @@ func TestCreateEntry(t *testing.T) {
 func TestCreateEntrySubmit(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Loggers = Loggers
+	crypt.Loggers = Loggers
+	authtool.Loggers = Loggers
+	validated = true
+	db.Connect("demo")
 	Path = "assets/"
 	w := httptest.NewRecorder()
 	req := httptest.NewRequest(http.MethodGet, "/home/create-Submit?title=test&password=test&username=test&private_note=test&public_note=test", nil)
