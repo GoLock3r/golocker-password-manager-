@@ -6,6 +6,7 @@ import (
 	"golock3r/server/logger"
 	"net/http"
 	"net/http/httptest"
+	//"os"
 	"testing"
 )
 
@@ -33,20 +34,18 @@ func TestLoginSubmit(t *testing.T) {
 	}
 
 }
+func TestCreateUser(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	authtool.Loggers = Loggers
+	Path = "assets/"
+	w := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodGet, "/createUser?username=test_username2&password=test_password1", nil)
+	loginSubmit := createUser(w, req)
+	if !loginSubmit {
+		t.Error("login should have submitted succesfully it didnt")
+	}
 
-// func TestCreateUser(t *testing.T) {
-// 	os.Chdir("assets/")
-// 	Loggers = logger.CreateLoggers("testlogs.txt")
-// 	w := httptest.NewRecorder()
-// 	form := url.Values{}
-// 	form.Add("username", "demo")
-// 	form.Add("password", "demo123")
-// 	req := httptest.NewRequest(http.MethodGet, "/createUser", strings.NewReader(form.Encode()))
-// 	req.Form = form
-// 	var createUser = createUser(w, req)
-// 	if !createUser {
-// 		t.Error("this didnt work")
-// 	}
+}
 
 // }
 // func TestLogout(t *testing.T) {

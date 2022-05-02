@@ -18,7 +18,7 @@ var validated = false
 
 var key []byte
 
-var Path = "/web/assests"
+var Path = "web/assets/"
 
 // Serve a login page to the user and pass credentials off to the
 // loginSubmit function to verify these credentials
@@ -104,19 +104,18 @@ func createUser(w http.ResponseWriter, r *http.Request) bool {
 			fmt.Println("Parse error")
 			return false
 		}
-		err = t.ExecuteTemplate(w, "creatUser-submit.html", username)
+		err = t.ExecuteTemplate(w, "createUser-submit.html", username)
 		if err != nil {
-			fmt.Println("Template execution error")
+			fmt.Println(err ,"Template execution error")
 			return false
 		}
-
-		fmt.Fprintf(w, "Account was created successfully")
-		return true
+		
 	} else {
 		w.WriteHeader(http.StatusNotFound)
 		fmt.Fprintf(w, "Unable to create account ")
 		return false
 	}
+	return true
 }
 
 func formatEntryString(entryTable []map[string]string) string {
@@ -190,6 +189,7 @@ func searchByTitle(w http.ResponseWriter, r *http.Request) bool {
 		return false
 	}
 }
+
 func searchByTitle_submit(w http.ResponseWriter, r *http.Request) {
 	if validated {
 
@@ -232,6 +232,7 @@ func searchByUsername(w http.ResponseWriter, r *http.Request) bool {
 		return false
 	}
 }
+
 func searchByUsername_submit(w http.ResponseWriter, r *http.Request) {
 
 	if validated {
