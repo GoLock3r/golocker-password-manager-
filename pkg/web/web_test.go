@@ -50,6 +50,7 @@ func TestCreateUser(t *testing.T) {
 func TestLogout(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	authtool.Loggers = Loggers
+	db.Loggers = Loggers
 	db.Connect("demo")
 	req := httptest.NewRequest(http.MethodGet, "/logout", nil)
 	w := httptest.NewRecorder()
