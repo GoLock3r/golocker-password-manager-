@@ -20,10 +20,12 @@ var key []byte
 
 var Path = "web/assets/"
 
+var Url = "http://localhost:8010"
+
 // Serve a login page to the user and pass credentials off to the
 // loginSubmit function to verify these credentials
 func login(w http.ResponseWriter, r *http.Request) bool {
-	
+
 	var fileName = Path + "login.html"
 	t, err := template.ParseFiles(fileName)
 	if err != nil {
@@ -72,7 +74,7 @@ func loginSubmit(w http.ResponseWriter, r *http.Request) bool {
 
 // Strip validation from the users database and dissconects from said data base\
 func logout(w http.ResponseWriter, r *http.Request) bool {
-	
+
 	if validated {
 		db.CloseClientDB()
 		validated = false
@@ -106,10 +108,10 @@ func createUser(w http.ResponseWriter, r *http.Request) bool {
 		}
 		err = t.ExecuteTemplate(w, "createUser-submit.html", username)
 		if err != nil {
-			fmt.Println(err ,"Template execution error")
+			fmt.Println(err, "Template execution error")
 			return false
 		}
-		
+
 	} else {
 		w.WriteHeader(http.StatusNotFound)
 		fmt.Fprintf(w, "Unable to create account ")
@@ -214,7 +216,7 @@ func searchByTitle_submit(w http.ResponseWriter, r *http.Request) {
 
 func searchByUsername(w http.ResponseWriter, r *http.Request) bool {
 	if validated {
-		var fileName =  Path + "searchUsername.html"
+		var fileName = Path + "searchUsername.html"
 		t, err := template.ParseFiles(fileName)
 		if err != nil {
 			fmt.Println("Parse error")
@@ -234,7 +236,7 @@ func searchByUsername(w http.ResponseWriter, r *http.Request) bool {
 }
 
 func searchByUsername_submit(w http.ResponseWriter, r *http.Request) {
-	
+
 	if validated {
 		var display = ""
 		var fileName = Path + "searchByUsername.html"
@@ -257,7 +259,7 @@ func searchByUsername_submit(w http.ResponseWriter, r *http.Request) {
 
 // Deletes an entry from the database for a validated user
 func delete_submit(w http.ResponseWriter, r *http.Request) {
-	
+
 	if validated {
 		var fileName = "web/assets/delete-submit.html"
 		t, err := template.ParseFiles(fileName)
@@ -278,7 +280,7 @@ func delete_submit(w http.ResponseWriter, r *http.Request) {
 }
 
 func delete(w http.ResponseWriter, r *http.Request) bool {
-	
+
 	if validated {
 		var fileName = Path + "delete.html"
 		t, err := template.ParseFiles(fileName)
@@ -327,7 +329,7 @@ func createEntry(w http.ResponseWriter, r *http.Request) bool {
 }
 
 func createEntrySubmit(w http.ResponseWriter, r *http.Request) {
-	
+
 	if validated {
 		entry := map[string]string{
 			"title":        r.FormValue("title"),
@@ -344,7 +346,7 @@ func createEntrySubmit(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("Parse error")
 			return
 		}
-		err = t.ExecuteTemplate(w,"createsubmit.html", nil)
+		err = t.ExecuteTemplate(w, "createsubmit.html", Url)
 		if err != nil {
 			fmt.Println("Template execution error")
 		}
@@ -356,7 +358,7 @@ func createEntrySubmit(w http.ResponseWriter, r *http.Request) {
 
 // Edits an entry for a validated user
 func edit(w http.ResponseWriter, r *http.Request) bool {
-	
+
 	if validated {
 		var fileName = Path + "edit.html"
 		t, err := template.ParseFiles(fileName)
@@ -364,7 +366,7 @@ func edit(w http.ResponseWriter, r *http.Request) bool {
 			fmt.Println("Parse error")
 			return false
 		}
-		err = t.ExecuteTemplate(w,"edit.html", nil)
+		err = t.ExecuteTemplate(w, "edit.html", nil)
 		if err != nil {
 			fmt.Println("Template execution error")
 			return false
@@ -378,11 +380,11 @@ func edit(w http.ResponseWriter, r *http.Request) bool {
 }
 
 func edit_submit(w http.ResponseWriter, r *http.Request) {
-	
+
 	if validated {
 		db.UpdateEntry(r.FormValue("title"), r.FormValue("update_key"), r.FormValue("update_value"))
 		if validated {
-			var fileName =Path +"edit-submit.html"
+			var fileName = Path + "edit-submit.html"
 			t, err := template.ParseFiles(fileName)
 			if err != nil {
 				fmt.Println("Parse error")
@@ -401,7 +403,7 @@ func edit_submit(w http.ResponseWriter, r *http.Request) {
 
 // Display the homepage for a validated user
 func home(w http.ResponseWriter, r *http.Request) bool {
-	
+
 	if validated {
 		w.WriteHeader(http.StatusOK)
 		var fileName = Path + "home.html"
