@@ -30,6 +30,7 @@ func TestConnect(t *testing.T) {
 }
 
 func TestEncryptDecryptEntry(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
 	entry := map[string]string{
 		"title":        "Test Title",
 		"password":     "VerySecurePassword",
@@ -55,12 +56,12 @@ func TestEncryptDecryptEntry(t *testing.T) {
 			}
 		}
 	}
+	CloseClientDB()
 }
 
 func TestWriteEntry(t *testing.T) {
-
+	Loggers = logger.CreateLoggers("testlogs.txt")
 	Connect("test")
-
 	entry := map[string]string{
 		"title":        "Test Title",
 		"password":     "VerySecurePassword",
@@ -84,6 +85,7 @@ func TestWriteEntry(t *testing.T) {
 }
 
 func TestReadFromTitle(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
 	Connect("test")
 	rt := ReadFromTitle("Test Title")
 
@@ -93,6 +95,7 @@ func TestReadFromTitle(t *testing.T) {
 }
 
 func TestReadFromUsername(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
 	Connect("test")
 	ru := ReadFromUsername("Test")
 
@@ -102,6 +105,7 @@ func TestReadFromUsername(t *testing.T) {
 }
 
 func TestReadAll(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
 	Connect("test")
 
 	ra := ReadAll()
@@ -110,10 +114,11 @@ func TestReadAll(t *testing.T) {
 
 		t.Error("unexpected results expected to find two")
 	}
+
 }
 
 func TestUpdate(t *testing.T) {
-
+	Loggers = logger.CreateLoggers("testlogs.txt")
 	if !UpdateEntry("title", "title", "testUpdate") {
 		t.Error("unable to update database entry")
 	}
@@ -121,6 +126,7 @@ func TestUpdate(t *testing.T) {
 }
 
 func TestDelete(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
 	if !DeleteEntry("Test") {
 		t.Error("unable to delete")
 	}
@@ -134,4 +140,18 @@ func TestRemoveAll(t *testing.T) {
 		t.Error("unable to remove all entries")
 	}
 	removeFiles()
+}
+
+func TestDisconnect(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
+
+	Connect("test")
+
+	if !CloseClientDB() {
+		t.Error("Unable to disconnect from the database")
+	}
+
+	if CloseClientDB() {
+		t.Error("Shouldn't disconnect twice")
+	}
 }
