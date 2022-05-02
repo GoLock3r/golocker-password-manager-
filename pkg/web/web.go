@@ -84,6 +84,7 @@ func logout(w http.ResponseWriter, r *http.Request) bool {
 		return true
 	} else {
 		w.WriteHeader(http.StatusNotFound)
+		Loggers.LogError.Println("Unexpected error. Logout was unsuccessful.")
 		fmt.Fprintf(w, "Unexpected error. Logout was unsuccessful.")
 		return false
 	}

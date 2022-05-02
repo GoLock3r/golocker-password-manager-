@@ -49,15 +49,17 @@ func TestCreateUser(t *testing.T) {
 
 func TestLogout(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
-	authtool.Loggers = Loggers
+	//authtool.Loggers = Loggers
 	db.Loggers = Loggers
 	db.Connect("demo")
+	validated = true
 	req := httptest.NewRequest(http.MethodGet, "/logout", nil)
 	w := httptest.NewRecorder()
 	var logout = logout(w, req)
 	if !logout {
-		t.Error("logout unseccessful")
+		t.Error("logout unsuccessful", w)
 	}
+
 }
 
 // func TestReadall(t *testing.T) {
