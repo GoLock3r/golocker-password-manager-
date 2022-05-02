@@ -1,11 +1,12 @@
 package web
 
 import (
-	"golock3r/server/db"
 	"golock3r/server/authtool"
+	"golock3r/server/db"
 	"golock3r/server/logger"
 	"net/http"
 	"net/http/httptest"
+
 	//"os"
 	"testing"
 )
@@ -24,7 +25,7 @@ func TestLandingPage(t *testing.T) {
 func TestLoginSubmit(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	authtool.Loggers = Loggers
-    authtool.CreateUser("test_username", "test_password")
+	authtool.CreateUser("test_username", "test_password")
 	Path = "assets/"
 	w := httptest.NewRecorder()
 	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
@@ -33,7 +34,7 @@ func TestLoginSubmit(t *testing.T) {
 		t.Error("login should have submitted succesfully it didnt")
 	}
 
- }
+}
 func TestCreateUser(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	authtool.Loggers = Loggers
@@ -45,7 +46,7 @@ func TestCreateUser(t *testing.T) {
 		t.Error("login should have submitted succesfully it didnt")
 	}
 
-	}
+}
 
 func TestLogout(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
@@ -62,19 +63,19 @@ func TestLogout(t *testing.T) {
 
 }
 
-// func TestReadall(t *testing.T) {
-// 	os.Chdir("assets/")
-// 	Loggers = logger.CreateLoggers("testlogs.txt")
-// 	db.Connect("demo")
-// 	req := httptest.NewRequest(http.MethodGet, "/home/display", nil)
-// 	w := httptest.NewRecorder()
-// 	var readAll = readAll(w, req)
-// 	if !readAll {
-// 		t.Error("unable to read all")
+func TestReadall(t *testing.T) {
+	validated = true
+	Path = "assets/"
+	req := httptest.NewRequest(http.MethodGet, "/home/display", nil)
+	w := httptest.NewRecorder()
+	var readAll = readAll(w, req)
+	if !readAll {
+		t.Error("unable to read all")
 
-// 	}
-// }
+	}
+}
 func TestSearchByTitle(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
 	Path = "assets/"
 	validated = true
 	Loggers = logger.CreateLoggers("testlogs.txt")
