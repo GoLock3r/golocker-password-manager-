@@ -179,13 +179,14 @@ func TestEdit(t *testing.T) {
 }
 
 func TestEditSubmit(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Loggers = Loggers
 	authtool.Loggers = Loggers
 	validated = true
 	Path = "assets/"
 	w := httptest.NewRecorder()
 	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
-	 loginSubmit(w, req)
+	loginSubmit(w, req)
 	w = httptest.NewRecorder()
 	req = httptest.NewRequest(http.MethodGet, "/home/edit-submit?title=test&update_key=title&update_value=test2", nil)
 	loginSubmit := edit_submit(w, req)
