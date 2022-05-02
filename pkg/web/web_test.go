@@ -4,7 +4,6 @@ import (
 	"golock3r/server/authtool"
 	"golock3r/server/db"
 	"golock3r/server/logger"
-	"golock3r/server/crypt"
 	"net/http"
 	"net/http/httptest"
 	//"os"
@@ -125,10 +124,15 @@ func TestDelete(t *testing.T) {
 func TestDeleteSubmit(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Loggers = Loggers
+	authtool.Loggers = Loggers
+	validated = true
 	Path = "assets/"
 	w := httptest.NewRecorder()
-	req := httptest.NewRequest(http.MethodGet, "/home/edit-submit?title=test&update_key=title&update_value=test2", nil)
-	loginSubmit := edit_submit(w, req)
+	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
+	 loginSubmit(w, req)
+	w = httptest.NewRecorder()
+	req = httptest.NewRequest(http.MethodGet, "/home/edit-submit?title=test&update_key=title&update_value=test2", nil)
+	loginSubmit := delete(w, req)
 	if !loginSubmit {
 		t.Error("edit should have submitted succesfully it didnt")
 	}
@@ -149,7 +153,6 @@ func TestCreateEntry(t *testing.T) {
 func TestCreateEntrySubmit(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Loggers = Loggers
-	crypt.Loggers = Loggers
 	authtool.Loggers = Loggers
 	validated = true
 	Path = "assets/"
@@ -180,7 +183,10 @@ func TestEditSubmit(t *testing.T) {
 	db.Loggers = Loggers
 	Path = "assets/"
 	w := httptest.NewRecorder()
-	req := httptest.NewRequest(http.MethodGet, "/home/edit-submit?title=test&update_key=title&update_value=test2", nil)
+	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
+	loginSubmit(w, req)
+	w = httptest.NewRecorder()
+	req = httptest.NewRequest(http.MethodGet, "/home/edit-submit?title=test&update_key=title&update_value=test2", nil)
 	loginSubmit := edit_submit(w, req)
 	if !loginSubmit {
 		t.Error("edit should have submitted succesfully it didnt")
