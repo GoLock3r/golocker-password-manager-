@@ -150,7 +150,7 @@ func TestCreateEntrySubmit(t *testing.T) {
 	db.Loggers = Loggers
 	Path = "assets/"
 	w := httptest.NewRecorder()
-	req := httptest.NewRequest(http.MethodGet, "/home/create-Submit?title=test&password=title&username=test&private_note=test&public_note=test", nil)
+	req := httptest.NewRequest(http.MethodGet, "/home/create-Submit?title=test&password=test&username=test&private_note=test&public_note=test", nil)
 	loginSubmit := createEntrySubmit(w,req)
 	if !loginSubmit {
 		t.Error("create should have submitted succesfully it didnt")
