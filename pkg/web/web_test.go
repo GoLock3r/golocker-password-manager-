@@ -1,7 +1,7 @@
 package web
 
 import (
-	//"golock3r/server/db"
+	"golock3r/server/db"
 	"golock3r/server/authtool"
 	"golock3r/server/logger"
 	"net/http"
@@ -47,17 +47,17 @@ func TestCreateUser(t *testing.T) {
 
 	}
 
-// }
-// func TestLogout(t *testing.T) {
-// 	db.Connect("demo")
-// 	os.Chdir("../")
-// 	req := httptest.NewRequest(http.MethodGet, "/logout", nil)
-// 	w := httptest.NewRecorder()
-// 	var logout = logout(w, req)
-// 	if !logout {
-// 		t.Error("logout unseccessful")
-// 	}
-// }
+func TestLogout(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	authtool.Loggers = Loggers
+	db.Connect("demo")
+	req := httptest.NewRequest(http.MethodGet, "/logout", nil)
+	w := httptest.NewRecorder()
+	var logout = logout(w, req)
+	if !logout {
+		t.Error("logout unseccessful")
+	}
+}
 
 // func TestReadall(t *testing.T) {
 // 	os.Chdir("assets/")
