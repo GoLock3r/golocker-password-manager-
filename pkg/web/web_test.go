@@ -68,6 +68,7 @@ func TestReadall(t *testing.T) {
 	db.Loggers = Loggers
 	validated = true
 	Path = "assets/"
+	db.Connect("test")
 	req := httptest.NewRequest(http.MethodGet, "/home/display", nil)
 	w := httptest.NewRecorder()
 	var readAll = readAll(w, req)
