@@ -64,6 +64,8 @@ func TestLogout(t *testing.T) {
 }
 
 func TestReadall(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	db.Loggers = Loggers
 	validated = true
 	Path = "assets/"
 	req := httptest.NewRequest(http.MethodGet, "/home/display", nil)
