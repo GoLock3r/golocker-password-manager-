@@ -152,11 +152,12 @@ func TestCreateEntrySubmit(t *testing.T) {
 	crypt.Loggers = Loggers
 	authtool.Loggers = Loggers
 	validated = true
-	key = authtool.GetKey("demo","demo123")
-	db.Connect("demo")
 	Path = "assets/"
 	w := httptest.NewRecorder()
-	req := httptest.NewRequest(http.MethodGet, "/home/create-Submit?title=test&password=test&username=test&private_note=test&public_note=test", nil)
+	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
+	 loginSubmit(w, req)
+	w = httptest.NewRecorder()
+	req = httptest.NewRequest(http.MethodGet, "/home/create-Submit?title=test&password=test&username=test&private_note=test&public_note=test", nil)
 	loginSubmit := createEntrySubmit(w,req)
 	if !loginSubmit {
 		t.Error("create should have submitted succesfully it didnt")
