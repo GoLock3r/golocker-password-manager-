@@ -23,7 +23,7 @@ func main() {
 
 	authtool.Loggers = loggers
 	authtool.LoginFile = "logins.txt"
-
+	web.Loggers = loggers
 	// fmt.Println("Welcome to GoLock3r, extremely rudimentary CLI edition")
 
 	// var username = ""

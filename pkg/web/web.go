@@ -74,7 +74,7 @@ func loginSubmit(w http.ResponseWriter, r *http.Request) bool {
 		}
 		err = t.ExecuteTemplate(w, "redirect.html", Url + "/home")
 		if err != nil {
-			fmt.Println("Template execution error")
+			fmt.Println(err,"Template execution error")
 			return false
 		}
 		valid_username = username
