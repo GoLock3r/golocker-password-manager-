@@ -115,13 +115,13 @@ func createUser(w http.ResponseWriter, r *http.Request) bool {
 	var userCreated = authtool.CreateUser(username, password)
 	if userCreated {
 		w.WriteHeader(http.StatusOK)
-		var fileName = Path + "createUser-submit.html"
+		var fileName = Path + "redirect.html"
 		t, err := template.ParseFiles(fileName)
 		if err != nil {
 			fmt.Println("Parse error")
 			return false
 		}
-		err = t.ExecuteTemplate(w, "createUser-submit.html", username)
+		err = t.ExecuteTemplate(w, "redirect.html", Url + "/" )
 		if err != nil {
 			fmt.Println(err, "Template execution error")
 			return false

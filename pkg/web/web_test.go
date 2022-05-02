@@ -39,7 +39,7 @@ func TestCreateUser(t *testing.T) {
 	authtool.Loggers = Loggers
 	Path = "assets/"
 	w := httptest.NewRecorder()
-	req := httptest.NewRequest(http.MethodGet, "/createUser?username=test_username2&password=test_password1", nil)
+	req := httptest.NewRequest(http.MethodGet, "/createUser?username=test_username4&password=test_password1", nil)
 	loginSubmit := createUser(w, req)
 	if !loginSubmit {
 		t.Error("login should have submitted succesfully it didnt")
