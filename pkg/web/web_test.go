@@ -9,6 +9,7 @@ import (
 	"os"
 	"testing"
 )
+
 func removeFiles() {
 	os.Remove("logins.txt")
 	os.Remove("testlogs.txt")
@@ -93,9 +94,23 @@ func TestSearchByTitle(t *testing.T) {
 
 }
 
-// func TestSearchByTitleSubmit(t *testing.T) {
+func TestSearchByTitleSubmit(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	db.Loggers = Loggers
+	authtool.Loggers = Loggers
+	validated = true
+	Path = "assets/"
+	w := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
+	loginSubmit(w, req)
+	w = httptest.NewRecorder()
+	req = httptest.NewRequest(http.MethodGet, "/home/searchTitle-Submit?title=test", nil)
+	loginSubmit := delete(w, req)
+	if !loginSubmit {
+		t.Error("edit should have submitted succesfully it didnt")
+	}
+}
 
-// }
 func TestSearchByUsername(t *testing.T) {
 	Path = "assets/"
 	validated = true
@@ -108,9 +123,22 @@ func TestSearchByUsername(t *testing.T) {
 	}
 }
 
-// func TestSearchByUsernameSubmit(t *testing.T) {
-
-// }
+func TestSearchByUsernameSubmit(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	db.Loggers = Loggers
+	authtool.Loggers = Loggers
+	validated = true
+	Path = "assets/"
+	w := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
+	loginSubmit(w, req)
+	w = httptest.NewRecorder()
+	req = httptest.NewRequest(http.MethodGet, "/home/searchUser-Submit?username=test", nil)
+	loginSubmit := delete(w, req)
+	if !loginSubmit {
+		t.Error("edit should have submitted succesfully it didnt")
+	}
+}
 
 func TestDelete(t *testing.T) {
 	Path = "assets/"
@@ -132,7 +160,7 @@ func TestDeleteSubmit(t *testing.T) {
 	Path = "assets/"
 	w := httptest.NewRecorder()
 	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
-	 loginSubmit(w, req)
+	loginSubmit(w, req)
 	w = httptest.NewRecorder()
 	req = httptest.NewRequest(http.MethodGet, "/home/edit-submit?title=test&update_key=title&update_value=test2", nil)
 	loginSubmit := delete(w, req)
@@ -161,10 +189,10 @@ func TestCreateEntrySubmit(t *testing.T) {
 	Path = "assets/"
 	w := httptest.NewRecorder()
 	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
-	 loginSubmit(w, req)
+	loginSubmit(w, req)
 	w = httptest.NewRecorder()
 	req = httptest.NewRequest(http.MethodGet, "/home/create-Submit?title=test&password=test&username=test&private_note=test&public_note=test", nil)
-	loginSubmit := createEntrySubmit(w,req)
+	loginSubmit := createEntrySubmit(w, req)
 	if !loginSubmit {
 		t.Error("create should have submitted succesfully it didnt")
 	}
@@ -208,6 +236,188 @@ func TestHome(t *testing.T) {
 	var landingpage = home(w, req)
 	if !landingpage {
 		t.Error("expected to have the home page shown landing page didnt show ")
+	}
+	removeFiles()
+}
+func TestHandlercase1(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/", nil)
+	w := httptest.NewRecorder()
+	handler(w, req)
+	if w.Code != http.StatusOK {
+		t.Error("expected http.StatusOk got ", w.Code)
+	}
+}
+
+func TestHandlercase2(t *testing.T) { // needs db access
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	authtool.Loggers = Loggers
+	authtool.CreateUser("test_username", "test_password")
+	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
+	w := httptest.NewRecorder()
+	handler(w, req)
+	if w.Code != http.StatusOK {
+		t.Error("expected http.StatusOk got ", w.Code)
+	}
+}
+func TestHandlercase3(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	authtool.Loggers = Loggers
+	validated = true
+	req := httptest.NewRequest(http.MethodGet, "/logout", nil)
+	w := httptest.NewRecorder()
+	handler(w, req)
+	if w.Code != http.StatusOK {
+		t.Error("expected http.StatusOk got ", w.Code)
+	}
+}
+func TestHandlercase4(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	authtool.Loggers = Loggers
+	req := httptest.NewRequest(http.MethodGet, "/home", nil)
+	w := httptest.NewRecorder()
+	validated = true
+	handler(w, req)
+	if w.Code != http.StatusOK {
+		t.Error("expected http.StatusOk got ", w.Code)
+	}
+}
+
+func TestHandlercase5(t *testing.T) { // needs db access
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	authtool.Loggers = Loggers
+	validated = true
+	db.Connect("test")
+	req := httptest.NewRequest(http.MethodGet, "/home/display", nil)
+	w := httptest.NewRecorder()
+	validated = true
+	handler(w, req)
+	if w.Code != http.StatusOK {
+		t.Error("expected http.StatusOk got ", w.Code)
+	}
+}
+func TestHandlercase6(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/home/searchTitle", nil)
+	w := httptest.NewRecorder()
+	validated = true
+	handler(w, req)
+	if w.Code != http.StatusOK {
+		t.Error("expected http.StatusOk got ", w.Code)
+	}
+}
+
+func TestHandlercase7(t *testing.T) { // needs db access
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	authtool.Loggers = Loggers
+	db.Loggers = Loggers
+	req := httptest.NewRequest(http.MethodGet, "/home/searchTitle-Submit", nil)
+	w := httptest.NewRecorder()
+	validated = true
+	handler(w, req)
+	if w.Code != http.StatusOK {
+		t.Error("expected http.StatusOk got ", w.Code)
+	}
+}
+func TestHandlercase8(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/home/searchUser", nil)
+	w := httptest.NewRecorder()
+	validated = true
+	handler(w, req)
+	if w.Code != http.StatusOK {
+		t.Error("expected http.StatusOk got ", w.Code)
+	}
+}
+
+func TestHandlercase9(t *testing.T) { // needs db access
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	authtool.Loggers = Loggers
+	db.Loggers = Loggers
+	req := httptest.NewRequest(http.MethodGet, "/home/searchUser-Submit", nil)
+	w := httptest.NewRecorder()
+	validated = true
+	handler(w, req)
+	if w.Code != http.StatusOK {
+		t.Error("expected http.StatusOk got ", w.Code)
+	}
+}
+func TestHandlercase10(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/home/delete", nil)
+	w := httptest.NewRecorder()
+	validated = true
+	handler(w, req)
+	if w.Code != http.StatusOK {
+		t.Error("expected http.StatusOk got ", w.Code)
+	}
+}
+func TestHandlercase11(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/home/delete-submit", nil)
+	w := httptest.NewRecorder()
+	validated = true
+	handler(w, req)
+	if w.Code != http.StatusOK {
+		t.Error("expected http.StatusOk got ", w.Code)
+	}
+}
+func TestHandlercase12(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/home/create", nil)
+	w := httptest.NewRecorder()
+	validated = true
+	handler(w, req)
+	if w.Code != http.StatusOK {
+		t.Error("expected http.StatusOk got ", w.Code)
+	}
+}
+
+func TestHandlercase13(t *testing.T) { // needs db access
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	authtool.Loggers = Loggers
+	db.Loggers = Loggers
+	req := httptest.NewRequest(http.MethodGet, "/home/create-Submit", nil)
+	w := httptest.NewRecorder()
+	validated = true
+	handler(w, req)
+	if w.Code != http.StatusOK {
+		t.Error("expected http.StatusOk got ", w.Code)
+	}
+}
+func TestHandlercase14(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/home/edit", nil)
+	w := httptest.NewRecorder()
+	validated = true
+	handler(w, req)
+	if w.Code != http.StatusOK {
+		t.Error("expected http.StatusOk got ", w.Code)
+	}
+}
+
+func TestHandlercase15(t *testing.T) { // needs db access
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	authtool.Loggers = Loggers
+	db.Loggers = Loggers
+	req := httptest.NewRequest(http.MethodGet, "/home/edit-submit", nil)
+	w := httptest.NewRecorder()
+	validated = true
+	handler(w, req)
+	if w.Code != http.StatusOK {
+		t.Error("expected http.StatusOk got ", w.Code)
+	}
+}
+func TestHandlercase16(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	authtool.Loggers = Loggers
+	req := httptest.NewRequest(http.MethodGet, "/createUser?username=test_username4&password=test_password1", nil)
+	w := httptest.NewRecorder()
+	handler(w, req)
+	if w.Code != http.StatusOK {
+		t.Error("expected http.StatusOk got ", w.Code)
+	}
+}
+
+func TestHandlercase17(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/thisshouldntwork", nil)
+	w := httptest.NewRecorder()
+	handler(w, req)
+	if w.Code != http.StatusNotFound {
+		t.Error("expected http.StatusNotFound got ", w.Code)
 	}
 	removeFiles()
 }

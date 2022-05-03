@@ -452,8 +452,6 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	switch r.URL.Path {
 	case "/":
 		login(w, r)
-	case "":
-		login(w, r)
 	case "/login-submit":
 		loginSubmit(w, r)
 	case "/logout":
@@ -485,7 +483,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	case "/createUser":
 		createUser(w, r)
 	default:
-		//fmt.Println("Path not found?")
+	w.WriteHeader(http.StatusNotFound)
 	}
 }
 
