@@ -298,6 +298,17 @@ func TestCreateEntry(t *testing.T) {
 		t.Error("expected to have the create entry page shown")
 	}
 }
+func TestCreateEntryunvalidated(t *testing.T) {
+	Path = "assets/"
+	validated = false
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	req := httptest.NewRequest(http.MethodGet, "/home/create", nil)
+	w := httptest.NewRecorder()
+	var landingpage = login(w, req)
+	if landingpage {
+		t.Error("expected to have the create entry page shown")
+	}
+}
 
 func TestCreateEntrySubmit(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
@@ -315,6 +326,20 @@ func TestCreateEntrySubmit(t *testing.T) {
 		t.Error("create should have submitted succesfully it didnt")
 	}
 }
+func TestCreateEntrySubmitunvalidated(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	db.Loggers = Loggers
+	authtool.Loggers = Loggers
+	validated = false
+	Path = "assets/"
+
+	w := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodGet, "/home/create-Submit?title=test&password=test&username=test&private_note=test&public_note=test", nil)
+	loginSubmit := createEntrySubmit(w, req)
+	if loginSubmit {
+		t.Error("create should have submitted succesfully it didnt")
+	}
+}
 func TestEdit(t *testing.T) {
 	Path = "assets/"
 	validated = true
@@ -323,6 +348,17 @@ func TestEdit(t *testing.T) {
 	w := httptest.NewRecorder()
 	var landingpage = login(w, req)
 	if !landingpage {
+		t.Error("expected to have the edit page didnt show ")
+	}
+}
+func TestEditunvalidated(t *testing.T) {
+	Path = "assets/"
+	validated = false
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	req := httptest.NewRequest(http.MethodGet, "/home/edit", nil)
+	w := httptest.NewRecorder()
+	var landingpage = login(w, req)
+	if landingpage {
 		t.Error("expected to have the edit page didnt show ")
 	}
 }
@@ -338,6 +374,20 @@ func TestEditSubmit(t *testing.T) {
 	loginSubmit(w, req)
 	w = httptest.NewRecorder()
 	req = httptest.NewRequest(http.MethodGet, "/home/edit-submit?title=test&update_key=title&update_value=test2", nil)
+	loginSubmit := edit_submit(w, req)
+	if !loginSubmit {
+		t.Error("edit should have submitted succesfully it didnt")
+	}
+
+}
+func TestEditSubmitunvalidated(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	db.Loggers = Loggers
+	authtool.Loggers = Loggers
+	validated = false
+	Path = "assets/"
+	w := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodGet, "/home/edit-submit?title=test&update_key=title&update_value=test2", nil)
 	loginSubmit := edit_submit(w, req)
 	if !loginSubmit {
 		t.Error("edit should have submitted succesfully it didnt")
@@ -537,5 +587,6 @@ func TestHandlercase17(t *testing.T) {
 	if w.Code != http.StatusNotFound {
 		t.Error("expected http.StatusNotFound got ", w.Code)
 	}
+	
 	removeFiles()
 }
