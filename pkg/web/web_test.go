@@ -293,7 +293,7 @@ func TestCreateEntry(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	req := httptest.NewRequest(http.MethodGet, "/home/create", nil)
 	w := httptest.NewRecorder()
-	var landingpage = login(w, req)
+	var landingpage = createEntry(w, req)
 	if !landingpage {
 		t.Error("expected to have the create entry page shown")
 	}
@@ -304,7 +304,7 @@ func TestCreateEntryunvalidated(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	req := httptest.NewRequest(http.MethodGet, "/home/create", nil)
 	w := httptest.NewRecorder()
-	var landingpage = login(w, req)
+	var landingpage = createEntry(w, req)
 	if landingpage {
 		t.Error("expected to have the create entry page shown")
 	}
