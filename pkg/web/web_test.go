@@ -115,7 +115,7 @@ func TestReadall(t *testing.T) {
 func TestReadallunvalidated(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Loggers = Loggers
-
+	validated = false
 	Path = "assets/"
 	db.Connect("test")
 	req := httptest.NewRequest(http.MethodGet, "/home/display", nil)
@@ -142,6 +142,7 @@ func TestSearchByTitle(t *testing.T) {
 func TestSearchByTitleunvalidated(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	Path = "assets/"
+	validated = false
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	req := httptest.NewRequest(http.MethodGet, "/home/searchTitle", nil)
 	w := httptest.NewRecorder()
@@ -173,6 +174,7 @@ func TestSearchByTitleSubmitunvalidated(t *testing.T) {
 	db.Loggers = Loggers
 	authtool.Loggers = Loggers
 	Path = "assets/"
+	validated = false
 	w := httptest.NewRecorder()
 	req := httptest.NewRequest(http.MethodGet, "/home/searchTitle-Submit?title=test", nil)
 	loginSubmit := searchByTitle(w, req)
@@ -193,7 +195,7 @@ func TestSearchByUsername(t *testing.T) {
 }
 func TestSearchByUsernameunvalidated(t *testing.T) {
 	Path = "assets/"
-
+	validated = false
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	req := httptest.NewRequest(http.MethodGet, "/home/searchUser", nil)
 	w := httptest.NewRecorder()
@@ -223,7 +225,7 @@ func TestSearchByUsernameSubmitunvalidated(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Loggers = Loggers
 	authtool.Loggers = Loggers
-
+	validated = false
 	Path = "assets/"
 	w := httptest.NewRecorder()
 	req := httptest.NewRequest(http.MethodGet, "/home/searchUser-Submit?username=test", nil)
@@ -276,7 +278,7 @@ func TestDeleteSubmitunvalidated(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Loggers = Loggers
 	authtool.Loggers = Loggers
-
+	validated = false
 	Path = "assets/"
 	w := httptest.NewRecorder()
 	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
