@@ -389,7 +389,7 @@ func TestEditSubmitunvalidated(t *testing.T) {
 	w := httptest.NewRecorder()
 	req := httptest.NewRequest(http.MethodGet, "/home/edit-submit?title=test&update_key=title&update_value=test2", nil)
 	loginSubmit := edit_submit(w, req)
-	if !loginSubmit {
+	if loginSubmit {
 		t.Error("edit should have submitted succesfully it didnt")
 	}
 
