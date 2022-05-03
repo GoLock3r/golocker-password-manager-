@@ -145,7 +145,7 @@ func TestLogoutunvalidated(t *testing.T) {
 	//authtool.Loggers = Loggers
 	db.Loggers = Loggers
 	db.Connect("demo")
-
+	validated = false
 	req := httptest.NewRequest(http.MethodGet, "/logout", nil)
 	w := httptest.NewRecorder()
 	var logout = logout(w, req)
@@ -213,7 +213,7 @@ func TestSearchByTitle(t *testing.T) {
 }
 func TestSearchByTitlewrongpath(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
-	Path = "somethingƒ/"
+	Path = "something/"
 	validated = true
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	req := httptest.NewRequest(http.MethodGet, "/home/searchTitle", nil)

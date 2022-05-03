@@ -134,7 +134,7 @@ func createUser(w http.ResponseWriter, r *http.Request) bool {
 	}
 	return true
 }
-
+//formats user inputed data to be put into the maps that are entered into the db 
 func formatEntryString(entryTable []map[string]string) string {
 	var display = ""
 	if entryTable == nil {
@@ -206,7 +206,7 @@ func searchByTitle(w http.ResponseWriter, r *http.Request) bool {
 		return false
 	}
 }
-
+// Gets form data and performs the search by title 
 func searchByTitle_submit(w http.ResponseWriter, r *http.Request) {
 	if validated {
 
@@ -228,7 +228,7 @@ func searchByTitle_submit(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Oh no maybe log in first")
 	}
 }
-
+//serves page with html form that allows for search by username
 func searchByUsername(w http.ResponseWriter, r *http.Request) bool {
 	if validated {
 		var fileName = Path + "searchUsername.html"
@@ -249,7 +249,7 @@ func searchByUsername(w http.ResponseWriter, r *http.Request) bool {
 		return false
 	}
 }
-
+//grabs from data when form is submited and searches using user inputed username
 func searchByUsername_submit(w http.ResponseWriter, r *http.Request) {
 
 	if validated {
@@ -293,7 +293,7 @@ func delete_submit(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Oh no maybe log in first")
 	}
 }
-
+//Servers form for user to enter the entry that they would like to delete
 func delete(w http.ResponseWriter, r *http.Request) bool {
 
 	if validated {
@@ -341,7 +341,7 @@ func createEntry(w http.ResponseWriter, r *http.Request) bool {
 		return false
 	}
 }
-
+//submits entry into db with encryption
 func createEntrySubmit(w http.ResponseWriter, r *http.Request) bool {
 
 	if validated {
@@ -396,7 +396,7 @@ func edit(w http.ResponseWriter, r *http.Request) bool {
 		return false
 	}
 }
-
+//submits edit into active db 
 func edit_submit(w http.ResponseWriter, r *http.Request) bool {
 
 	if validated {
@@ -489,7 +489,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 // Creates an instance of the web server. Listens on port 8010
-func Run() error {
+func Run(){
 	http.HandleFunc("/", handler)
-	return http.ListenAndServe(":8010", nil)
+	http.ListenAndServe(":8010", nil)
 }
