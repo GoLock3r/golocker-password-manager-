@@ -252,7 +252,7 @@ func TestDeleteunvalidated(t *testing.T) {
 	validated = false
 	req := httptest.NewRequest(http.MethodGet, "/home/delete", nil)
 	w := httptest.NewRecorder()
-	var landingpage = login(w, req)
+	var landingpage = delete(w, req)
 	if landingpage {
 		t.Error("expected to not have the delete page shown")
 	}
