@@ -246,10 +246,6 @@ func TestDelete(t *testing.T) {
 }
 func TestDeleteunvalidated(t *testing.T) {
 	Path = "assets/"
-<<<<<<< HEAD
-
-=======
->>>>>>> c5b65c218c24ff361b4f0090f64380f602c3a732
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	validated = false
 	req := httptest.NewRequest(http.MethodGet, "/home/delete", nil)
