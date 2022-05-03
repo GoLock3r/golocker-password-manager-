@@ -112,13 +112,13 @@ func TestReadall(t *testing.T) {
 func TestReadallunvalidated(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Loggers = Loggers
-
 	Path = "assets/"
 	db.Connect("test")
+	validated = false
 	req := httptest.NewRequest(http.MethodGet, "/home/display", nil)
 	w := httptest.NewRecorder()
 	var readAll = readAll(w, req)
-	if readAll {
+	if !readAll {
 		t.Error("shouldnt be able to read all")
 
 	}
