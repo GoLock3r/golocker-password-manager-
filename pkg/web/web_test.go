@@ -25,6 +25,7 @@ func TestLandingPage(t *testing.T) {
 	}
 }
 func TestLandingPagewrongpath(t *testing.T) {
+	Path = "something/"
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	req := httptest.NewRequest(http.MethodGet, "/", nil)
 	w := httptest.NewRecorder()
@@ -64,11 +65,11 @@ func TestLoginSubmitwrongpath(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	authtool.Loggers = Loggers
 	authtool.CreateUser("test_username", "test_password")
-	
+	Path = "something/"
 	w := httptest.NewRecorder()
 	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
 	loginSubmit := loginSubmit(w, req)
-	if !loginSubmit {
+	if loginSubmit {
 		t.Error("login should have submitted succesfully it didnt")
 	}
 
