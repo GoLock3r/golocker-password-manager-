@@ -242,6 +242,22 @@ func TestSearchByTitleSubmit(t *testing.T) {
 		t.Error("edit should have submitted succesfully it didnt")
 	}
 }
+func TestSearchByTitleSubmitwrongpath(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	db.Loggers = Loggers
+	authtool.Loggers = Loggers
+	validated = true
+	Path = "something/"
+	w := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
+	loginSubmit(w, req)
+	w = httptest.NewRecorder()
+	req = httptest.NewRequest(http.MethodGet, "/home/searchTitle-Submit?title=test", nil)
+	loginSubmit := searchByTitle(w, req)
+	if loginSubmit {
+		t.Error("edit should have submitted succesfully it didnt")
+	}
+}
 
 func TestSearchByTitleSubmitunvalidated(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
@@ -264,6 +280,17 @@ func TestSearchByUsername(t *testing.T) {
 	w := httptest.NewRecorder()
 	var landingpage = searchByUsername(w, req)
 	if !landingpage {
+		t.Error("expected to have the search by username page shown")
+	}
+}
+func TestSearchByUsernamewrongpath(t *testing.T) {
+	Path = "something/"
+	validated = true
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	req := httptest.NewRequest(http.MethodGet, "/home/searchUser", nil)
+	w := httptest.NewRecorder()
+	var landingpage = searchByUsername(w, req)
+	if landingpage {
 		t.Error("expected to have the search by username page shown")
 	}
 }
@@ -294,6 +321,22 @@ func TestSearchByUsernameSubmit(t *testing.T) {
 		t.Error("edit should have submitted succesfully it didnt")
 	}
 }
+func TestSearchByUsernameSubmitwrongpath(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	db.Loggers = Loggers
+	authtool.Loggers = Loggers
+	validated = true
+	Path = "something/"
+	w := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
+	loginSubmit(w, req)
+	w = httptest.NewRecorder()
+	req = httptest.NewRequest(http.MethodGet, "/home/searchUser-Submit?username=test", nil)
+	loginSubmit := searchByUsername(w, req)
+	if loginSubmit {
+		t.Error("edit should have submitted succesfully it didnt")
+	}
+}
 
 func TestSearchByUsernameSubmitunvalidated(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
@@ -317,6 +360,17 @@ func TestDelete(t *testing.T) {
 	w := httptest.NewRecorder()
 	var landingpage = delete(w, req)
 	if !landingpage {
+		t.Error("expected to have the delete page shown")
+	}
+}
+func TestDeletewrongpath(t *testing.T) {
+	Path = "something/"
+	validated = true
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	req := httptest.NewRequest(http.MethodGet, "/home/delete", nil)
+	w := httptest.NewRecorder()
+	var landingpage = delete(w, req)
+	if landingpage {
 		t.Error("expected to have the delete page shown")
 	}
 }
@@ -348,6 +402,22 @@ func TestDeleteSubmit(t *testing.T) {
 		t.Error("edit should have submitted succesfully it didnt")
 	}
 }
+func TestDeleteSubmitwrongpath(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	db.Loggers = Loggers
+	authtool.Loggers = Loggers
+	validated = true
+	Path = "something/"
+	w := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
+	loginSubmit(w, req)
+	w = httptest.NewRecorder()
+	req = httptest.NewRequest(http.MethodGet, "/home/delete-submit?title=test&update_key=title&update_value=test2", nil)
+	loginSubmit := delete(w, req)
+	if loginSubmit {
+		t.Error("edit should have submitted succesfully it didnt")
+	}
+}
 func TestDeleteSubmitunvalidated(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Loggers = Loggers
@@ -369,6 +439,17 @@ func TestCreateEntry(t *testing.T) {
 	w := httptest.NewRecorder()
 	var landingpage = createEntry(w, req)
 	if !landingpage {
+		t.Error("expected to have the create entry page shown")
+	}
+}
+func TestCreateEntrywrongpath(t *testing.T) {
+	Path = "something/"
+	validated = true
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	req := httptest.NewRequest(http.MethodGet, "/home/create", nil)
+	w := httptest.NewRecorder()
+	var landingpage = createEntry(w, req)
+	if landingpage {
 		t.Error("expected to have the create entry page shown")
 	}
 }
@@ -400,6 +481,22 @@ func TestCreateEntrySubmit(t *testing.T) {
 		t.Error("create should have submitted succesfully it didnt")
 	}
 }
+func TestCreateEntrySubmitwrongpath(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	db.Loggers = Loggers
+	authtool.Loggers = Loggers
+	validated = true
+	Path = "something/"
+	w := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
+	loginSubmit(w, req)
+	w = httptest.NewRecorder()
+	req = httptest.NewRequest(http.MethodGet, "/home/create-Submit?title=test&password=test&username=test&private_note=test&public_note=test", nil)
+	loginSubmit := createEntrySubmit(w, req)
+	if loginSubmit {
+		t.Error("create should have submitted succesfully it didnt")
+	}
+}
 func TestCreateEntrySubmitunvalidated(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Loggers = Loggers
@@ -422,6 +519,17 @@ func TestEdit(t *testing.T) {
 	w := httptest.NewRecorder()
 	var landingpage = edit(w, req)
 	if !landingpage {
+		t.Error("expected to have the edit page didnt show ")
+	}
+}
+func TestEditwrongpath(t *testing.T) {
+	Path = "something/"
+	validated = true
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	req := httptest.NewRequest(http.MethodGet, "/home/edit", nil)
+	w := httptest.NewRecorder()
+	var landingpage = edit(w, req)
+	if landingpage {
 		t.Error("expected to have the edit page didnt show ")
 	}
 }
@@ -454,6 +562,23 @@ func TestEditSubmit(t *testing.T) {
 	}
 
 }
+func TestEditSubmitwrongpath(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	db.Loggers = Loggers
+	authtool.Loggers = Loggers
+	validated = true
+	Path = "something/"
+	w := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
+	loginSubmit(w, req)
+	w = httptest.NewRecorder()
+	req = httptest.NewRequest(http.MethodGet, "/home/edit-submit?title=test&update_key=title&update_value=test2", nil)
+	loginSubmit := edit_submit(w, req)
+	if loginSubmit {
+		t.Error("edit should have submitted succesfully it didnt")
+	}
+
+}
 func TestEditSubmitunvalidated(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Loggers = Loggers
@@ -477,6 +602,30 @@ func TestHome(t *testing.T) {
 	w := httptest.NewRecorder()
 	var landingpage = home(w, req)
 	if !landingpage {
+		t.Error("expected to have the home page shown landing page didnt show ")
+	}
+	removeFiles()
+}
+func TestHomewrongpath(t *testing.T) {
+	Path = "something/"
+	validated = true
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	req := httptest.NewRequest(http.MethodGet, "/home", nil)
+	w := httptest.NewRecorder()
+	var landingpage = home(w, req)
+	if landingpage {
+		t.Error("expected to have the home page shown landing page didnt show ")
+	}
+	removeFiles()
+}
+func TestHomeunvalidated(t *testing.T) {
+	Path = "assets/"
+	validated = false
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	req := httptest.NewRequest(http.MethodGet, "/home", nil)
+	w := httptest.NewRecorder()
+	var landingpage = home(w, req)
+	if landingpage {
 		t.Error("expected to have the home page shown landing page didnt show ")
 	}
 	removeFiles()
