@@ -100,7 +100,18 @@ func TestCreateUserexisting(t *testing.T) {
 	}
 
 }
+func TestCreateUserwrongpath(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	authtool.Loggers = Loggers
+	Path = "something/"
+	w := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodGet, "/createUser?username=test_username4&password=test_password1", nil)
+	loginSubmit := createUser(w, req)
+	if loginSubmit {
+		t.Error("login should have submitted succesfully it didnt")
+	}
 
+}
 // create user with existing user
 func TestLogout(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
@@ -147,6 +158,20 @@ func TestReadall(t *testing.T) {
 
 	}
 }
+func TestReadallwrongpath(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	db.Loggers = Loggers
+	validated = true
+	Path = "something/"
+	db.Connect("test")
+	req := httptest.NewRequest(http.MethodGet, "/home/display", nil)
+	w := httptest.NewRecorder()
+	var readAll = readAll(w, req)
+	if readAll {
+		t.Error("unable to read all")
+
+	}
+}
 
 func TestReadallunvalidated(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
@@ -171,6 +196,19 @@ func TestSearchByTitle(t *testing.T) {
 	w := httptest.NewRecorder()
 	var landingpage = searchByTitle(w, req)
 	if !landingpage {
+		t.Error("expected to have the search by title page shown")
+	}
+
+}
+func TestSearchByTitlewrongpath(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	Path = "somethingƒ/"
+	validated = true
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	req := httptest.NewRequest(http.MethodGet, "/home/searchTitle", nil)
+	w := httptest.NewRecorder()
+	var landingpage = searchByTitle(w, req)
+	if landingpage {
 		t.Error("expected to have the search by title page shown")
 	}
 
