@@ -38,6 +38,7 @@ func TestLoginSubmit(t *testing.T) {
 	}
 
 }
+// invalid login test 
 func TestCreateUser(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	authtool.Loggers = Loggers
@@ -50,7 +51,19 @@ func TestCreateUser(t *testing.T) {
 	}
 
 }
+func TestCreateUserexisting(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	authtool.Loggers = Loggers
+	Path = "assets/"
+	w := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodGet, "/createUser?username=test_username4&password=test_password1", nil)
+	loginSubmit := createUser(w, req)
+	if loginSubmit {
+		t.Error("shouldnt have created user")
+	}
 
+}
+ // create user with existing user 
 func TestLogout(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	//authtool.Loggers = Loggers
@@ -62,6 +75,21 @@ func TestLogout(t *testing.T) {
 	var logout = logout(w, req)
 	if !logout {
 		t.Error("logout unsuccessful", w)
+	}
+
+}
+ // testLogout when validated == false 
+ func TestLogoutunvalidated(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	//authtool.Loggers = Loggers
+	db.Loggers = Loggers
+	db.Connect("demo")
+	
+	req := httptest.NewRequest(http.MethodGet, "/logout", nil)
+	w := httptest.NewRecorder()
+	var logout = logout(w, req)
+	if logout {
+		t.Error("logout successful")
 	}
 
 }
@@ -80,6 +108,21 @@ func TestReadall(t *testing.T) {
 
 	}
 }
+
+func TestReadallunvalidated(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	db.Loggers = Loggers
+
+	Path = "assets/"
+	db.Connect("test")
+	req := httptest.NewRequest(http.MethodGet, "/home/display", nil)
+	w := httptest.NewRecorder()
+	var readAll = readAll(w, req)
+	if readAll {
+		t.Error("shouldnt be able to read all")
+
+	}
+}
 func TestSearchByTitle(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	Path = "assets/"
@@ -93,7 +136,18 @@ func TestSearchByTitle(t *testing.T) {
 	}
 
 }
+func TestSearchByTitleunvalidated(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	Path = "assets/"
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	req := httptest.NewRequest(http.MethodGet, "/home/searchTitle", nil)
+	w := httptest.NewRecorder()
+	var landingpage = searchByTitle(w, req)
+	if landingpage {
+		t.Error("title page should be shown")
+	}
 
+}
 func TestSearchByTitleSubmit(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Loggers = Loggers
@@ -111,6 +165,21 @@ func TestSearchByTitleSubmit(t *testing.T) {
 	}
 }
 
+func TestSearchByTitleSubmitunvalidated(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	db.Loggers = Loggers
+	authtool.Loggers = Loggers
+	Path = "assets/"
+	w := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
+	loginSubmit(w, req)
+	w = httptest.NewRecorder()
+	req = httptest.NewRequest(http.MethodGet, "/home/searchTitle-Submit?title=test", nil)
+	loginSubmit := delete(w, req)
+	if loginSubmit {
+		t.Error("edit should not have submitted succesfully it didnt")
+	}
+}
 func TestSearchByUsername(t *testing.T) {
 	Path = "assets/"
 	validated = true
@@ -122,7 +191,17 @@ func TestSearchByUsername(t *testing.T) {
 		t.Error("expected to have the search by username page shown")
 	}
 }
-
+func TestSearchByUsernameunvalidated(t *testing.T) {
+	Path = "assets/"
+	
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	req := httptest.NewRequest(http.MethodGet, "/home/searchUser", nil)
+	w := httptest.NewRecorder()
+	var landingpage = searchByUsername(w, req)
+	if landingpage {
+		t.Error("expected to not have the search by username page shown")
+	}
+}
 func TestSearchByUsernameSubmit(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Loggers = Loggers
