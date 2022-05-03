@@ -159,7 +159,7 @@ func TestSearchByTitleSubmit(t *testing.T) {
 	loginSubmit(w, req)
 	w = httptest.NewRecorder()
 	req = httptest.NewRequest(http.MethodGet, "/home/searchTitle-Submit?title=test", nil)
-	loginSubmit := delete(w, req)
+	loginSubmit := searchByTitle(w, req)
 	if !loginSubmit {
 		t.Error("edit should have submitted succesfully it didnt")
 	}
@@ -175,7 +175,7 @@ func TestSearchByTitleSubmitunvalidated(t *testing.T) {
 	loginSubmit(w, req)
 	w = httptest.NewRecorder()
 	req = httptest.NewRequest(http.MethodGet, "/home/searchTitle-Submit?title=test", nil)
-	loginSubmit := delete(w, req)
+	loginSubmit := searchByTitle(w, req)
 	if loginSubmit {
 		t.Error("edit should not have submitted succesfully it didnt")
 	}
@@ -213,9 +213,26 @@ func TestSearchByUsernameSubmit(t *testing.T) {
 	loginSubmit(w, req)
 	w = httptest.NewRecorder()
 	req = httptest.NewRequest(http.MethodGet, "/home/searchUser-Submit?username=test", nil)
-	loginSubmit := delete(w, req)
+	loginSubmit := searchByUsername(w, req)
 	if !loginSubmit {
 		t.Error("edit should have submitted succesfully it didnt")
+	}
+}
+
+func TestSearchByUsernameSubmitunvalidated(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	db.Loggers = Loggers
+	authtool.Loggers = Loggers
+	
+	Path = "assets/"
+	w := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
+	loginSubmit(w, req)
+	w = httptest.NewRecorder()
+	req = httptest.NewRequest(http.MethodGet, "/home/searchUser-Submit?username=test", nil)
+	loginSubmit := searchByUsername(w, req)
+	if loginSubmit {
+		t.Error("edit should not have submitted succesfully it didnt")
 	}
 }
 
@@ -230,6 +247,17 @@ func TestDelete(t *testing.T) {
 		t.Error("expected to have the delete page shown")
 	}
 }
+func TestDeleteunvalidated(t *testing.T) {
+	Path = "assets/"
+	
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	req := httptest.NewRequest(http.MethodGet, "/home/delete", nil)
+	w := httptest.NewRecorder()
+	var landingpage = login(w, req)
+	if landingpage {
+		t.Error("expected to not have the delete page shown")
+	}
+}
 
 func TestDeleteSubmit(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
@@ -241,13 +269,28 @@ func TestDeleteSubmit(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
 	loginSubmit(w, req)
 	w = httptest.NewRecorder()
-	req = httptest.NewRequest(http.MethodGet, "/home/edit-submit?title=test&update_key=title&update_value=test2", nil)
+	req = httptest.NewRequest(http.MethodGet, "/home/delete-submit?title=test&update_key=title&update_value=test2", nil)
 	loginSubmit := delete(w, req)
 	if !loginSubmit {
 		t.Error("edit should have submitted succesfully it didnt")
 	}
 }
-
+func TestDeleteSubmitunvalidated(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	db.Loggers = Loggers
+	authtool.Loggers = Loggers
+	
+	Path = "assets/"
+	w := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
+	loginSubmit(w, req)
+	w = httptest.NewRecorder()
+	req = httptest.NewRequest(http.MethodGet, "/home/delete-submit?title=test&update_key=title&update_value=test2", nil)
+	loginSubmit := delete(w, req)
+	if loginSubmit {
+		t.Error("edit should not have submitted succesfully it didnt")
+	}
+}
 func TestCreateEntry(t *testing.T) {
 	Path = "assets/"
 	validated = true
