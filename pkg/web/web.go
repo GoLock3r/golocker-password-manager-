@@ -311,7 +311,6 @@ func delete(w http.ResponseWriter, r *http.Request) bool {
 		}
 		return true
 	} else {
-
 		w.WriteHeader(http.StatusNotFound)
 		fmt.Fprintf(w, "Oh no maybe log in first")
 		return false
@@ -485,7 +484,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	case "/createUser":
 		createUser(w, r)
 	default:
-		//fmt.Println("Path not found?")
+		w.WriteHeader(http.StatusNotFound)
 	}
 }
 

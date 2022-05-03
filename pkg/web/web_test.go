@@ -281,10 +281,7 @@ func TestDeleteSubmitunvalidated(t *testing.T) {
 	validated = false
 	Path = "assets/"
 	w := httptest.NewRecorder()
-	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
-	loginSubmit(w, req)
-	w = httptest.NewRecorder()
-	req = httptest.NewRequest(http.MethodGet, "/home/delete-submit?title=test&update_key=title&update_value=test2", nil)
+	req := httptest.NewRequest(http.MethodGet, "/home/delete-submit?title=test&update_key=title&update_value=test2", nil)
 	loginSubmit := delete(w, req)
 	if loginSubmit {
 		t.Error("edit should not have submitted succesfully it didnt")
