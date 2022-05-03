@@ -346,7 +346,7 @@ func TestEdit(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	req := httptest.NewRequest(http.MethodGet, "/home/edit", nil)
 	w := httptest.NewRecorder()
-	var landingpage = login(w, req)
+	var landingpage = edit(w, req)
 	if !landingpage {
 		t.Error("expected to have the edit page didnt show ")
 	}
@@ -357,7 +357,7 @@ func TestEditunvalidated(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	req := httptest.NewRequest(http.MethodGet, "/home/edit", nil)
 	w := httptest.NewRecorder()
-	var landingpage = login(w, req)
+	var landingpage = edit(w, req)
 	if landingpage {
 		t.Error("expected to have the edit page didnt show ")
 	}
