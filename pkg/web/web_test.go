@@ -241,7 +241,7 @@ func TestDelete(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	req := httptest.NewRequest(http.MethodGet, "/home/delete", nil)
 	w := httptest.NewRecorder()
-	var landingpage = login(w, req)
+	var landingpage = delete(w, req)
 	if !landingpage {
 		t.Error("expected to have the delete page shown")
 	}
