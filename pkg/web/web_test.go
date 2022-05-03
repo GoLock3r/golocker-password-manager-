@@ -24,12 +24,47 @@ func TestLandingPage(t *testing.T) {
 		t.Error("expected to have the landing page shown landing page didnt show ")
 	}
 }
+func TestLandingPagewrongpath(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	req := httptest.NewRequest(http.MethodGet, "/", nil)
+	w := httptest.NewRecorder()
+	var landingpage = login(w, req)
+	if landingpage {
+		t.Error("expected to have the not landing page shown landing page didnt show ")
+	}
+}
 
 func TestLoginSubmit(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	authtool.Loggers = Loggers
 	authtool.CreateUser("test_username", "test_password")
 	Path = "assets/"
+	w := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
+	loginSubmit := loginSubmit(w, req)
+	if !loginSubmit {
+		t.Error("login should have submitted succesfully it didnt")
+	}
+
+}
+func TestLoginSubmitinvalidLogIn(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	authtool.Loggers = Loggers
+	authtool.CreateUser("test_username", "test_password")
+	Path = "assets/"
+	w := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username1&password=test_password", nil)
+	loginSubmit := loginSubmit(w, req)
+	if loginSubmit {
+		t.Error("login should have not submitted succesfully it didnt")
+	}
+
+}
+func TestLoginSubmitwrongpath(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	authtool.Loggers = Loggers
+	authtool.CreateUser("test_username", "test_password")
+	
 	w := httptest.NewRecorder()
 	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
 	loginSubmit := loginSubmit(w, req)
