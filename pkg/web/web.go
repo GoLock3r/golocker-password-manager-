@@ -490,7 +490,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 // Creates an instance of the web server. Listens on port 8010
-func Run() error{
+func Run() error {
 	http.HandleFunc("/", handler)
 	return http.ListenAndServe(":8010", nil)
 }

@@ -38,7 +38,8 @@ func TestLoginSubmit(t *testing.T) {
 	}
 
 }
-// invalid login test 
+
+// invalid login test
 func TestCreateUser(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	authtool.Loggers = Loggers
@@ -63,7 +64,8 @@ func TestCreateUserexisting(t *testing.T) {
 	}
 
 }
- // create user with existing user 
+
+// create user with existing user
 func TestLogout(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	//authtool.Loggers = Loggers
@@ -78,13 +80,14 @@ func TestLogout(t *testing.T) {
 	}
 
 }
- // testLogout when validated == false 
- func TestLogoutunvalidated(t *testing.T) {
+
+// testLogout when validated == false
+func TestLogoutunvalidated(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	//authtool.Loggers = Loggers
 	db.Loggers = Loggers
 	db.Connect("demo")
-	
+
 	req := httptest.NewRequest(http.MethodGet, "/logout", nil)
 	w := httptest.NewRecorder()
 	var logout = logout(w, req)
@@ -112,9 +115,9 @@ func TestReadall(t *testing.T) {
 func TestReadallunvalidated(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Loggers = Loggers
+
 	Path = "assets/"
 	db.Connect("test")
-	validated = false
 	req := httptest.NewRequest(http.MethodGet, "/home/display", nil)
 	w := httptest.NewRecorder()
 	var readAll = readAll(w, req)
@@ -139,7 +142,6 @@ func TestSearchByTitle(t *testing.T) {
 func TestSearchByTitleunvalidated(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	Path = "assets/"
-	validated = false
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	req := httptest.NewRequest(http.MethodGet, "/home/searchTitle", nil)
 	w := httptest.NewRecorder()
@@ -170,7 +172,6 @@ func TestSearchByTitleSubmitunvalidated(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Loggers = Loggers
 	authtool.Loggers = Loggers
-	validated = false
 	Path = "assets/"
 	w := httptest.NewRecorder()
 	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
@@ -195,7 +196,7 @@ func TestSearchByUsername(t *testing.T) {
 }
 func TestSearchByUsernameunvalidated(t *testing.T) {
 	Path = "assets/"
-	validated = false
+
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	req := httptest.NewRequest(http.MethodGet, "/home/searchUser", nil)
 	w := httptest.NewRecorder()
@@ -225,7 +226,7 @@ func TestSearchByUsernameSubmitunvalidated(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Loggers = Loggers
 	authtool.Loggers = Loggers
-	validated = false
+
 	Path = "assets/"
 	w := httptest.NewRecorder()
 	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
@@ -251,7 +252,7 @@ func TestDelete(t *testing.T) {
 }
 func TestDeleteunvalidated(t *testing.T) {
 	Path = "assets/"
-	validated = false
+
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	req := httptest.NewRequest(http.MethodGet, "/home/delete", nil)
 	w := httptest.NewRecorder()
@@ -281,7 +282,7 @@ func TestDeleteSubmitunvalidated(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Loggers = Loggers
 	authtool.Loggers = Loggers
-	validated = false
+
 	Path = "assets/"
 	w := httptest.NewRecorder()
 	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
