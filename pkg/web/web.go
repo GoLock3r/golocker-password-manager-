@@ -25,33 +25,33 @@ var Url = "http://localhost:8010"
 // Serve a login page to the user and pass credentials off to the
 // loginSubmit function to verify these credentials
 func login(w http.ResponseWriter, r *http.Request) bool {
-if !validated{
-	var fileName = Path + "login.html"
-	t, err := template.ParseFiles(fileName)
-	if err != nil {
-		fmt.Println("Parse error")
-		return false
-	}
-	err = t.ExecuteTemplate(w, "login.html", nil)
-	if err != nil {
-		fmt.Println("Template execution error")
-		return false
+	if !validated {
+		var fileName = Path + "login.html"
+		t, err := template.ParseFiles(fileName)
+		if err != nil {
+			fmt.Println("Parse error")
+			return false
+		}
+		err = t.ExecuteTemplate(w, "login.html", nil)
+		if err != nil {
+			fmt.Println("Template execution error")
+			return false
+		}
+		return true
+	} else {
+		var fileName = Path + "redirect.html"
+		t, err := template.ParseFiles(fileName)
+		if err != nil {
+			fmt.Println("Parse error")
+			return false
+		}
+		err = t.ExecuteTemplate(w, "redirect.html", Url+"/home")
+		if err != nil {
+			fmt.Println("Template execution error")
+			return false
+		}
 	}
 	return true
-}else{
-	var fileName = Path + "redirect.html"
-	t, err := template.ParseFiles(fileName)
-	if err != nil {
-		fmt.Println("Parse error")
-		return false
-	}
-	err = t.ExecuteTemplate(w, "redirect.html", Url + "/home")
-	if err != nil {
-		fmt.Println("Template execution error")
-		return false 
-	}
-}
-return true
 }
 
 // Process user credentials given from the login function.
@@ -72,9 +72,9 @@ func loginSubmit(w http.ResponseWriter, r *http.Request) bool {
 			fmt.Println("Parse error")
 			return false
 		}
-		err = t.ExecuteTemplate(w, "redirect.html", Url + "/home")
+		err = t.ExecuteTemplate(w, "redirect.html", Url+"/home")
 		if err != nil {
-			fmt.Println(err,"Template execution error")
+			fmt.Println(err, "Template execution error")
 			return false
 		}
 		valid_username = username
@@ -121,7 +121,7 @@ func createUser(w http.ResponseWriter, r *http.Request) bool {
 			fmt.Println("Parse error")
 			return false
 		}
-		err = t.ExecuteTemplate(w, "redirect.html", Url + "/" )
+		err = t.ExecuteTemplate(w, "redirect.html", Url+"/")
 		if err != nil {
 			fmt.Println(err, "Template execution error")
 			return false
@@ -282,7 +282,7 @@ func delete_submit(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("Parse error")
 			return
 		}
-		err = t.ExecuteTemplate(w, "redirect.html", Url + "/home")
+		err = t.ExecuteTemplate(w, "redirect.html", Url+"/home")
 		if err != nil {
 			fmt.Println("Template execution error")
 		}
@@ -343,7 +343,7 @@ func createEntry(w http.ResponseWriter, r *http.Request) bool {
 	}
 }
 
-func createEntrySubmit(w http.ResponseWriter, r *http.Request) bool{
+func createEntrySubmit(w http.ResponseWriter, r *http.Request) bool {
 
 	if validated {
 		entry := map[string]string{
@@ -361,12 +361,12 @@ func createEntrySubmit(w http.ResponseWriter, r *http.Request) bool{
 			fmt.Println("Parse error")
 			return false
 		}
-		err = t.ExecuteTemplate(w, "redirect.html", Url + "/home")
-				if err != nil {
+		err = t.ExecuteTemplate(w, "redirect.html", Url+"/home")
+		if err != nil {
 			fmt.Println("Template execution error")
-					return false
+			return false
 		}
-	
+
 	} else {
 		w.WriteHeader(http.StatusNotFound)
 		fmt.Fprintf(w, "Oh no maybe log in first")
@@ -398,22 +398,22 @@ func edit(w http.ResponseWriter, r *http.Request) bool {
 	}
 }
 
-func edit_submit(w http.ResponseWriter, r *http.Request) bool{
+func edit_submit(w http.ResponseWriter, r *http.Request) bool {
 
 	if validated {
-			db.UpdateEntry(r.FormValue("title"), r.FormValue("update_key"), r.FormValue("update_value"))
-			var fileName = Path + "redirect.html"
-			t, err := template.ParseFiles(fileName)
-			if err != nil {
-				fmt.Println("Parse error")
-				return false
-			}
-			err = t.ExecuteTemplate(w, "redirect.html", Url + "/home")
-			if err != nil {
-				fmt.Println("Template execution error")
-				return false
-			}
-		
+		db.UpdateEntry(r.FormValue("title"), r.FormValue("update_key"), r.FormValue("update_value"))
+		var fileName = Path + "redirect.html"
+		t, err := template.ParseFiles(fileName)
+		if err != nil {
+			fmt.Println("Parse error")
+			return false
+		}
+		err = t.ExecuteTemplate(w, "redirect.html", Url+"/home")
+		if err != nil {
+			fmt.Println("Template execution error")
+			return false
+		}
+
 	} else {
 		w.WriteHeader(http.StatusNotFound)
 		fmt.Fprintf(w, "Oh no maybe log in first")
@@ -452,6 +452,8 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	switch r.URL.Path {
 	case "/":
 		login(w, r)
+	case "":
+		login(w, r)
 	case "/login-submit":
 		loginSubmit(w, r)
 	case "/logout":
@@ -483,7 +485,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	case "/createUser":
 		createUser(w, r)
 	default:
-	w.WriteHeader(http.StatusNotFound)
+		//fmt.Println("Path not found?")
 	}
 }
 
