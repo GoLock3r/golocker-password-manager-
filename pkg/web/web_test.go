@@ -118,7 +118,7 @@ func TestReadallunvalidated(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/home/display", nil)
 	w := httptest.NewRecorder()
 	var readAll = readAll(w, req)
-	if !readAll {
+	if readAll {
 		t.Error("shouldnt be able to read all")
 
 	}
@@ -139,6 +139,7 @@ func TestSearchByTitle(t *testing.T) {
 func TestSearchByTitleunvalidated(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	Path = "assets/"
+	validated = false
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	req := httptest.NewRequest(http.MethodGet, "/home/searchTitle", nil)
 	w := httptest.NewRecorder()
@@ -169,6 +170,7 @@ func TestSearchByTitleSubmitunvalidated(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Loggers = Loggers
 	authtool.Loggers = Loggers
+	validated = false
 	Path = "assets/"
 	w := httptest.NewRecorder()
 	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
@@ -193,7 +195,7 @@ func TestSearchByUsername(t *testing.T) {
 }
 func TestSearchByUsernameunvalidated(t *testing.T) {
 	Path = "assets/"
-	
+	validated = false
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	req := httptest.NewRequest(http.MethodGet, "/home/searchUser", nil)
 	w := httptest.NewRecorder()
@@ -223,7 +225,7 @@ func TestSearchByUsernameSubmitunvalidated(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Loggers = Loggers
 	authtool.Loggers = Loggers
-	
+	validated = false
 	Path = "assets/"
 	w := httptest.NewRecorder()
 	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
@@ -249,7 +251,7 @@ func TestDelete(t *testing.T) {
 }
 func TestDeleteunvalidated(t *testing.T) {
 	Path = "assets/"
-	
+	validated = false
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	req := httptest.NewRequest(http.MethodGet, "/home/delete", nil)
 	w := httptest.NewRecorder()
@@ -279,7 +281,7 @@ func TestDeleteSubmitunvalidated(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Loggers = Loggers
 	authtool.Loggers = Loggers
-	
+	validated = false
 	Path = "assets/"
 	w := httptest.NewRecorder()
 	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
