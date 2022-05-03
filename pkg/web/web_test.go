@@ -173,10 +173,7 @@ func TestSearchByTitleSubmitunvalidated(t *testing.T) {
 	validated = false
 	Path = "assets/"
 	w := httptest.NewRecorder()
-	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
-	loginSubmit(w, req)
-	w = httptest.NewRecorder()
-	req = httptest.NewRequest(http.MethodGet, "/home/searchTitle-Submit?title=test", nil)
+	req := httptest.NewRequest(http.MethodGet, "/home/searchTitle-Submit?title=test", nil)
 	loginSubmit := searchByTitle(w, req)
 	if loginSubmit {
 		t.Error("edit should not have submitted succesfully it didnt")
@@ -228,10 +225,7 @@ func TestSearchByUsernameSubmitunvalidated(t *testing.T) {
 	validated = false
 	Path = "assets/"
 	w := httptest.NewRecorder()
-	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
-	loginSubmit(w, req)
-	w = httptest.NewRecorder()
-	req = httptest.NewRequest(http.MethodGet, "/home/searchUser-Submit?username=test", nil)
+	req := httptest.NewRequest(http.MethodGet, "/home/searchUser-Submit?username=test", nil)
 	loginSubmit := searchByUsername(w, req)
 	if loginSubmit {
 		t.Error("edit should not have submitted succesfully it didnt")
@@ -251,8 +245,8 @@ func TestDelete(t *testing.T) {
 }
 func TestDeleteunvalidated(t *testing.T) {
 	Path = "assets/"
-	validated = false
 	Loggers = logger.CreateLoggers("testlogs.txt")
+	validated = false
 	req := httptest.NewRequest(http.MethodGet, "/home/delete", nil)
 	w := httptest.NewRecorder()
 	var landingpage = login(w, req)
