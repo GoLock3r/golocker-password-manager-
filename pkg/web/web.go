@@ -155,22 +155,40 @@ func formatEntryString(entryTable []map[string]string) string {
 // Reads all database entries for a validated user
 // displays all of the entries in user database
 func readAll(w http.ResponseWriter, r *http.Request) bool {
+
+	type Entry struct {
+		Title       string
+		Username    string
+		Password    string
+		PublicNote  string
+		PrivateNote string
+	}
+
 	var entries []map[string]string
+	var cards = ""
+
 	if validated {
 		// var display = ""
 		var fileName = Path + "display.html"
 		entries = db.ReadAll()
 		for i := 0; i < len(entries); i++ {
 			entries[i] = db.DecryptEntry(key, entries[i])
+			var titleString = entries[i]["title"]
+			var usernameString = entries[i]["username"]
+			var passwordString = entries[i]["password"]
+			var publicNoteString = entries[i]["public_note"]
+			var privateNoteString = entries[i]["public_note"]
+			cards += "<div class=\"col\"><div class=\"card shadow-sm\"><img src=\"...\" class=\"card-img-top\" alt=\"...\"><div class=\"card-body\"><h5 class=\"card-title\">" +
+				"Title: " + titleString + "</h5><p class=\"card-text\">" +
+				"Username: " + usernameString + "</p><p class=\"card-text\">" +
+				"Password: " + passwordString + "</p><p class=\"card-text\">" +
+				"Public Note: " + publicNoteString + "</p><p class=\"card-text\">" +
+				"Private Note: " + privateNoteString + "</p></div></div></div>"
 		}
 
-		type Entry struct {
-			Title       string
-			Username    string
-			Password    string
-			PublicNote  string
-			PrivateNote string
-		}
+		cards += "</div>"
+
+		fmt.Println(cards)
 
 		// display = formatEntryString(entries)
 		t, err := template.ParseFiles(fileName)
@@ -178,8 +196,8 @@ func readAll(w http.ResponseWriter, r *http.Request) bool {
 			fmt.Println("Parse error")
 			return false
 		}
-		
-		err = t.ExecuteTemplate(w, "display.html", Entry{entries[0]["title"], entries[0]["username"], entries[0]["password"], entries[0]["public_note"], entries[0]["private_note"]})
+		// Entry{entries[0]["title"], entries[0]["username"], entries[0]["password"], entries[0]["public_note"], entries[0]["private_note"]}
+		err = t.ExecuteTemplate(w, "display.html", template.HTML(cards))
 		if err != nil {
 			fmt.Println("Template execution error")
 			return false
