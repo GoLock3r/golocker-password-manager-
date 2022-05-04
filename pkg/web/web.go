@@ -134,7 +134,8 @@ func createUser(w http.ResponseWriter, r *http.Request) bool {
 	}
 	return true
 }
-//formats user inputed data to be put into the maps that are entered into the db 
+
+//formats user inputed data to be put into the maps that are entered into the db
 func formatEntryString(entryTable []map[string]string) string {
 	var display = ""
 	if entryTable == nil {
@@ -156,19 +157,29 @@ func formatEntryString(entryTable []map[string]string) string {
 func readAll(w http.ResponseWriter, r *http.Request) bool {
 	var entries []map[string]string
 	if validated {
-		var display = ""
+		// var display = ""
 		var fileName = Path + "display.html"
 		entries = db.ReadAll()
 		for i := 0; i < len(entries); i++ {
 			entries[i] = db.DecryptEntry(key, entries[i])
 		}
-		display = formatEntryString(entries)
+
+		type Entry struct {
+			Title       string
+			Username    string
+			Password    string
+			PublicNote  string
+			PrivateNote string
+		}
+
+		// display = formatEntryString(entries)
 		t, err := template.ParseFiles(fileName)
 		if err != nil {
 			fmt.Println("Parse error")
 			return false
 		}
-		err = t.ExecuteTemplate(w, "display.html", display)
+		
+		err = t.ExecuteTemplate(w, "display.html", Entry{entries[0]["title"], entries[0]["username"], entries[0]["password"], entries[0]["public_note"], entries[0]["private_note"]})
 		if err != nil {
 			fmt.Println("Template execution error")
 			return false
@@ -206,7 +217,8 @@ func searchByTitle(w http.ResponseWriter, r *http.Request) bool {
 		return false
 	}
 }
-// Gets form data and performs the search by title 
+
+// Gets form data and performs the search by title
 func searchByTitle_submit(w http.ResponseWriter, r *http.Request) {
 	if validated {
 
@@ -228,6 +240,7 @@ func searchByTitle_submit(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Oh no maybe log in first")
 	}
 }
+
 //serves page with html form that allows for search by username
 func searchByUsername(w http.ResponseWriter, r *http.Request) bool {
 	if validated {
@@ -249,6 +262,7 @@ func searchByUsername(w http.ResponseWriter, r *http.Request) bool {
 		return false
 	}
 }
+
 //grabs from data when form is submited and searches using user inputed username
 func searchByUsername_submit(w http.ResponseWriter, r *http.Request) {
 
@@ -293,6 +307,7 @@ func delete_submit(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Oh no maybe log in first")
 	}
 }
+
 //Servers form for user to enter the entry that they would like to delete
 func delete(w http.ResponseWriter, r *http.Request) bool {
 
@@ -341,6 +356,7 @@ func createEntry(w http.ResponseWriter, r *http.Request) bool {
 		return false
 	}
 }
+
 //submits entry into db with encryption
 func createEntrySubmit(w http.ResponseWriter, r *http.Request) bool {
 
@@ -396,7 +412,8 @@ func edit(w http.ResponseWriter, r *http.Request) bool {
 		return false
 	}
 }
-//submits edit into active db 
+
+//submits edit into active db
 func edit_submit(w http.ResponseWriter, r *http.Request) bool {
 
 	if validated {
@@ -489,7 +506,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 // Creates an instance of the web server. Listens on port 8010
-func Run(){
+func Run() {
 	http.HandleFunc("/", handler)
 	http.ListenAndServe(":8010", nil)
 }

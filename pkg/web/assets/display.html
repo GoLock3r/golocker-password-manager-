@@ -55,8 +55,11 @@
             <div class="card shadow-sm">
                 <img src="..." class="card-img-top" alt="...">
                 <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">{{ . }}</p>
+                    <h5 class="card-title">{{ .Title }}</h5>
+                    <p class="card-text">{{ .Username }}</p>
+                    <p class="card-text">{{ .Password }}</p>
+                    <p class="card-text">{{ .PublicNote }}</p>
+                    <p class="card-text">{{ .PrivateNote }}</p>
                 </div>
             </div>
         </div>
