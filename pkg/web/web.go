@@ -177,7 +177,7 @@ func readAll(w http.ResponseWriter, r *http.Request) bool {
 			var usernameString = entries[i]["username"]
 			var passwordString = entries[i]["password"]
 			var publicNoteString = entries[i]["public_note"]
-			var privateNoteString = entries[i]["public_note"]
+			var privateNoteString = entries[i]["private_note"]
 			cards += "<div class=\"col\"><div class=\"card shadow-sm\"><img src=\"...\" class=\"card-img-top\" alt=\"...\"><div class=\"card-body\"><h5 class=\"card-title\">" +
 				"Title: " + titleString + "</h5><p class=\"card-text\">" +
 				"Username: " + usernameString + "</p><p class=\"card-text\">" +
