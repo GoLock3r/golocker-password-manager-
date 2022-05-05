@@ -24,7 +24,7 @@ func TestLandingPage(t *testing.T) {
 		t.Error("expected to have the landing page shown landing page didnt show ")
 	}
 }
-func TestLandingPagewrongpath(t *testing.T) {
+func TestLandingPageWrongPath(t *testing.T) {
 	Path = "something/"
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	req := httptest.NewRequest(http.MethodGet, "/", nil)
@@ -72,7 +72,7 @@ func TestLoginSubmitinvalidLogIn(t *testing.T) {
 	}
 
 }
-func TestLoginSubmitwrongpath(t *testing.T) {
+func TestLoginSubmitWrongPath(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	authtool.Loggers = Loggers
 	authtool.CreateUser("test_username", "test_password")
@@ -111,7 +111,7 @@ func TestCreateUserexisting(t *testing.T) {
 	}
 
 }
-func TestCreateUserwrongpath(t *testing.T) {
+func TestCreateUserWrongPath(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	authtool.Loggers = Loggers
 	Path = "something/"
@@ -140,7 +140,7 @@ func TestLogout(t *testing.T) {
 }
 
 // testLogout when validated == false
-func TestLogoutunvalidated(t *testing.T) {
+func TestLogoutInvalidated(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	//authtool.Loggers = Loggers
 	db.Loggers = Loggers
@@ -169,7 +169,7 @@ func TestReadall(t *testing.T) {
 
 	}
 }
-func TestReadallwrongpath(t *testing.T) {
+func TestReadallWrongPath(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Loggers = Loggers
 	validated = true
@@ -184,7 +184,7 @@ func TestReadallwrongpath(t *testing.T) {
 	}
 }
 
-func TestReadallunvalidated(t *testing.T) {
+func TestReadallInvalidated(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Loggers = Loggers
 	validated = false
@@ -211,7 +211,7 @@ func TestSearchByTitle(t *testing.T) {
 	}
 
 }
-func TestSearchByTitlewrongpath(t *testing.T) {
+func TestSearchByTitleWrongPath(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	Path = "something/"
 	validated = true
@@ -224,7 +224,7 @@ func TestSearchByTitlewrongpath(t *testing.T) {
 	}
 
 }
-func TestSearchByTitleunvalidated(t *testing.T) {
+func TestSearchByTitleInvalidated(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	Path = "assets/"
 	validated = false
@@ -253,7 +253,7 @@ func TestSearchByTitleSubmit(t *testing.T) {
 		t.Error("edit should have submitted succesfully it didnt")
 	}
 }
-func TestSearchByTitleSubmitwrongpath(t *testing.T) {
+func TestSearchByTitleSubmitWrongPath(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Loggers = Loggers
 	authtool.Loggers = Loggers
@@ -270,7 +270,7 @@ func TestSearchByTitleSubmitwrongpath(t *testing.T) {
 	}
 }
 
-func TestSearchByTitleSubmitunvalidated(t *testing.T) {
+func TestSearchByTitleSubmitInvalidated(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Loggers = Loggers
 	authtool.Loggers = Loggers
@@ -294,7 +294,7 @@ func TestSearchByUsername(t *testing.T) {
 		t.Error("expected to have the search by username page shown")
 	}
 }
-func TestSearchByUsernamewrongpath(t *testing.T) {
+func TestSearchByUsernameWrongPath(t *testing.T) {
 	Path = "something/"
 	validated = true
 	Loggers = logger.CreateLoggers("testlogs.txt")
@@ -305,7 +305,7 @@ func TestSearchByUsernamewrongpath(t *testing.T) {
 		t.Error("expected to have the search by username page shown")
 	}
 }
-func TestSearchByUsernameunvalidated(t *testing.T) {
+func TestSearchByUsernameInvalidated(t *testing.T) {
 	Path = "assets/"
 	validated = false
 	Loggers = logger.CreateLoggers("testlogs.txt")
@@ -332,7 +332,7 @@ func TestSearchByUsernameSubmit(t *testing.T) {
 		t.Error("edit should have submitted succesfully it didnt")
 	}
 }
-func TestSearchByUsernameSubmitwrongpath(t *testing.T) {
+func TestSearchByUsernameSubmitWrongPath(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Loggers = Loggers
 	authtool.Loggers = Loggers
@@ -349,7 +349,7 @@ func TestSearchByUsernameSubmitwrongpath(t *testing.T) {
 	}
 }
 
-func TestSearchByUsernameSubmitunvalidated(t *testing.T) {
+func TestSearchByUsernameSubmitInvalidated(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Loggers = Loggers
 	authtool.Loggers = Loggers
@@ -374,7 +374,7 @@ func TestDelete(t *testing.T) {
 		t.Error("expected to have the delete page shown")
 	}
 }
-func TestDeletewrongpath(t *testing.T) {
+func TestDeleteWrongPath(t *testing.T) {
 	Path = "something/"
 	validated = true
 	Loggers = logger.CreateLoggers("testlogs.txt")
@@ -385,7 +385,7 @@ func TestDeletewrongpath(t *testing.T) {
 		t.Error("expected to have the delete page shown")
 	}
 }
-func TestDeleteunvalidated(t *testing.T) {
+func TestDeleteInvalidated(t *testing.T) {
 	Path = "assets/"
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	validated = false
@@ -413,7 +413,7 @@ func TestDeleteSubmit(t *testing.T) {
 		t.Error("edit should have submitted succesfully it didnt")
 	}
 }
-func TestDeleteSubmitwrongpath(t *testing.T) {
+func TestDeleteSubmitWrongPath(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Loggers = Loggers
 	authtool.Loggers = Loggers
@@ -429,7 +429,7 @@ func TestDeleteSubmitwrongpath(t *testing.T) {
 		t.Error("edit should have submitted succesfully it didnt")
 	}
 }
-func TestDeleteSubmitunvalidated(t *testing.T) {
+func TestDeleteSubmitInvalidated(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Loggers = Loggers
 	authtool.Loggers = Loggers
@@ -453,7 +453,7 @@ func TestCreateEntry(t *testing.T) {
 		t.Error("expected to have the create entry page shown")
 	}
 }
-func TestCreateEntrywrongpath(t *testing.T) {
+func TestCreateEntryWrongPath(t *testing.T) {
 	Path = "something/"
 	validated = true
 	Loggers = logger.CreateLoggers("testlogs.txt")
@@ -464,7 +464,7 @@ func TestCreateEntrywrongpath(t *testing.T) {
 		t.Error("expected to have the create entry page shown")
 	}
 }
-func TestCreateEntryunvalidated(t *testing.T) {
+func TestCreateEntryInvalidated(t *testing.T) {
 	Path = "assets/"
 	validated = false
 	Loggers = logger.CreateLoggers("testlogs.txt")
@@ -492,7 +492,7 @@ func TestCreateEntrySubmit(t *testing.T) {
 		t.Error("create should have submitted succesfully it didnt")
 	}
 }
-func TestCreateEntrySubmitwrongpath(t *testing.T) {
+func TestCreateEntrySubmitWrongPath(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Loggers = Loggers
 	authtool.Loggers = Loggers
@@ -508,7 +508,7 @@ func TestCreateEntrySubmitwrongpath(t *testing.T) {
 		t.Error("create should have submitted succesfully it didnt")
 	}
 }
-func TestCreateEntrySubmitunvalidated(t *testing.T) {
+func TestCreateEntrySubmitInvalidated(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Loggers = Loggers
 	authtool.Loggers = Loggers
@@ -533,7 +533,7 @@ func TestEdit(t *testing.T) {
 		t.Error("expected to have the edit page didnt show ")
 	}
 }
-func TestEditwrongpath(t *testing.T) {
+func TestEditWrongPath(t *testing.T) {
 	Path = "something/"
 	validated = true
 	Loggers = logger.CreateLoggers("testlogs.txt")
@@ -544,7 +544,7 @@ func TestEditwrongpath(t *testing.T) {
 		t.Error("expected to have the edit page didnt show ")
 	}
 }
-func TestEditunvalidated(t *testing.T) {
+func TestEditInvalidated(t *testing.T) {
 	Path = "assets/"
 	validated = false
 	Loggers = logger.CreateLoggers("testlogs.txt")
@@ -573,7 +573,7 @@ func TestEditSubmit(t *testing.T) {
 	}
 
 }
-func TestEditSubmitwrongpath(t *testing.T) {
+func TestEditSubmitWrongPath(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Loggers = Loggers
 	authtool.Loggers = Loggers
@@ -590,7 +590,7 @@ func TestEditSubmitwrongpath(t *testing.T) {
 	}
 
 }
-func TestEditSubmitunvalidated(t *testing.T) {
+func TestEditSubmitInvalidated(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Loggers = Loggers
 	authtool.Loggers = Loggers
@@ -617,7 +617,7 @@ func TestHome(t *testing.T) {
 	}
 	removeFiles()
 }
-func TestHomewrongpath(t *testing.T) {
+func TestHomeWrongPath(t *testing.T) {
 	Path = "something/"
 	validated = true
 	Loggers = logger.CreateLoggers("testlogs.txt")
@@ -629,7 +629,7 @@ func TestHomewrongpath(t *testing.T) {
 	}
 	removeFiles()
 }
-func TestHomeunvalidated(t *testing.T) {
+func TestHomeInvalidated(t *testing.T) {
 	Path = "assets/"
 	validated = false
 	Loggers = logger.CreateLoggers("testlogs.txt")
