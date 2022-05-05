@@ -9,7 +9,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>GoLocker - Edit</title>
 </head>
 
 <body>
@@ -51,28 +51,17 @@
     </nav>
 
 
-    <!-- <h1>Enter the title of the entry you'd like to update.</h1>
-    <form action="/home/edit-submit" method="POST">
-        <label for="title">Title:</label><br>
-        <input type="text" id="title" name="title" value=""><br>
-        <label for="title">Enter field would you like to update:</label><br>
-        <input type="text" id="update_key" name="update_key" value=""><br>
-        <label for="title">Enter new value:</label><br>
-        <input type="text" id="update_value" name="update_value" value=""><br>
-        <input type="submit" value="update">
-    </form> -->
 
     <div class="container px-4">
-        <h2><strong>Update</strong></h2>
+        <h2><strong>Edit</strong></h2>
         <form>
             <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Site You Want to Update</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                <div id="emailHelp" class="form-text">Insert note here</div>
+                <label for="inputWebsiteName" class="form-label">Website Name</label>
+                <input type="website" class="form-control" id="inputWebsiteName" placeholder="example.com">
             </div>
             <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">New Username</label>
-                <input type="password" class="form-control" id="exampleInputPassword1">
+                <label for="inputUsername" class="form-label">Username</label>
+                <input type="username" class="form-control" id="inputUsername">
             </div>
             <div class="mb-3">
                 <label for="exampleInputPassword2" class="form-label">New Password</label>
@@ -80,7 +69,7 @@
             </div>
             <div class="mb-3 form-check">
                 <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                <label class="form-check-label" for="exampleCheck1" placeholder="Note Empty">Check me out</label>
             </div>
             <button type="submit" class="btn btn-primary">Update</button>
         </form>
