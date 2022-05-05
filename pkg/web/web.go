@@ -135,23 +135,6 @@ func createUser(w http.ResponseWriter, r *http.Request) bool {
 	return true
 }
 
-// formats user inputed data to be put into the maps that are entered into the db
-func formatEntryString(entryTable []map[string]string) string {
-	var display = ""
-	if entryTable == nil {
-		display = "No entries"
-	}
-	for _, entry := range entryTable {
-		display += "Website: " + entry["title"] + "\n"
-		display += "Username: " + entry["username"] + "\n"
-		display += "Password: " + entry["password"] + "\n"
-		display += "Public note: " + entry["public_note"] + "\n"
-		display += "Private note: " + entry["private_note"] + "\n"
-		display += "\n"
-	}
-	return display
-}
-
 func parseCards(entryTable []map[string]string) string {
 	var cards = ""
 	if entryTable == nil {
