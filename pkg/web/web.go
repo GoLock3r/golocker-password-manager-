@@ -138,6 +138,7 @@ func createUser(w http.ResponseWriter, r *http.Request) bool {
 func parseCards(entryTable []map[string]string) string {
 	var cards = ""
 	if entryTable == nil {
+		cards += "<h>No entries found.</h>"
 		return cards
 	}
 	for _, entry := range entryTable {
