@@ -25,33 +25,33 @@ var Url = "http://localhost:8010"
 // Serve a login page to the user and pass credentials off to the
 // loginSubmit function to verify these credentials
 func login(w http.ResponseWriter, r *http.Request) bool {
-if !validated{
-	var fileName = Path + "login.html"
-	t, err := template.ParseFiles(fileName)
-	if err != nil {
-		fmt.Println("Parse error")
-		return false
-	}
-	err = t.ExecuteTemplate(w, "login.html", nil)
-	if err != nil {
-		fmt.Println("Template execution error")
-		return false
+	if !validated {
+		var fileName = Path + "login.html"
+		t, err := template.ParseFiles(fileName)
+		if err != nil {
+			fmt.Println("Parse error")
+			return false
+		}
+		err = t.ExecuteTemplate(w, "login.html", nil)
+		if err != nil {
+			fmt.Println("Template execution error")
+			return false
+		}
+		return true
+	} else {
+		var fileName = Path + "redirect.html"
+		t, err := template.ParseFiles(fileName)
+		if err != nil {
+			fmt.Println("Parse error")
+			return false
+		}
+		err = t.ExecuteTemplate(w, "redirect.html", Url+"/home")
+		if err != nil {
+			fmt.Println("Template execution error")
+			return false
+		}
 	}
 	return true
-}else{
-	var fileName = Path + "redirect.html"
-	t, err := template.ParseFiles(fileName)
-	if err != nil {
-		fmt.Println("Parse error")
-		return false
-	}
-	err = t.ExecuteTemplate(w, "redirect.html", Url + "/home")
-	if err != nil {
-		fmt.Println("Template execution error")
-		return false 
-	}
-}
-return true
 }
 
 // Process user credentials given from the login function.
@@ -72,9 +72,9 @@ func loginSubmit(w http.ResponseWriter, r *http.Request) bool {
 			fmt.Println("Parse error")
 			return false
 		}
-		err = t.ExecuteTemplate(w, "redirect.html", Url + "/home")
+		err = t.ExecuteTemplate(w, "redirect.html", Url+"/home")
 		if err != nil {
-			fmt.Println(err,"Template execution error")
+			fmt.Println(err, "Template execution error")
 			return false
 		}
 		valid_username = username
@@ -108,7 +108,7 @@ func logout(w http.ResponseWriter, r *http.Request) bool {
 }
 
 // Creates a new valid user account
-//Utilizes authtool package
+// Utilizes authtool package
 func createUser(w http.ResponseWriter, r *http.Request) bool {
 	username := r.FormValue("username")
 	password := r.FormValue("password")
@@ -121,7 +121,7 @@ func createUser(w http.ResponseWriter, r *http.Request) bool {
 			fmt.Println("Parse error")
 			return false
 		}
-		err = t.ExecuteTemplate(w, "redirect.html", Url + "/" )
+		err = t.ExecuteTemplate(w, "redirect.html", Url+"/")
 		if err != nil {
 			fmt.Println(err, "Template execution error")
 			return false
@@ -135,6 +135,7 @@ func createUser(w http.ResponseWriter, r *http.Request) bool {
 	return true
 }
 
+// formats user inputed data to be put into the maps that are entered into the db
 func formatEntryString(entryTable []map[string]string) string {
 	var display = ""
 	if entryTable == nil {
@@ -154,25 +155,41 @@ func formatEntryString(entryTable []map[string]string) string {
 // Reads all database entries for a validated user
 // displays all of the entries in user database
 func readAll(w http.ResponseWriter, r *http.Request) bool {
+
 	var entries []map[string]string
+	var cards = ""
+
 	if validated {
-		var display = ""
+
 		var fileName = Path + "display.html"
 		entries = db.ReadAll()
 		for i := 0; i < len(entries); i++ {
 			entries[i] = db.DecryptEntry(key, entries[i])
+			var titleString = entries[i]["title"]
+			var usernameString = entries[i]["username"]
+			var passwordString = entries[i]["password"]
+			var publicNoteString = entries[i]["public_note"]
+			var privateNoteString = entries[i]["private_note"]
+			cards += "<div class=\"col\"><div class=\"card shadow-sm\"><img src=\"...\" class=\"card-img-top\" alt=\"...\"><div class=\"card-body\"><h5 class=\"card-title\">" +
+				"Title: " + titleString + "</h5><p class=\"card-text\">" +
+				"Username: " + usernameString + "</p><p class=\"card-text\">" +
+				"Password: " + passwordString + "</p><p class=\"card-text\">" +
+				"Public Note: " + publicNoteString + "</p><p class=\"card-text\">" +
+				"Private Note: " + privateNoteString + "</p></div></div></div>"
 		}
-		display = formatEntryString(entries)
+
+		cards += "</div>"
+
 		t, err := template.ParseFiles(fileName)
 		if err != nil {
 			fmt.Println("Parse error")
 			return false
 		}
-		err = t.ExecuteTemplate(w, "display.html", display)
+
+		err = t.ExecuteTemplate(w, "display.html", template.HTML(cards))
 		if err != nil {
 			fmt.Println("Template execution error")
 			return false
-
 		}
 		w.WriteHeader(http.StatusOK)
 		return true
@@ -207,6 +224,7 @@ func searchByTitle(w http.ResponseWriter, r *http.Request) bool {
 	}
 }
 
+// Gets form data and performs the search by title
 func searchByTitle_submit(w http.ResponseWriter, r *http.Request) {
 	if validated {
 
@@ -229,6 +247,7 @@ func searchByTitle_submit(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+//serves page with html form that allows for search by username
 func searchByUsername(w http.ResponseWriter, r *http.Request) bool {
 	if validated {
 		var fileName = Path + "searchUsername.html"
@@ -250,6 +269,7 @@ func searchByUsername(w http.ResponseWriter, r *http.Request) bool {
 	}
 }
 
+//grabs from data when form is submited and searches using user inputed username
 func searchByUsername_submit(w http.ResponseWriter, r *http.Request) {
 
 	if validated {
@@ -282,7 +302,7 @@ func delete_submit(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("Parse error")
 			return
 		}
-		err = t.ExecuteTemplate(w, "redirect.html", Url + "/home")
+		err = t.ExecuteTemplate(w, "redirect.html", Url+"/home")
 		if err != nil {
 			fmt.Println("Template execution error")
 		}
@@ -294,6 +314,7 @@ func delete_submit(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+//Servers form for user to enter the entry that they would like to delete
 func delete(w http.ResponseWriter, r *http.Request) bool {
 
 	if validated {
@@ -311,7 +332,6 @@ func delete(w http.ResponseWriter, r *http.Request) bool {
 		}
 		return true
 	} else {
-
 		w.WriteHeader(http.StatusNotFound)
 		fmt.Fprintf(w, "Oh no maybe log in first")
 		return false
@@ -343,7 +363,8 @@ func createEntry(w http.ResponseWriter, r *http.Request) bool {
 	}
 }
 
-func createEntrySubmit(w http.ResponseWriter, r *http.Request) bool{
+//submits entry into db with encryption
+func createEntrySubmit(w http.ResponseWriter, r *http.Request) bool {
 
 	if validated {
 		entry := map[string]string{
@@ -361,12 +382,12 @@ func createEntrySubmit(w http.ResponseWriter, r *http.Request) bool{
 			fmt.Println("Parse error")
 			return false
 		}
-		err = t.ExecuteTemplate(w, "redirect.html", Url + "/home")
-				if err != nil {
+		err = t.ExecuteTemplate(w, "redirect.html", Url+"/home")
+		if err != nil {
 			fmt.Println("Template execution error")
-					return false
+			return false
 		}
-	
+
 	} else {
 		w.WriteHeader(http.StatusNotFound)
 		fmt.Fprintf(w, "Oh no maybe log in first")
@@ -398,22 +419,23 @@ func edit(w http.ResponseWriter, r *http.Request) bool {
 	}
 }
 
-func edit_submit(w http.ResponseWriter, r *http.Request) bool{
+//submits edit into active db
+func edit_submit(w http.ResponseWriter, r *http.Request) bool {
 
 	if validated {
-			db.UpdateEntry(r.FormValue("title"), r.FormValue("update_key"), r.FormValue("update_value"))
-			var fileName = Path + "redirect.html"
-			t, err := template.ParseFiles(fileName)
-			if err != nil {
-				fmt.Println("Parse error")
-				return false
-			}
-			err = t.ExecuteTemplate(w, "redirect.html", Url + "/home")
-			if err != nil {
-				fmt.Println("Template execution error")
-				return false
-			}
-		
+		db.UpdateEntry(r.FormValue("title"), r.FormValue("update_key"), r.FormValue("update_value"))
+		var fileName = Path + "redirect.html"
+		t, err := template.ParseFiles(fileName)
+		if err != nil {
+			fmt.Println("Parse error")
+			return false
+		}
+		err = t.ExecuteTemplate(w, "redirect.html", Url+"/home")
+		if err != nil {
+			fmt.Println("Template execution error")
+			return false
+		}
+
 	} else {
 		w.WriteHeader(http.StatusNotFound)
 		fmt.Fprintf(w, "Oh no maybe log in first")
@@ -485,7 +507,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	case "/createUser":
 		createUser(w, r)
 	default:
-		//fmt.Println("Path not found?")
+		w.WriteHeader(http.StatusNotFound)
 	}
 }
 
