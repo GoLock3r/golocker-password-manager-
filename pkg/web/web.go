@@ -135,32 +135,37 @@ func createUser(w http.ResponseWriter, r *http.Request) bool {
 	return true
 }
 
-func parseCards(entryTable []map[string]string) string {
+// Parses entry data from various read methods into html cards
+func parseCards(entryTable []map[string]string, callingMethod string) string {
 	var cards = ""
 	if entryTable == nil {
-		cards += "<h>No entries found.</h>"
-		return cards
-	}
-	for _, entry := range entryTable {
-		entry = db.DecryptEntry(key, entry)
-		cards += "<div class=\"col\"><div class=\"card shadow-sm\"><img src=\"...\" class=\"card-img-top\" alt=\"...\"><div class=\"card-body\"><h5 class=\"card-title\">" +
-			"Title: " + entry["title"] + "</h5><p class=\"card-text\">" +
-			"Username: " + entry["username"] + "</p><p class=\"card-text\">" +
-			"Password: " + entry["password"] + "</p><p class=\"card-text\">" +
-			"Private Note: " + entry["private_note"] + "</p><p class=\"card-text\">" +
-			"Public Note: " + entry["public_note"] + "</p></div></div></div>"
+		if callingMethod == "readAll" {
+			cards += "<h>No entries found. Try creating a new entry!</h>"
+		} else {
+			cards += "<h>Your search didn't return anything. Why don't you try again?</h>"
+		}
+	} else {
+		for _, entry := range entryTable {
+			entry = db.DecryptEntry(key, entry)
+			cards += "<div class=\"col\"><div class=\"card shadow-sm\"><img src=\"...\" class=\"card-img-top\" alt=\"...\"><div class=\"card-body\"><h5 class=\"card-title\">" +
+				"Title: " + entry["title"] + "</h5><p class=\"card-text\">" +
+				"Username: " + entry["username"] + "</p><p class=\"card-text\">" +
+				"Password: " + entry["password"] + "</p><p class=\"card-text\">" +
+				"Private Note: " + entry["private_note"] + "</p><p class=\"card-text\">" +
+				"Public Note: " + entry["public_note"] + "</p></div></div></div>"
+		}
 	}
 	return cards
 }
 
-// Reads all database entries for a validated user
+// Reads all database entries for a validated user and
 // displays all of the entries in user database
 func readAll(w http.ResponseWriter, r *http.Request) bool {
 
 	if validated {
 
 		var fileName = Path + "display.html"
-		var cards = parseCards(db.ReadAll())
+		var cards = parseCards(db.ReadAll(), "readAll")
 
 		t, err := template.ParseFiles(fileName)
 		if err != nil {
@@ -173,11 +178,11 @@ func readAll(w http.ResponseWriter, r *http.Request) bool {
 			fmt.Println("Template execution error")
 			return false
 		}
-		w.WriteHeader(http.StatusOK)
+		// w.WriteHeader(http.StatusOK) -- Note: Output on command line says this call is superfluous; removing it broke nothing
 		return true
 	} else {
 		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, "Oh no maybe log in first")
+		fmt.Fprintf(w, "You are not logged in.")
 		return false
 	}
 }
@@ -201,7 +206,7 @@ func searchByTitle(w http.ResponseWriter, r *http.Request) bool {
 		return true
 	} else {
 		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, "Oh no maybe log in first")
+		fmt.Fprintf(w, "You are not logged in.")
 		return false
 	}
 }
@@ -212,7 +217,7 @@ func searchByTitle_submit(w http.ResponseWriter, r *http.Request) {
 	if validated {
 
 		var fileName = Path + "display.html"
-		var cards = parseCards(db.ReadFromTitle(r.FormValue("title")))
+		var cards = parseCards(db.ReadFromTitle(r.FormValue("title")), "searchByTitle_submit")
 
 		t, err := template.ParseFiles(fileName)
 		if err != nil {
@@ -225,7 +230,7 @@ func searchByTitle_submit(w http.ResponseWriter, r *http.Request) {
 		}
 	} else {
 		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, "Oh no maybe log in first")
+		fmt.Fprintf(w, "You are not logged in.")
 	}
 }
 
@@ -246,7 +251,7 @@ func searchByUsername(w http.ResponseWriter, r *http.Request) bool {
 		return true
 	} else {
 		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, "Oh no maybe log in first")
+		fmt.Fprintf(w, "You are not logged in.")
 		return false
 	}
 }
@@ -257,7 +262,7 @@ func searchByUsername_submit(w http.ResponseWriter, r *http.Request) {
 	if validated {
 
 		var fileName = Path + "display.html"
-		var cards = parseCards(db.ReadFromUsername(r.FormValue("username")))
+		var cards = parseCards(db.ReadFromUsername(r.FormValue("username")), "searchByUsername_submit")
 
 		t, err := template.ParseFiles(fileName)
 		if err != nil {
@@ -270,7 +275,7 @@ func searchByUsername_submit(w http.ResponseWriter, r *http.Request) {
 		}
 	} else {
 		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, "Oh no maybe log in first")
+		fmt.Fprintf(w, "You are not logged in.")
 	}
 }
 
@@ -292,7 +297,7 @@ func delete_submit(w http.ResponseWriter, r *http.Request) {
 		db.DeleteEntry(title)
 	} else {
 		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, "Oh no maybe log in first")
+		fmt.Fprintf(w, "You are not logged in.")
 	}
 }
 
@@ -315,7 +320,7 @@ func delete(w http.ResponseWriter, r *http.Request) bool {
 		return true
 	} else {
 		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, "Oh no maybe log in first")
+		fmt.Fprintf(w, "You are not logged in.")
 		return false
 	}
 }
@@ -340,7 +345,7 @@ func createEntry(w http.ResponseWriter, r *http.Request) bool {
 
 	} else {
 		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, "Oh no maybe log in first")
+		fmt.Fprintf(w, "You are not logged in.")
 		return false
 	}
 }
@@ -372,7 +377,7 @@ func createEntrySubmit(w http.ResponseWriter, r *http.Request) bool {
 
 	} else {
 		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, "Oh no maybe log in first")
+		fmt.Fprintf(w, "You are not logged in.")
 		return false
 	}
 	return true
@@ -396,7 +401,7 @@ func edit(w http.ResponseWriter, r *http.Request) bool {
 		return true
 	} else {
 		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, "Oh no maybe log in first")
+		fmt.Fprintf(w, "You are not logged in.")
 		return false
 	}
 }
@@ -420,7 +425,7 @@ func edit_submit(w http.ResponseWriter, r *http.Request) bool {
 
 	} else {
 		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, "Oh no maybe log in first")
+		fmt.Fprintf(w, "You are not logged in.")
 		return false
 	}
 	return true
@@ -445,7 +450,7 @@ func home(w http.ResponseWriter, r *http.Request) bool {
 		return true
 	} else {
 		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, "Oh no maybe log in first")
+		fmt.Fprintf(w, "You are not logged in.")
 		return false
 	}
 
