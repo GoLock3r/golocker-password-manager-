@@ -140,9 +140,9 @@ func parseCards(entryTable []map[string]string, callingMethod string) string {
 	var cards = ""
 	if entryTable == nil {
 		if callingMethod == "readAll" {
-			cards += "<h>No entries found. Try creating a new entry!</h>"
+			cards += "<h>No entries found. </b>Try creating a new entry!</h>"
 		} else {
-			cards += "<h>Your search didn't return anything. Why don't you try again?</h>"
+			cards += "<h>Your search didn't return anything. </b>Why don't you try again?</h>"
 		}
 	} else {
 		for _, entry := range entryTable {
