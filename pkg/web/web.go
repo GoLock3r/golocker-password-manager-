@@ -108,7 +108,7 @@ func logout(w http.ResponseWriter, r *http.Request) bool {
 }
 
 // Creates a new valid user account
-//Utilizes authtool package
+// Utilizes authtool package
 func createUser(w http.ResponseWriter, r *http.Request) bool {
 	username := r.FormValue("username")
 	password := r.FormValue("password")
@@ -135,7 +135,7 @@ func createUser(w http.ResponseWriter, r *http.Request) bool {
 	return true
 }
 
-//formats user inputed data to be put into the maps that are entered into the db
+// formats user inputed data to be put into the maps that are entered into the db
 func formatEntryString(entryTable []map[string]string) string {
 	var display = ""
 	if entryTable == nil {
@@ -156,19 +156,11 @@ func formatEntryString(entryTable []map[string]string) string {
 // displays all of the entries in user database
 func readAll(w http.ResponseWriter, r *http.Request) bool {
 
-	type Entry struct {
-		Title       string
-		Username    string
-		Password    string
-		PublicNote  string
-		PrivateNote string
-	}
-
 	var entries []map[string]string
 	var cards = ""
 
 	if validated {
-		// var display = ""
+
 		var fileName = Path + "display.html"
 		entries = db.ReadAll()
 		for i := 0; i < len(entries); i++ {
@@ -188,20 +180,16 @@ func readAll(w http.ResponseWriter, r *http.Request) bool {
 
 		cards += "</div>"
 
-		fmt.Println(cards)
-
-		// display = formatEntryString(entries)
 		t, err := template.ParseFiles(fileName)
 		if err != nil {
 			fmt.Println("Parse error")
 			return false
 		}
-		// Entry{entries[0]["title"], entries[0]["username"], entries[0]["password"], entries[0]["public_note"], entries[0]["private_note"]}
+
 		err = t.ExecuteTemplate(w, "display.html", template.HTML(cards))
 		if err != nil {
 			fmt.Println("Template execution error")
 			return false
-
 		}
 		w.WriteHeader(http.StatusOK)
 		return true
