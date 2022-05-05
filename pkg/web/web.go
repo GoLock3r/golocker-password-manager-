@@ -152,33 +152,38 @@ func formatEntryString(entryTable []map[string]string) string {
 	return display
 }
 
+func parseCards(entryTable []map[string]string) string {
+	var cards = ""
+	if entryTable == nil {
+		return cards
+	}
+	for _, entry := range entryTable {
+		cards += "<div class=\"col\"><div class=\"card shadow-sm\"><img src=\"...\" class=\"card-img-top\" alt=\"...\"><div class=\"card-body\"><h5 class=\"card-title\">" +
+			"Title: " + entry["title"] + "</h5><p class=\"card-text\">" +
+			"Username: " + entry["username"] + "</p><p class=\"card-text\">" +
+			"Password: " + entry["password"] + "</p><p class=\"card-text\">" +
+			"Private Note: " + entry["private_note"] + "</p><p class=\"card-text\">" +
+			"Public Note: " + entry["public_note"] + "</p></div></div></div>"
+	}
+	return cards
+}
+
 // Reads all database entries for a validated user
 // displays all of the entries in user database
 func readAll(w http.ResponseWriter, r *http.Request) bool {
 
 	var entries []map[string]string
-	var cards = ""
 
 	if validated {
 
 		var fileName = Path + "display.html"
+		
 		entries = db.ReadAll()
 		for i := 0; i < len(entries); i++ {
 			entries[i] = db.DecryptEntry(key, entries[i])
-			var titleString = entries[i]["title"]
-			var usernameString = entries[i]["username"]
-			var passwordString = entries[i]["password"]
-			var publicNoteString = entries[i]["public_note"]
-			var privateNoteString = entries[i]["private_note"]
-			cards += "<div class=\"col\"><div class=\"card shadow-sm\"><img src=\"...\" class=\"card-img-top\" alt=\"...\"><div class=\"card-body\"><h5 class=\"card-title\">" +
-				"Title: " + titleString + "</h5><p class=\"card-text\">" +
-				"Username: " + usernameString + "</p><p class=\"card-text\">" +
-				"Password: " + passwordString + "</p><p class=\"card-text\">" +
-				"Public Note: " + publicNoteString + "</p><p class=\"card-text\">" +
-				"Private Note: " + privateNoteString + "</p></div></div></div>"
 		}
 
-		cards += "</div>"
+		var cards = parseCards(entries)
 
 		t, err := template.ParseFiles(fileName)
 		if err != nil {
