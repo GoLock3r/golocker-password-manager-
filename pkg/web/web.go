@@ -158,6 +158,7 @@ func parseCards(entryTable []map[string]string) string {
 		return cards
 	}
 	for _, entry := range entryTable {
+		entry = db.DecryptEntry(key, entry)
 		cards += "<div class=\"col\"><div class=\"card shadow-sm\"><img src=\"...\" class=\"card-img-top\" alt=\"...\"><div class=\"card-body\"><h5 class=\"card-title\">" +
 			"Title: " + entry["title"] + "</h5><p class=\"card-text\">" +
 			"Username: " + entry["username"] + "</p><p class=\"card-text\">" +
@@ -172,18 +173,10 @@ func parseCards(entryTable []map[string]string) string {
 // displays all of the entries in user database
 func readAll(w http.ResponseWriter, r *http.Request) bool {
 
-	var entries []map[string]string
-
 	if validated {
 
 		var fileName = Path + "display.html"
-		
-		entries = db.ReadAll()
-		for i := 0; i < len(entries); i++ {
-			entries[i] = db.DecryptEntry(key, entries[i])
-		}
-
-		var cards = parseCards(entries)
+		var cards = parseCards(db.ReadAll())
 
 		t, err := template.ParseFiles(fileName)
 		if err != nil {
@@ -231,18 +224,18 @@ func searchByTitle(w http.ResponseWriter, r *http.Request) bool {
 
 // Gets form data and performs the search by title
 func searchByTitle_submit(w http.ResponseWriter, r *http.Request) {
+
 	if validated {
 
-		var display = ""
-		var fileName = Path + "searchByTitle.html"
-		display = formatEntryString(db.ReadFromTitle(r.FormValue("title")))
+		var fileName = Path + "display.html"
+		var cards = parseCards(db.ReadFromTitle(r.FormValue("title")))
 
 		t, err := template.ParseFiles(fileName)
 		if err != nil {
 			fmt.Println("Parse error")
 			return
 		}
-		err = t.ExecuteTemplate(w, "searchByTitle.html", display)
+		err = t.ExecuteTemplate(w, "display.html", template.HTML(cards))
 		if err != nil {
 			fmt.Println("Template execution error")
 		}
@@ -278,16 +271,16 @@ func searchByUsername(w http.ResponseWriter, r *http.Request) bool {
 func searchByUsername_submit(w http.ResponseWriter, r *http.Request) {
 
 	if validated {
-		var display = ""
-		var fileName = Path + "searchByUsername.html"
-		display = formatEntryString(db.ReadFromUsername(r.FormValue("username")))
+
+		var fileName = Path + "display.html"
+		var cards = parseCards(db.ReadFromUsername(r.FormValue("username")))
 
 		t, err := template.ParseFiles(fileName)
 		if err != nil {
 			fmt.Println("Parse error")
 			return
 		}
-		err = t.ExecuteTemplate(w, "searchByUsername.html", display)
+		err = t.ExecuteTemplate(w, "display.html", template.HTML(cards))
 		if err != nil {
 			fmt.Println("Template execution error")
 		}
