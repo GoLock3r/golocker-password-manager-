@@ -10,7 +10,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GoLock3r - Login</title>
+    <title>GoLocker - Login</title>
 </head>
 <!-- inline style example -->
 <!-- style="font-size:3rem; color:#ff000050;" -->
@@ -29,8 +29,8 @@
                         <a class="nav-link active" aria-current="page" href="/home">Home</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-white"  href="#" id="navbarScrollingDropdown" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle text-white" href="#" id="navbarScrollingDropdown"
+                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Saved Creds
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
@@ -54,8 +54,8 @@
 
 
 
-    <div class="container-fluid vh-100" style="margin-top:300px">
-        <div class="" style="margin-top:200px">
+    <div class="container-fluid vh-100">
+        <div class="mb-3" style="margin-top:100px">
             <div class="rounded d-flex justify-content-center">
                 <div class="col-md-4 col-sm-12 shadow-lg p-5 bg-light">
                     <div class="text-center">
@@ -71,25 +71,25 @@
                                 <span class="input-group-text bg-dark"><i class="bi bi-key-fill text-white"></i></span>
                                 <input type="password" class="form-control" placeholder="password" name="password">
                             </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
+                            <!-- <button class="btn btn-primary text-center mt-2" type="submit"> -->
+                            <!-- <button class="btn btn-dark  text-center mt-2" formaction="/createUser">Create
+                                    Account!</button> -->
+                            <input type="submit" value="Login" class="btn btn-dark text-center mb-3"> 
+                            <div class="form-check text">
+                                <input class="form-check-input mb-3" type="checkbox" value="" id="flexCheckDefault">
+                                <label class="form-check-label mb-3" for="flexCheckDefault">
                                     Remember Me
                                 </label>
-                            </div>
-                            <!-- <button class="btn btn-primary text-center mt-2" type="submit"> -->
-                            <button class="btn btn-dark  text-center mt-2" formaction="/createUser">Create
-                                Account!</button>
-                            <input type="submit" value="Login" class="btn btn-dark text-center mt-2">
-                            <p class="text-center mt-5">Don't have an account?
-                                <span class="text-dark">Sign Up</span>
-                            </p>
-                            <p class="text-center text-dark">Forgot your password?</p>
                         </div>
+                        
+
+                            <a class="dropdown-item mb-3 text-center" href="#">New around here? Create Account</a>
+                            <a class="dropdown-item mb-3 text-center" href="#">Forgot password?</a>
                     </form>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 
     <h2> {{ . }} </h2>

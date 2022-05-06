@@ -41,8 +41,21 @@
             <a class="nav-link active" aria-current="page" href="/logout">logout</a>
           </li>
         </ul>
-        <form class="d-flex">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+          <label class="form-check-label" for="flexCheckDefault" style="color:#FFFFFF;">
+            Title
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
+          <label class="form-check-label" for="flexCheckChecked" style="color:#FFFFFF;">
+            Username
+          </label>
+        </div>
+        <form class="d-flex" action="/home/searchTitle-Submit" method="post">
+          <input class="form-control me-2" type="search" id="title" name="title" placeholder="Search"
+            aria-label="Search">
           <button class="btn btn-dark" type="submit">Search</button>
         </form>
       </div>
