@@ -3,6 +3,7 @@ package web
 import (
 	"fmt"
 	"golock3r/server/authtool"
+	"golock3r/server/crypt"
 	"golock3r/server/db"
 	"golock3r/server/logger"
 	"html/template"
@@ -409,8 +410,16 @@ func edit(w http.ResponseWriter, r *http.Request) bool {
 //submits edit into active db
 func edit_submit(w http.ResponseWriter, r *http.Request) bool {
 
+	var updateValue = ""
+
 	if validated {
-		db.UpdateEntry(r.FormValue("title"), r.FormValue("updateField"), r.FormValue("updateValue"))
+		if r.FormValue("updateField") == "password" || r.FormValue("updateField") == "private_note" {
+			updateValue = crypt.EncryptStringToHex(key, r.FormValue("updateValue"))
+		} else {
+			updateValue = r.FormValue("updateValue")
+		}
+
+		db.UpdateEntry(r.FormValue("title"), r.FormValue("updateField"), updateValue)
 		var fileName = Path + "redirect.html"
 		t, err := template.ParseFiles(fileName)
 		if err != nil {
