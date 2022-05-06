@@ -605,6 +605,56 @@ func TestEditSubmitInvalidated(t *testing.T) {
 
 }
 
+func TestParseCardsReadAll(t *testing.T){
+	entry := map[string]string{
+		"title":        "title",
+		"password":     "password",
+		"username":     "username",
+		"private_note": "private_note",
+		"public_note":  "public_note",
+	}
+	var results_map []map[string]string
+
+	results_map = append(results_map, entry)
+var ans =parseCards(results_map, "readAll")
+
+	if ans == ""{
+		t.Error("expected a response")
+	}
+}
+
+
+func TestParseCardsreadAllempty(t *testing.T){
+	var results_map []map[string]string
+	var ans =parseCards(results_map, "readAll")
+	if ans != "<h>No entries found. </br>Try creating a new entry!</h>"{
+		t.Error("expected a response of <h>No entries found. </br>Try creating a new entry!</h> go t", ans)
+	}
+}
+func TestParseCardsElse(t *testing.T){
+	entry := map[string]string{
+		"title":        "title",
+		"password":     "password",
+		"username":     "username",
+		"private_note": "private_note",
+		"public_note":  "public_note",
+	}
+	var results_map []map[string]string
+
+	results_map = append(results_map, entry)
+var ans =parseCards(results_map, "anything")
+
+	if ans == ""{
+		t.Error("expected a response")
+	}
+}
+func TestParseCardselseempty(t *testing.T){
+	var results_map []map[string]string
+	var ans =parseCards(results_map, "else")
+	if ans != "<h>Your search didn't return anything. </br>Why don't you try again?</h>" {
+		t.Error("expected a response of <h>Your search didn't return anything. </br>Why don't you try again?</h> got ", ans)
+	}
+}
 func TestHome(t *testing.T) {
 	Path = "assets/"
 	validated = true
