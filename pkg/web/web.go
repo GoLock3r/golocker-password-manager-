@@ -410,7 +410,7 @@ func edit(w http.ResponseWriter, r *http.Request) bool {
 func edit_submit(w http.ResponseWriter, r *http.Request) bool {
 
 	if validated {
-		db.UpdateEntry(r.FormValue("title"), r.FormValue("update_key"), r.FormValue("update_value"))
+		db.UpdateEntry(r.FormValue("title"), r.FormValue("updateField"), r.FormValue("updateValue"))
 		var fileName = Path + "redirect.html"
 		t, err := template.ParseFiles(fileName)
 		if err != nil {

@@ -44,13 +44,13 @@
                 </ul>
                 <div class="form-check">
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="title" checked>
+                        <input class="form-check-input" type="radio" name="flexRadioDefault" value="title" checked>
                         <label class="form-check-label" for="title" style="color:#FFFFFF;">
                             Title
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="username">
+                        <input class="form-check-input" type="radio" name="flexRadioDefault" value="username">
                         <label class="form-check-label" for="username" style="color:#FFFFFF;">
                             Username
                         </label>
@@ -71,26 +71,26 @@
         <div class="text-center">
             <h3 class="text-dark">Create Entry</h3>
         </div>
-        <form>
+        <form action="/home/create-Submit" method="POST">
             <div class="mb-3">
-                <label for="inputWebsiteName" class="form-label">Website Name</label>
-                <input type="website" class="form-control" id="inputWebsiteName" placeholder="example.com">
+                <label for="title" class="form-label">Website Name</label>
+                <input type="text" class="form-control" id="title" name="title" placeholder="Enter title">
             </div>
             <div class="mb-3">
-                <label for="inputUsername" class="form-label">Username</label>
-                <input type="username" class="form-control" id="inputUsername">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" name="username">
             </div>
             <div class="mb-3">
-                <label for="inputPassword" class="form-label">Password</label>
-                <input type="password" class="form-control" id="inputPassword">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password">
             </div>
             <div class="mb-3">
-                <label for="inputPublicNote" class="form-label">Public Note:</label>
-                <input type="password" class="form-control" id="inputPublicNote">
+                <label for="public_note" class="form-label">Public Note:</label>
+                <input type="text" class="form-control" id="public_note" name="public_note">
             </div>
             <div class="mb-3">
-                <label for="inputPrivateNote" class="form-label">Private Note</label>
-                <input type="password" class="form-control" id="inputPrivateNote">
+                <label for="private_note" class="form-label">Private Note</label>
+                <input type="password" class="form-control" id="private_note" name="private_note">
             </div>
             <div class="mb-3 form-check">
                 <input type="checkbox" class="form-check-input" id="exampleCheck1">

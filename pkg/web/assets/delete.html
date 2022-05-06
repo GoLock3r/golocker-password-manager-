@@ -43,13 +43,13 @@
                 </ul>
                 <div class="form-check">
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="title" checked>
+                        <input class="form-check-input" type="radio" name="flexRadioDefault" value="title" checked>
                         <label class="form-check-label" for="title" style="color:#FFFFFF;">
                             Title
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="username">
+                        <input class="form-check-input" type="radio" name="flexRadioDefault" value="username">
                         <label class="form-check-label" for="username" style="color:#FFFFFF;">
                             Username
                         </label>
@@ -69,10 +69,10 @@
         <div class="text-center">
             <h3 class="text-dark">Delete Entry</h3>
         </div>
-        <form>
+        <form action="/home/delete-submit" method="POST">
             <div class="mb-3">
                 <label for="inputWebsiteName" class="form-label">Website Name</label>
-                <input type="website" class="form-control" id="inputWebsiteName" placeholder="example.com">
+                <input type="website" class="form-control" id="title" name="title" placeholder="Enter title">
             </div>
             <button type="submit" class="btn btn-primary">Delete</button>
         </form>
