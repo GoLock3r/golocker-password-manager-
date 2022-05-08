@@ -213,12 +213,18 @@ func searchByTitle(w http.ResponseWriter, r *http.Request) bool {
 }
 
 // Gets form data and performs the search by title
-func searchByTitle_submit(w http.ResponseWriter, r *http.Request) {
+func search(w http.ResponseWriter, r *http.Request) {
+
+	var cards = ""
 
 	if validated {
 
 		var fileName = Path + "display.html"
-		var cards = parseCards(db.ReadFromTitle(r.FormValue("title")), "searchByTitle_submit")
+		if r.FormValue("searchType") == "title" {
+			cards = parseCards(db.ReadFromTitle(r.FormValue("searchString")), "search")
+		} else {
+			cards = parseCards(db.ReadFromUsername(r.FormValue("searchString")), "search")
+		}
 
 		t, err := template.ParseFiles(fileName)
 		if err != nil {
@@ -482,8 +488,8 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		readAll(w, r)
 	case "/home/searchTitle":
 		searchByTitle(w, r)
-	case "/home/searchTitle-Submit":
-		searchByTitle_submit(w, r)
+	case "/home/search":
+		search(w, r)
 	case "/home/searchUser":
 		searchByUsername(w, r)
 	case "/home/searchUser-Submit":
