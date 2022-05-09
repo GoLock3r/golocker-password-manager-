@@ -244,7 +244,7 @@ func TestSearchByTitleSubmit(t *testing.T) {
 	validated = true
 	Path = "assets/"
 	w := httptest.NewRecorder()
-	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
+	req := httptest.NewRequest(http.MethodGet, "/login-submit?searchType=title&username=test_username&password=test_password", nil)
 	loginSubmit(w, req)
 	w = httptest.NewRecorder()
 	req = httptest.NewRequest(http.MethodGet, "/home/searchTitle-Submit?title=test", nil)
@@ -260,7 +260,7 @@ func TestSearchByTitleSubmitWrongPath(t *testing.T) {
 	validated = true
 	Path = "something/"
 	w := httptest.NewRecorder()
-	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
+	req := httptest.NewRequest(http.MethodGet, "/login-submit?searchType=title&username=test_username&password=test_password", nil)
 	loginSubmit(w, req)
 	w = httptest.NewRecorder()
 	req = httptest.NewRequest(http.MethodGet, "/home/searchTitle-Submit?title=test", nil)
@@ -323,7 +323,7 @@ func TestSearchByUsernameSubmit(t *testing.T) {
 	validated = true
 	Path = "assets/"
 	w := httptest.NewRecorder()
-	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
+	req := httptest.NewRequest(http.MethodGet, "/login-submit?searchType=username&username=test_username&password=test_password", nil)
 	loginSubmit(w, req)
 	w = httptest.NewRecorder()
 	req = httptest.NewRequest(http.MethodGet, "/home/searchUser-Submit?username=test", nil)
@@ -339,7 +339,7 @@ func TestSearchByUsernameSubmitWrongPath(t *testing.T) {
 	validated = true
 	Path = "something/"
 	w := httptest.NewRecorder()
-	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
+	req := httptest.NewRequest(http.MethodGet, "/login-submit?searchType=username&username=test_username&password=test_password", nil)
 	loginSubmit(w, req)
 	w = httptest.NewRecorder()
 	req = httptest.NewRequest(http.MethodGet, "/home/searchUser-Submit?username=test", nil)
