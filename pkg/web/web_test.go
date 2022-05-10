@@ -302,11 +302,10 @@ func TestDeleteSubmitInvalidated(t *testing.T) {
 	validated = false
 	Path = "assets/"
 	w := httptest.NewRecorder()
-	req := httptest.NewRequest(http.MethodGet, "/home/delete-submit?title=test", nil)
-	validated = false
+	req := httptest.NewRequest(http.MethodGet, "/home/delete-submit?title=test&update_key=title&update_value=test2", nil)
 	loginSubmit := delete(w, req)
-	if loginSubmit {
-		t.Error("delte should not have submitted succesfully it didnt")
+	if !loginSubmit {
+		t.Error("edit should have submitted succesfully it didnt")
 	}
 }
 func TestCreateEntry(t *testing.T) {
