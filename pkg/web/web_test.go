@@ -757,18 +757,7 @@ func TestHandlercase6(t *testing.T) {
 	}
 }
 
-func TestHandlercase7(t *testing.T) { // needs db access
-	Loggers = logger.CreateLoggers("testlogs.txt")
-	authtool.Loggers = Loggers
-	db.Loggers = Loggers
-	req := httptest.NewRequest(http.MethodGet, "/home/searchTitle-Submit", nil)
-	w := httptest.NewRecorder()
-	validated = true
-	handler(w, req)
-	if w.Code != http.StatusOK {
-		t.Error("expected http.StatusOk got ", w.Code)
-	}
-}
+
 func TestHandlercase8(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/home/searchUser", nil)
 	w := httptest.NewRecorder()
