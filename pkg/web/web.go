@@ -417,14 +417,9 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		home(w, r)
 	case "/home/display":
 		readAll(w, r)
-	case "/home/searchTitle":
-		searchByTitle(w, r)
+
 	case "/home/search":
 		search(w, r)
-	case "/home/searchUser":
-		searchByUsername(w, r)
-	case "/home/searchUser-Submit":
-		searchByUsername_submit(w, r)
 	case "/home/delete":
 		delete(w, r)
 	case "/home/delete-submit":
