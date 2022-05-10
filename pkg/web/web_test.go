@@ -225,8 +225,8 @@ func TestSearchUnvalidated(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	req := httptest.NewRequest(http.MethodGet, "/home/search?searchtype=title&searchstring=test", nil)
 	w := httptest.NewRecorder()
-	if !search(w, req) {
-		t.Error("expected to have the search complete")
+	if search(w, req) {
+		t.Error("expected to have the search not complete")
 	}
 }
 func TestDelete(t *testing.T) {
