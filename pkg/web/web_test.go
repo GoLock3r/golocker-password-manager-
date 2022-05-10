@@ -432,7 +432,7 @@ func TestEditSubmit(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
 	loginSubmit(w, req)
 	w = httptest.NewRecorder()
-	req = httptest.NewRequest(http.MethodGet, "/home/edit-submit?title=test&update_key=title&update_value=test2", nil)
+	req = httptest.NewRequest(http.MethodGet, "/home/edit-submit?title=test&updateField=title&update_value=test2", nil)
 	loginSubmit := edit_submit(w, req)
 	if !loginSubmit {
 		t.Error("edit should have submitted succesfully it didnt")
@@ -449,7 +449,7 @@ func TestEditSubmitPassword(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
 	loginSubmit(w, req)
 	w = httptest.NewRecorder()
-	req = httptest.NewRequest(http.MethodGet, "/home/edit-submit?title=test&update_key=private_note&update_value=test2", nil)
+	req = httptest.NewRequest(http.MethodGet, "/home/edit-submit?title=test&updateField=private_note&update_value=test2", nil)
 	loginSubmit := edit_submit(w, req)
 	if !loginSubmit {
 		t.Error("edit should have submitted succesfully it didnt")
