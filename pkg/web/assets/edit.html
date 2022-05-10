@@ -42,25 +42,25 @@
                         <a class="nav-link active" aria-current="page" href="/logout">Logout</a>
                     </li>
                 </ul>
-                <div class="form-check">
+                <form class="d-flex" action="/home/search" method="POST">
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="flexRadioDefault" value="title" checked>
-                        <label class="form-check-label" for="title" style="color:#FFFFFF;">
-                            Title
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="flexRadioDefault" value="username">
-                        <label class="form-check-label" for="username" style="color:#FFFFFF;">
-                            Username
-                        </label>
-                    </div>
-                    <form class="d-flex" action="/home/searchTitle-Submit" method="post">
-                        <input class="form-control me-2" type="search" id="title" name="title" placeholder="Search"
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="searchType" value="title" checked>
+                            <label class="form-check-label" for="title" style="color:#FFFFFF;">
+                                Title
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="searchType" value="username">
+                            <label class="form-check-label" for="username" style="color:#FFFFFF;">
+                                Username
+                            </label>
+                        </div>
+                        <input class="form-control me-2" type="search" id="searchString" name="searchString" placeholder="Search"
                             aria-label="Search">
                         <button class="btn btn-dark" type="submit">Search</button>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
     </nav>
 
