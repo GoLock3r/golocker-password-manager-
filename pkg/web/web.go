@@ -21,7 +21,7 @@ var key []byte
 
 var Path = "web/assets/"
 
-var Url = "http://localhost:8010"
+var Url = "https://localhost:8010"
 
 // Serve a login page to the user and pass credentials off to the
 // loginSubmit function to verify these credentials
@@ -152,8 +152,8 @@ func parseCards(entryTable []map[string]string, callingMethod string) string {
 				"Title: " + entry["title"] + "</h5><p class=\"card-text\">" +
 				"Username: " + entry["username"] + "</p><p class=\"card-text\">" +
 				"Password: " + entry["password"] + "</p><p class=\"card-text\">" +
-				"Private Note: " + entry["private_note"] + "</p><p class=\"card-text\">" +
-				"Public Note: " + entry["public_note"] + "</p></div></div></div>"
+				"Public Note: " + entry["public_note"] + "</p><p class=\"card-text\">" +
+				"Private Note: " + entry["private_note"] + "</p></div></div></div>"
 		}
 	}
 	return cards
@@ -189,7 +189,7 @@ func readAll(w http.ResponseWriter, r *http.Request) bool {
 }
 
 // Gets form data and performs the search by title
-func search(w http.ResponseWriter, r *http.Request) bool{
+func search(w http.ResponseWriter, r *http.Request) bool {
 
 	var cards = ""
 
@@ -442,5 +442,5 @@ func handler(w http.ResponseWriter, r *http.Request) {
 // Creates an instance of the web server. Listens on port 8010
 func Run() {
 	http.HandleFunc("/", handler)
-	http.ListenAndServe(":8010", nil)
+	http.ListenAndServeTLS(":8010", "localhost.crt", "localhost.key", nil)
 }
