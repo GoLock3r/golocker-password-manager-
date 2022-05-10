@@ -439,6 +439,22 @@ func TestEditSubmit(t *testing.T) {
 	}
 
 }
+func TestEditSubmitPassword(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	db.Loggers = Loggers
+	authtool.Loggers = Loggers
+	validated = true
+	Path = "assets/"
+	w := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
+	loginSubmit(w, req)
+	w = httptest.NewRecorder()
+	req = httptest.NewRequest(http.MethodGet, "/home/edit-submit?title=test&update_key=password&update_value=test2", nil)
+	loginSubmit := edit_submit(w, req)
+	if !loginSubmit {
+		t.Error("edit should have submitted succesfully it didnt")
+	}
+}
 func TestEditSubmitWrongPath(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Loggers = Loggers
