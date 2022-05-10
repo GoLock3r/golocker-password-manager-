@@ -203,7 +203,7 @@ func TestSearchUsernmame(t *testing.T) {
 	Path = "assets/"
 	validated = true
 	Loggers = logger.CreateLoggers("testlogs.txt")
-	req := httptest.NewRequest(http.MethodGet, "/home/search?searchtype=username&searchstring=test", nil)
+	req := httptest.NewRequest(http.MethodGet, "/home/search?searchType=username&searchstring=test", nil)
 	w := httptest.NewRecorder()
 	if !search(w, req) {
 		t.Error("expected to have the search complete")
@@ -213,7 +213,7 @@ func TestSearchTitle(t *testing.T) {
 	Path = "assets/"
 	validated = true
 	Loggers = logger.CreateLoggers("testlogs.txt")
-	req := httptest.NewRequest(http.MethodGet, "/home/search?searchtype=title&searchstring=test", nil)
+	req := httptest.NewRequest(http.MethodGet, "/home/search?searchType=title&searchstring=test", nil)
 	w := httptest.NewRecorder()
 	if !search(w, req) {
 		t.Error("expected to have the search complete")
