@@ -410,8 +410,6 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	switch r.URL.Path {
 	case "/":
 		login(w, r)
-	case "":
-		login(w, r)
 	case "/login-submit":
 		loginSubmit(w, r)
 	case "/logout":
