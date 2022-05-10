@@ -3,6 +3,7 @@ package web
 import (
 	"fmt"
 	"golock3r/server/authtool"
+	"golock3r/server/crypt"
 	"golock3r/server/db"
 	"golock3r/server/logger"
 	"html/template"
@@ -20,7 +21,7 @@ var key []byte
 
 var Path = "web/assets/"
 
-var Url = "http://localhost:8010"
+var Url = "https://localhost:8010"
 
 // Serve a login page to the user and pass credentials off to the
 // loginSubmit function to verify these credentials
@@ -135,50 +136,37 @@ func createUser(w http.ResponseWriter, r *http.Request) bool {
 	return true
 }
 
-// formats user inputed data to be put into the maps that are entered into the db
-func formatEntryString(entryTable []map[string]string) string {
-	var display = ""
+// Parses entry data from various read methods into html cards
+func parseCards(entryTable []map[string]string, callingMethod string) string {
+	var cards = ""
 	if entryTable == nil {
-		display = "No entries"
+		if callingMethod == "readAll" {
+			cards += "<h>No entries found. </br>Try creating a new entry!</h>"
+		} else {
+			cards += "<h>Your search didn't return anything. </br>Why don't you try again?</h>"
+		}
+	} else {
+		for _, entry := range entryTable {
+			entry = db.DecryptEntry(key, entry)
+			cards += "<div class=\"col\"><div class=\"card shadow-sm\"><img src=\"...\" class=\"card-img-top\" alt=\"...\"><div class=\"card-body\"><h5 class=\"card-title\">" +
+				"Title: " + entry["title"] + "</h5><p class=\"card-text\">" +
+				"Username: " + entry["username"] + "</p><p class=\"card-text\">" +
+				"Password: " + entry["password"] + "</p><p class=\"card-text\">" +
+				"Public Note: " + entry["public_note"] + "</p><p class=\"card-text\">" +
+				"Private Note: " + entry["private_note"] + "</p></div></div></div>"
+		}
 	}
-	for _, entry := range entryTable {
-		display += "Website: " + entry["title"] + "\n"
-		display += "Username: " + entry["username"] + "\n"
-		display += "Password: " + entry["password"] + "\n"
-		display += "Public note: " + entry["public_note"] + "\n"
-		display += "Private note: " + entry["private_note"] + "\n"
-		display += "\n"
-	}
-	return display
+	return cards
 }
 
-// Reads all database entries for a validated user
+// Reads all database entries for a validated user and
 // displays all of the entries in user database
 func readAll(w http.ResponseWriter, r *http.Request) bool {
-
-	var entries []map[string]string
-	var cards = ""
 
 	if validated {
 
 		var fileName = Path + "display.html"
-		entries = db.ReadAll()
-		for i := 0; i < len(entries); i++ {
-			entries[i] = db.DecryptEntry(key, entries[i])
-			var titleString = entries[i]["title"]
-			var usernameString = entries[i]["username"]
-			var passwordString = entries[i]["password"]
-			var publicNoteString = entries[i]["public_note"]
-			var privateNoteString = entries[i]["private_note"]
-			cards += "<div class=\"col\"><div class=\"card shadow-sm\"><img src=\"...\" class=\"card-img-top\" alt=\"...\"><div class=\"card-body\"><h5 class=\"card-title\">" +
-				"Title: " + titleString + "</h5><p class=\"card-text\">" +
-				"Username: " + usernameString + "</p><p class=\"card-text\">" +
-				"Password: " + passwordString + "</p><p class=\"card-text\">" +
-				"Public Note: " + publicNoteString + "</p><p class=\"card-text\">" +
-				"Private Note: " + privateNoteString + "</p></div></div></div>"
-		}
-
-		cards += "</div>"
+		var cards = parseCards(db.ReadAll(), "readAll")
 
 		t, err := template.ParseFiles(fileName)
 		if err != nil {
@@ -191,105 +179,45 @@ func readAll(w http.ResponseWriter, r *http.Request) bool {
 			fmt.Println("Template execution error")
 			return false
 		}
-		w.WriteHeader(http.StatusOK)
+		// w.WriteHeader(http.StatusOK) -- Note: Output on command line says this call is superfluous; removing it broke nothing
 		return true
 	} else {
 		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, "Oh no maybe log in first")
-		return false
-	}
-}
-
-// Searches entry titles and usernames and displays the results
-// for a validated user
-func searchByTitle(w http.ResponseWriter, r *http.Request) bool {
-	if validated {
-
-		var fileName = Path + "searchTitle.html"
-		t, err := template.ParseFiles(fileName)
-		if err != nil {
-			fmt.Println("Parse error")
-			return false
-		}
-		err = t.ExecuteTemplate(w, "searchTitle.html", nil)
-		if err != nil {
-			fmt.Println("Template execution error")
-			return false
-		}
-		return true
-	} else {
-		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, "Oh no maybe log in first")
+		fmt.Fprintf(w, "You are not logged in.")
 		return false
 	}
 }
 
 // Gets form data and performs the search by title
-func searchByTitle_submit(w http.ResponseWriter, r *http.Request) {
+func search(w http.ResponseWriter, r *http.Request) bool {
+
+	var cards = ""
+
 	if validated {
 
-		var display = ""
-		var fileName = Path + "searchByTitle.html"
-		display = formatEntryString(db.ReadFromTitle(r.FormValue("title")))
-
-		t, err := template.ParseFiles(fileName)
-		if err != nil {
-			fmt.Println("Parse error")
-			return
+		var fileName = Path + "display.html"
+		if r.FormValue("searchType") == "title" {
+			cards = parseCards(db.ReadFromTitle(r.FormValue("searchString")), "search")
+		} else {
+			cards = parseCards(db.ReadFromUsername(r.FormValue("searchString")), "search")
 		}
-		err = t.ExecuteTemplate(w, "searchByTitle.html", display)
-		if err != nil {
-			fmt.Println("Template execution error")
-		}
-	} else {
-		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, "Oh no maybe log in first")
-	}
-}
 
-//serves page with html form that allows for search by username
-func searchByUsername(w http.ResponseWriter, r *http.Request) bool {
-	if validated {
-		var fileName = Path + "searchUsername.html"
 		t, err := template.ParseFiles(fileName)
 		if err != nil {
 			fmt.Println("Parse error")
 			return false
 		}
-		err = t.ExecuteTemplate(w, "searchUsername.html", nil)
+		err = t.ExecuteTemplate(w, "display.html", template.HTML(cards))
 		if err != nil {
 			fmt.Println("Template execution error")
 			return false
 		}
-		return true
 	} else {
 		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, "Oh no maybe log in first")
+		fmt.Fprintf(w, "You are not logged in.")
 		return false
 	}
-}
-
-//grabs from data when form is submited and searches using user inputed username
-func searchByUsername_submit(w http.ResponseWriter, r *http.Request) {
-
-	if validated {
-		var display = ""
-		var fileName = Path + "searchByUsername.html"
-		display = formatEntryString(db.ReadFromUsername(r.FormValue("username")))
-
-		t, err := template.ParseFiles(fileName)
-		if err != nil {
-			fmt.Println("Parse error")
-			return
-		}
-		err = t.ExecuteTemplate(w, "searchByUsername.html", display)
-		if err != nil {
-			fmt.Println("Template execution error")
-		}
-	} else {
-		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, "Oh no maybe log in first")
-	}
+	return true
 }
 
 // Deletes an entry from the database for a validated user
@@ -310,7 +238,7 @@ func delete_submit(w http.ResponseWriter, r *http.Request) {
 		db.DeleteEntry(title)
 	} else {
 		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, "Oh no maybe log in first")
+		fmt.Fprintf(w, "You are not logged in.")
 	}
 }
 
@@ -333,7 +261,7 @@ func delete(w http.ResponseWriter, r *http.Request) bool {
 		return true
 	} else {
 		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, "Oh no maybe log in first")
+		fmt.Fprintf(w, "You are not logged in.")
 		return false
 	}
 }
@@ -358,7 +286,7 @@ func createEntry(w http.ResponseWriter, r *http.Request) bool {
 
 	} else {
 		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, "Oh no maybe log in first")
+		fmt.Fprintf(w, "You are not logged in.")
 		return false
 	}
 }
@@ -390,7 +318,7 @@ func createEntrySubmit(w http.ResponseWriter, r *http.Request) bool {
 
 	} else {
 		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, "Oh no maybe log in first")
+		fmt.Fprintf(w, "You are not logged in.")
 		return false
 	}
 	return true
@@ -414,7 +342,7 @@ func edit(w http.ResponseWriter, r *http.Request) bool {
 		return true
 	} else {
 		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, "Oh no maybe log in first")
+		fmt.Fprintf(w, "You are not logged in.")
 		return false
 	}
 }
@@ -422,8 +350,16 @@ func edit(w http.ResponseWriter, r *http.Request) bool {
 //submits edit into active db
 func edit_submit(w http.ResponseWriter, r *http.Request) bool {
 
+	var updateValue = ""
+
 	if validated {
-		db.UpdateEntry(r.FormValue("title"), r.FormValue("update_key"), r.FormValue("update_value"))
+		if r.FormValue("updateField") == "password" || r.FormValue("updateField") == "private_note" {
+			updateValue = crypt.EncryptStringToHex(key, r.FormValue("updateValue"))
+		} else {
+			updateValue = r.FormValue("updateValue")
+		}
+
+		db.UpdateEntry(r.FormValue("title"), r.FormValue("updateField"), updateValue)
 		var fileName = Path + "redirect.html"
 		t, err := template.ParseFiles(fileName)
 		if err != nil {
@@ -438,7 +374,7 @@ func edit_submit(w http.ResponseWriter, r *http.Request) bool {
 
 	} else {
 		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, "Oh no maybe log in first")
+		fmt.Fprintf(w, "You are not logged in.")
 		return false
 	}
 	return true
@@ -463,7 +399,7 @@ func home(w http.ResponseWriter, r *http.Request) bool {
 		return true
 	} else {
 		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, "Oh no maybe log in first")
+		fmt.Fprintf(w, "You are not logged in.")
 		return false
 	}
 
@@ -474,8 +410,6 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	switch r.URL.Path {
 	case "/":
 		login(w, r)
-	case "":
-		login(w, r)
 	case "/login-submit":
 		loginSubmit(w, r)
 	case "/logout":
@@ -484,14 +418,8 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		home(w, r)
 	case "/home/display":
 		readAll(w, r)
-	case "/home/searchTitle":
-		searchByTitle(w, r)
-	case "/home/searchTitle-Submit":
-		searchByTitle_submit(w, r)
-	case "/home/searchUser":
-		searchByUsername(w, r)
-	case "/home/searchUser-Submit":
-		searchByUsername_submit(w, r)
+	case "/home/search":
+		search(w, r)
 	case "/home/delete":
 		delete(w, r)
 	case "/home/delete-submit":
@@ -514,5 +442,5 @@ func handler(w http.ResponseWriter, r *http.Request) {
 // Creates an instance of the web server. Listens on port 8010
 func Run() {
 	http.HandleFunc("/", handler)
-	http.ListenAndServe(":8010", nil)
+	http.ListenAndServeTLS(":8010", "localhost.crt", "localhost.key", nil)
 }

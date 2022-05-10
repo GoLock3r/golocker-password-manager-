@@ -14,6 +14,7 @@ func removeFiles() {
 	os.Remove("logins.txt")
 	os.Remove("testlogs.txt")
 }
+
 func TestLandingPage(t *testing.T) {
 	Path = "assets/"
 	Loggers = logger.CreateLoggers("testlogs.txt")
@@ -24,6 +25,7 @@ func TestLandingPage(t *testing.T) {
 		t.Error("expected to have the landing page shown landing page didnt show ")
 	}
 }
+
 func TestLandingPageWrongPath(t *testing.T) {
 	Path = "something/"
 	Loggers = logger.CreateLoggers("testlogs.txt")
@@ -34,6 +36,7 @@ func TestLandingPageWrongPath(t *testing.T) {
 		t.Error("expected to have the not landing page shown landing page didnt show ")
 	}
 }
+
 func TestLandingPagevalidated(t *testing.T) {
 	Path = "assets/"
 	validated = true
@@ -57,8 +60,8 @@ func TestLoginSubmit(t *testing.T) {
 	if !loginSubmit {
 		t.Error("login should have submitted succesfully it didnt")
 	}
-
 }
+
 func TestLoginSubmitinvalidLogIn(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	authtool.Loggers = Loggers
@@ -70,8 +73,8 @@ func TestLoginSubmitinvalidLogIn(t *testing.T) {
 	if loginSubmit {
 		t.Error("login should have not submitted succesfully it didnt")
 	}
-
 }
+
 func TestLoginSubmitWrongPath(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	authtool.Loggers = Loggers
@@ -83,7 +86,6 @@ func TestLoginSubmitWrongPath(t *testing.T) {
 	if loginSubmit {
 		t.Error("login should have submitted succesfully it didnt")
 	}
-
 }
 
 // invalid login test
@@ -97,8 +99,8 @@ func TestCreateUser(t *testing.T) {
 	if !loginSubmit {
 		t.Error("login should have submitted succesfully it didnt")
 	}
-
 }
+
 func TestCreateUserexisting(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	authtool.Loggers = Loggers
@@ -109,8 +111,8 @@ func TestCreateUserexisting(t *testing.T) {
 	if loginSubmit {
 		t.Error("shouldnt have created user")
 	}
-
 }
+
 func TestCreateUserWrongPath(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	authtool.Loggers = Loggers
@@ -121,8 +123,8 @@ func TestCreateUserWrongPath(t *testing.T) {
 	if loginSubmit {
 		t.Error("login should have submitted succesfully it didnt")
 	}
-
 }
+
 // create user with existing user
 func TestLogout(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
@@ -136,7 +138,6 @@ func TestLogout(t *testing.T) {
 	if !logout {
 		t.Error("logout unsuccessful", w)
 	}
-
 }
 
 // testLogout when validated == false
@@ -152,7 +153,6 @@ func TestLogoutInvalidated(t *testing.T) {
 	if logout {
 		t.Error("logout successful")
 	}
-
 }
 
 func TestReadall(t *testing.T) {
@@ -166,9 +166,9 @@ func TestReadall(t *testing.T) {
 	var readAll = readAll(w, req)
 	if !readAll {
 		t.Error("unable to read all")
-
 	}
 }
+
 func TestReadallWrongPath(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Loggers = Loggers
@@ -180,7 +180,6 @@ func TestReadallWrongPath(t *testing.T) {
 	var readAll = readAll(w, req)
 	if readAll {
 		t.Error("unable to read all")
-
 	}
 }
 
@@ -195,171 +194,39 @@ func TestReadallInvalidated(t *testing.T) {
 	var readAll = readAll(w, req)
 	if readAll {
 		t.Error("shouldnt be able to read all")
-
 	}
 }
-func TestSearchByTitle(t *testing.T) {
-	Loggers = logger.CreateLoggers("testlogs.txt")
+
+func TestSearchUsernmame(t *testing.T) {
 	Path = "assets/"
 	validated = true
 	Loggers = logger.CreateLoggers("testlogs.txt")
-	req := httptest.NewRequest(http.MethodGet, "/home/searchTitle", nil)
+	req := httptest.NewRequest(http.MethodGet, "/home/search?searchType=username&searchstring=test", nil)
 	w := httptest.NewRecorder()
-	var landingpage = searchByTitle(w, req)
-	if !landingpage {
-		t.Error("expected to have the search by title page shown")
+	if !search(w, req) {
+		t.Error("expected to have the search complete")
 	}
-
 }
-func TestSearchByTitleWrongPath(t *testing.T) {
-	Loggers = logger.CreateLoggers("testlogs.txt")
-	Path = "something/"
+
+func TestSearchTitle(t *testing.T) {
+	Path = "assets/"
 	validated = true
 	Loggers = logger.CreateLoggers("testlogs.txt")
-	req := httptest.NewRequest(http.MethodGet, "/home/searchTitle", nil)
+	req := httptest.NewRequest(http.MethodGet, "/home/search?searchType=title&searchstring=test", nil)
 	w := httptest.NewRecorder()
-	var landingpage = searchByTitle(w, req)
-	if landingpage {
-		t.Error("expected to have the search by title page shown")
+	if !search(w, req) {
+		t.Error("expected to have the search complete")
 	}
-
 }
-func TestSearchByTitleInvalidated(t *testing.T) {
-	Loggers = logger.CreateLoggers("testlogs.txt")
+
+func TestSearchUnvalidated(t *testing.T) {
 	Path = "assets/"
 	validated = false
 	Loggers = logger.CreateLoggers("testlogs.txt")
-	req := httptest.NewRequest(http.MethodGet, "/home/searchTitle", nil)
+	req := httptest.NewRequest(http.MethodGet, "/home/search?searchtype=title&searchstring=test", nil)
 	w := httptest.NewRecorder()
-	var landingpage = searchByTitle(w, req)
-	if landingpage {
-		t.Error("title page should be shown")
-	}
-
-}
-func TestSearchByTitleSubmit(t *testing.T) {
-	Loggers = logger.CreateLoggers("testlogs.txt")
-	db.Loggers = Loggers
-	authtool.Loggers = Loggers
-	validated = true
-	Path = "assets/"
-	w := httptest.NewRecorder()
-	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
-	loginSubmit(w, req)
-	w = httptest.NewRecorder()
-	req = httptest.NewRequest(http.MethodGet, "/home/searchTitle-Submit?title=test", nil)
-	loginSubmit := searchByTitle(w, req)
-	if !loginSubmit {
-		t.Error("edit should have submitted succesfully it didnt")
-	}
-}
-func TestSearchByTitleSubmitWrongPath(t *testing.T) {
-	Loggers = logger.CreateLoggers("testlogs.txt")
-	db.Loggers = Loggers
-	authtool.Loggers = Loggers
-	validated = true
-	Path = "something/"
-	w := httptest.NewRecorder()
-	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
-	loginSubmit(w, req)
-	w = httptest.NewRecorder()
-	req = httptest.NewRequest(http.MethodGet, "/home/searchTitle-Submit?title=test", nil)
-	loginSubmit := searchByTitle(w, req)
-	if loginSubmit {
-		t.Error("edit should have submitted succesfully it didnt")
-	}
-}
-
-func TestSearchByTitleSubmitInvalidated(t *testing.T) {
-	Loggers = logger.CreateLoggers("testlogs.txt")
-	db.Loggers = Loggers
-	authtool.Loggers = Loggers
-	Path = "assets/"
-	validated = false
-	w := httptest.NewRecorder()
-	req := httptest.NewRequest(http.MethodGet, "/home/searchTitle-Submit?title=test", nil)
-	loginSubmit := searchByTitle(w, req)
-	if loginSubmit {
-		t.Error("edit should not have submitted succesfully it didnt")
-	}
-}
-func TestSearchByUsername(t *testing.T) {
-	Path = "assets/"
-	validated = true
-	Loggers = logger.CreateLoggers("testlogs.txt")
-	req := httptest.NewRequest(http.MethodGet, "/home/searchUser", nil)
-	w := httptest.NewRecorder()
-	var landingpage = searchByUsername(w, req)
-	if !landingpage {
-		t.Error("expected to have the search by username page shown")
-	}
-}
-func TestSearchByUsernameWrongPath(t *testing.T) {
-	Path = "something/"
-	validated = true
-	Loggers = logger.CreateLoggers("testlogs.txt")
-	req := httptest.NewRequest(http.MethodGet, "/home/searchUser", nil)
-	w := httptest.NewRecorder()
-	var landingpage = searchByUsername(w, req)
-	if landingpage {
-		t.Error("expected to have the search by username page shown")
-	}
-}
-func TestSearchByUsernameInvalidated(t *testing.T) {
-	Path = "assets/"
-	validated = false
-	Loggers = logger.CreateLoggers("testlogs.txt")
-	req := httptest.NewRequest(http.MethodGet, "/home/searchUser", nil)
-	w := httptest.NewRecorder()
-	var landingpage = searchByUsername(w, req)
-	if landingpage {
-		t.Error("expected to not have the search by username page shown")
-	}
-}
-func TestSearchByUsernameSubmit(t *testing.T) {
-	Loggers = logger.CreateLoggers("testlogs.txt")
-	db.Loggers = Loggers
-	authtool.Loggers = Loggers
-	validated = true
-	Path = "assets/"
-	w := httptest.NewRecorder()
-	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
-	loginSubmit(w, req)
-	w = httptest.NewRecorder()
-	req = httptest.NewRequest(http.MethodGet, "/home/searchUser-Submit?username=test", nil)
-	loginSubmit := searchByUsername(w, req)
-	if !loginSubmit {
-		t.Error("edit should have submitted succesfully it didnt")
-	}
-}
-func TestSearchByUsernameSubmitWrongPath(t *testing.T) {
-	Loggers = logger.CreateLoggers("testlogs.txt")
-	db.Loggers = Loggers
-	authtool.Loggers = Loggers
-	validated = true
-	Path = "something/"
-	w := httptest.NewRecorder()
-	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
-	loginSubmit(w, req)
-	w = httptest.NewRecorder()
-	req = httptest.NewRequest(http.MethodGet, "/home/searchUser-Submit?username=test", nil)
-	loginSubmit := searchByUsername(w, req)
-	if loginSubmit {
-		t.Error("edit should have submitted succesfully it didnt")
-	}
-}
-
-func TestSearchByUsernameSubmitInvalidated(t *testing.T) {
-	Loggers = logger.CreateLoggers("testlogs.txt")
-	db.Loggers = Loggers
-	authtool.Loggers = Loggers
-	validated = false
-	Path = "assets/"
-	w := httptest.NewRecorder()
-	req := httptest.NewRequest(http.MethodGet, "/home/searchUser-Submit?username=test", nil)
-	loginSubmit := searchByUsername(w, req)
-	if loginSubmit {
-		t.Error("edit should not have submitted succesfully it didnt")
+	if search(w, req) {
+		t.Error("expected to have the search not complete")
 	}
 }
 
@@ -374,6 +241,7 @@ func TestDelete(t *testing.T) {
 		t.Error("expected to have the delete page shown")
 	}
 }
+
 func TestDeleteWrongPath(t *testing.T) {
 	Path = "something/"
 	validated = true
@@ -385,6 +253,7 @@ func TestDeleteWrongPath(t *testing.T) {
 		t.Error("expected to have the delete page shown")
 	}
 }
+
 func TestDeleteInvalidated(t *testing.T) {
 	Path = "assets/"
 	Loggers = logger.CreateLoggers("testlogs.txt")
@@ -413,6 +282,7 @@ func TestDeleteSubmit(t *testing.T) {
 		t.Error("edit should have submitted succesfully it didnt")
 	}
 }
+
 func TestDeleteSubmitWrongPath(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Loggers = Loggers
@@ -429,6 +299,7 @@ func TestDeleteSubmitWrongPath(t *testing.T) {
 		t.Error("edit should have submitted succesfully it didnt")
 	}
 }
+
 func TestDeleteSubmitInvalidated(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Loggers = Loggers
@@ -439,9 +310,10 @@ func TestDeleteSubmitInvalidated(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/home/delete-submit?title=test&update_key=title&update_value=test2", nil)
 	loginSubmit := delete(w, req)
 	if loginSubmit {
-		t.Error("edit should not have submitted succesfully it didnt")
+		t.Error("edit should have submitted succesfully it didnt")
 	}
 }
+
 func TestCreateEntry(t *testing.T) {
 	Path = "assets/"
 	validated = true
@@ -453,6 +325,7 @@ func TestCreateEntry(t *testing.T) {
 		t.Error("expected to have the create entry page shown")
 	}
 }
+
 func TestCreateEntryWrongPath(t *testing.T) {
 	Path = "something/"
 	validated = true
@@ -464,6 +337,7 @@ func TestCreateEntryWrongPath(t *testing.T) {
 		t.Error("expected to have the create entry page shown")
 	}
 }
+
 func TestCreateEntryInvalidated(t *testing.T) {
 	Path = "assets/"
 	validated = false
@@ -492,6 +366,7 @@ func TestCreateEntrySubmit(t *testing.T) {
 		t.Error("create should have submitted succesfully it didnt")
 	}
 }
+
 func TestCreateEntrySubmitWrongPath(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Loggers = Loggers
@@ -508,6 +383,7 @@ func TestCreateEntrySubmitWrongPath(t *testing.T) {
 		t.Error("create should have submitted succesfully it didnt")
 	}
 }
+
 func TestCreateEntrySubmitInvalidated(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Loggers = Loggers
@@ -522,6 +398,7 @@ func TestCreateEntrySubmitInvalidated(t *testing.T) {
 		t.Error("create should have submitted succesfully it didnt")
 	}
 }
+
 func TestEdit(t *testing.T) {
 	Path = "assets/"
 	validated = true
@@ -533,6 +410,7 @@ func TestEdit(t *testing.T) {
 		t.Error("expected to have the edit page didnt show ")
 	}
 }
+
 func TestEditWrongPath(t *testing.T) {
 	Path = "something/"
 	validated = true
@@ -544,6 +422,7 @@ func TestEditWrongPath(t *testing.T) {
 		t.Error("expected to have the edit page didnt show ")
 	}
 }
+
 func TestEditInvalidated(t *testing.T) {
 	Path = "assets/"
 	validated = false
@@ -566,13 +445,30 @@ func TestEditSubmit(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
 	loginSubmit(w, req)
 	w = httptest.NewRecorder()
-	req = httptest.NewRequest(http.MethodGet, "/home/edit-submit?title=test&update_key=title&update_value=test2", nil)
+	req = httptest.NewRequest(http.MethodGet, "/home/edit-submit?title=test&updateField=title&update_value=test2", nil)
 	loginSubmit := edit_submit(w, req)
 	if !loginSubmit {
 		t.Error("edit should have submitted succesfully it didnt")
 	}
-
 }
+
+func TestEditSubmitPassword(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	db.Loggers = Loggers
+	authtool.Loggers = Loggers
+	validated = true
+	Path = "assets/"
+	w := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodGet, "/login-submit?username=test_username&password=test_password", nil)
+	loginSubmit(w, req)
+	w = httptest.NewRecorder()
+	req = httptest.NewRequest(http.MethodGet, "/home/edit-submit?title=test&updateField=private_note&update_value=test2", nil)
+	loginSubmit := edit_submit(w, req)
+	if !loginSubmit {
+		t.Error("edit should have submitted succesfully it didnt")
+	}
+}
+
 func TestEditSubmitWrongPath(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Loggers = Loggers
@@ -588,8 +484,8 @@ func TestEditSubmitWrongPath(t *testing.T) {
 	if loginSubmit {
 		t.Error("edit should have submitted succesfully it didnt")
 	}
-
 }
+
 func TestEditSubmitInvalidated(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	db.Loggers = Loggers
@@ -602,7 +498,57 @@ func TestEditSubmitInvalidated(t *testing.T) {
 	if loginSubmit {
 		t.Error("edit should have submitted succesfully it didnt")
 	}
+}
 
+func TestParseCardsReadAll(t *testing.T) {
+	entry := map[string]string{
+		"title":        "title",
+		"password":     "password",
+		"username":     "username",
+		"private_note": "private_note",
+		"public_note":  "public_note",
+	}
+	var results_map []map[string]string
+
+	results_map = append(results_map, entry)
+	var ans = parseCards(results_map, "readAll")
+
+	if ans == "" {
+		t.Error("expected a response")
+	}
+}
+
+func TestParseCardsreadAllempty(t *testing.T) {
+	var results_map []map[string]string
+	var ans = parseCards(results_map, "readAll")
+	if ans != "<h>No entries found. </br>Try creating a new entry!</h>" {
+		t.Error("expected a response of <h>No entries found. </br>Try creating a new entry!</h> go t", ans)
+	}
+}
+func TestParseCardsElse(t *testing.T) {
+	entry := map[string]string{
+		"title":        "title",
+		"password":     "password",
+		"username":     "username",
+		"private_note": "private_note",
+		"public_note":  "public_note",
+	}
+	var results_map []map[string]string
+
+	results_map = append(results_map, entry)
+	var ans = parseCards(results_map, "anything")
+
+	if ans == "" {
+		t.Error("expected a response")
+	}
+}
+
+func TestParseCardselseempty(t *testing.T) {
+	var results_map []map[string]string
+	var ans = parseCards(results_map, "else")
+	if ans != "<h>Your search didn't return anything. </br>Why don't you try again?</h>" {
+		t.Error("expected a response of <h>Your search didn't return anything. </br>Why don't you try again?</h> got ", ans)
+	}
 }
 
 func TestHome(t *testing.T) {
@@ -617,6 +563,7 @@ func TestHome(t *testing.T) {
 	}
 	removeFiles()
 }
+
 func TestHomeWrongPath(t *testing.T) {
 	Path = "something/"
 	validated = true
@@ -629,6 +576,7 @@ func TestHomeWrongPath(t *testing.T) {
 	}
 	removeFiles()
 }
+
 func TestHomeInvalidated(t *testing.T) {
 	Path = "assets/"
 	validated = false
@@ -641,6 +589,7 @@ func TestHomeInvalidated(t *testing.T) {
 	}
 	removeFiles()
 }
+
 func TestHandlercase1(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/", nil)
 	w := httptest.NewRecorder()
@@ -661,6 +610,7 @@ func TestHandlercase2(t *testing.T) { // needs db access
 		t.Error("expected http.StatusOk got ", w.Code)
 	}
 }
+
 func TestHandlercase3(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	authtool.Loggers = Loggers
@@ -672,6 +622,7 @@ func TestHandlercase3(t *testing.T) {
 		t.Error("expected http.StatusOk got ", w.Code)
 	}
 }
+
 func TestHandlercase4(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	authtool.Loggers = Loggers
@@ -697,8 +648,11 @@ func TestHandlercase5(t *testing.T) { // needs db access
 		t.Error("expected http.StatusOk got ", w.Code)
 	}
 }
-func TestHandlercase6(t *testing.T) {
-	req := httptest.NewRequest(http.MethodGet, "/home/searchTitle", nil)
+
+func TestHandlerCase6(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	authtool.Loggers = Loggers
+	req := httptest.NewRequest(http.MethodGet, "/home/search", nil)
 	w := httptest.NewRecorder()
 	validated = true
 	handler(w, req)
@@ -707,40 +661,6 @@ func TestHandlercase6(t *testing.T) {
 	}
 }
 
-func TestHandlercase7(t *testing.T) { // needs db access
-	Loggers = logger.CreateLoggers("testlogs.txt")
-	authtool.Loggers = Loggers
-	db.Loggers = Loggers
-	req := httptest.NewRequest(http.MethodGet, "/home/searchTitle-Submit", nil)
-	w := httptest.NewRecorder()
-	validated = true
-	handler(w, req)
-	if w.Code != http.StatusOK {
-		t.Error("expected http.StatusOk got ", w.Code)
-	}
-}
-func TestHandlercase8(t *testing.T) {
-	req := httptest.NewRequest(http.MethodGet, "/home/searchUser", nil)
-	w := httptest.NewRecorder()
-	validated = true
-	handler(w, req)
-	if w.Code != http.StatusOK {
-		t.Error("expected http.StatusOk got ", w.Code)
-	}
-}
-
-func TestHandlercase9(t *testing.T) { // needs db access
-	Loggers = logger.CreateLoggers("testlogs.txt")
-	authtool.Loggers = Loggers
-	db.Loggers = Loggers
-	req := httptest.NewRequest(http.MethodGet, "/home/searchUser-Submit", nil)
-	w := httptest.NewRecorder()
-	validated = true
-	handler(w, req)
-	if w.Code != http.StatusOK {
-		t.Error("expected http.StatusOk got ", w.Code)
-	}
-}
 func TestHandlercase10(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/home/delete", nil)
 	w := httptest.NewRecorder()
@@ -750,6 +670,7 @@ func TestHandlercase10(t *testing.T) {
 		t.Error("expected http.StatusOk got ", w.Code)
 	}
 }
+
 func TestHandlercase11(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/home/delete-submit", nil)
 	w := httptest.NewRecorder()
@@ -759,6 +680,7 @@ func TestHandlercase11(t *testing.T) {
 		t.Error("expected http.StatusOk got ", w.Code)
 	}
 }
+
 func TestHandlercase12(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/home/create", nil)
 	w := httptest.NewRecorder()
@@ -781,6 +703,7 @@ func TestHandlercase13(t *testing.T) { // needs db access
 		t.Error("expected http.StatusOk got ", w.Code)
 	}
 }
+
 func TestHandlercase14(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/home/edit", nil)
 	w := httptest.NewRecorder()
@@ -803,6 +726,7 @@ func TestHandlercase15(t *testing.T) { // needs db access
 		t.Error("expected http.StatusOk got ", w.Code)
 	}
 }
+
 func TestHandlercase16(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
 	authtool.Loggers = Loggers
@@ -821,6 +745,5 @@ func TestHandlercase17(t *testing.T) {
 	if w.Code != http.StatusNotFound {
 		t.Error("expected http.StatusNotFound got ", w.Code)
 	}
-	
 	removeFiles()
 }

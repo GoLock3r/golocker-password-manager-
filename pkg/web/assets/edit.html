@@ -9,7 +9,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>GoLocker - Edit</title>
 </head>
 
 <body>
@@ -39,48 +39,70 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/logout">logout</a>
+                        <a class="nav-link active" aria-current="page" href="/logout">Logout</a>
                     </li>
                 </ul>
-                <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-dark" type="submit">Search</button>
+                <form class="d-flex" action="/home/search" method="POST">
+                    <div class="form-check">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="searchType" value="title" checked>
+                            <label class="form-check-label" for="title" style="color:#FFFFFF;">
+                                Title
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="searchType" value="username">
+                            <label class="form-check-label" for="username" style="color:#FFFFFF;">
+                                Username
+                            </label>
+                        </div>
+                        <input class="form-control me-2" type="search" id="searchString" name="searchString" placeholder="Search"
+                            aria-label="Search">
+                        <button class="btn btn-dark" type="submit">Search</button>
+                    </div>
                 </form>
             </div>
-        </div>
     </nav>
 
 
-    <!-- <h1>Enter the title of the entry you'd like to update.</h1>
-    <form action="/home/edit-submit" method="POST">
-        <label for="title">Title:</label><br>
-        <input type="text" id="title" name="title" value=""><br>
-        <label for="title">Enter field would you like to update:</label><br>
-        <input type="text" id="update_key" name="update_key" value=""><br>
-        <label for="title">Enter new value:</label><br>
-        <input type="text" id="update_value" name="update_value" value=""><br>
-        <input type="submit" value="update">
-    </form> -->
 
     <div class="container px-4">
-        <h2><strong>Update</strong></h2>
-        <form>
-            <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Site You Want to Update</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                <div id="emailHelp" class="form-text">Insert note here</div>
+        <h2><strong>Edit</strong></h2><br>
+        <h5>Select which field to update</h5>
+        <form action="/home/edit-submit" method="POST">
+            <div class="form-check">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="updateField" value="username" checked>
+                    <label class="form-check-label" for="username" style="color:#000;">
+                        Username
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="updateField" value="password">
+                    <label class="form-check-label" for="password" style="color:#000;">
+                        Password
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="updateField" value="private_note">
+                    <label class="form-check-label" for="private_note" style="color:#000;">
+                        Private Note
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="updateField" value="public_note">
+                    <label class="form-check-label" for="public_note" style="color:#000;">
+                        Public Note
+                    </label>
+                </div>
             </div>
             <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">New Username</label>
-                <input type="password" class="form-control" id="exampleInputPassword1">
+                <label for="inputWebsiteName" class="form-label">Website Name</label>
+                <input type="website" class="form-control" id="inputWebsiteName" name="title" placeholder="Enter title">
             </div>
             <div class="mb-3">
-                <label for="exampleInputPassword2" class="form-label">New Password</label>
-                <input type="password" class="form-control" id="exampleInputPassword1">
-            </div>
-            <div class="mb-3 form-check">
-                <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                <label for="inputWebsiteName" class="form-label">New Value</label>
+                <input type="text" class="form-control" id="inputUpdateValue" name="updateValue" placeholder="Enter new value">
             </div>
             <button type="submit" class="btn btn-primary">Update</button>
         </form>
