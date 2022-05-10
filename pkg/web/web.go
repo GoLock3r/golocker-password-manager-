@@ -188,30 +188,6 @@ func readAll(w http.ResponseWriter, r *http.Request) bool {
 	}
 }
 
-// Searches entry titles and usernames and displays the results
-// for a validated user
-func searchByTitle(w http.ResponseWriter, r *http.Request) bool {
-	if validated {
-
-		var fileName = Path + "searchTitle.html"
-		t, err := template.ParseFiles(fileName)
-		if err != nil {
-			fmt.Println("Parse error")
-			return false
-		}
-		err = t.ExecuteTemplate(w, "searchTitle.html", nil)
-		if err != nil {
-			fmt.Println("Template execution error")
-			return false
-		}
-		return true
-	} else {
-		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, "You are not logged in.")
-		return false
-	}
-}
-
 // Gets form data and performs the search by title
 func search(w http.ResponseWriter, r *http.Request) {
 
@@ -225,51 +201,6 @@ func search(w http.ResponseWriter, r *http.Request) {
 		} else {
 			cards = parseCards(db.ReadFromUsername(r.FormValue("searchString")), "search")
 		}
-
-		t, err := template.ParseFiles(fileName)
-		if err != nil {
-			fmt.Println("Parse error")
-			return
-		}
-		err = t.ExecuteTemplate(w, "display.html", template.HTML(cards))
-		if err != nil {
-			fmt.Println("Template execution error")
-		}
-	} else {
-		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, "You are not logged in.")
-	}
-}
-
-//serves page with html form that allows for search by username
-func searchByUsername(w http.ResponseWriter, r *http.Request) bool {
-	if validated {
-		var fileName = Path + "searchUsername.html"
-		t, err := template.ParseFiles(fileName)
-		if err != nil {
-			fmt.Println("Parse error")
-			return false
-		}
-		err = t.ExecuteTemplate(w, "searchUsername.html", nil)
-		if err != nil {
-			fmt.Println("Template execution error")
-			return false
-		}
-		return true
-	} else {
-		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, "You are not logged in.")
-		return false
-	}
-}
-
-//grabs from data when form is submited and searches using user inputed username
-func searchByUsername_submit(w http.ResponseWriter, r *http.Request) {
-
-	if validated {
-
-		var fileName = Path + "display.html"
-		var cards = parseCards(db.ReadFromUsername(r.FormValue("username")), "searchByUsername_submit")
 
 		t, err := template.ParseFiles(fileName)
 		if err != nil {
