@@ -123,6 +123,7 @@ func TestCreateUserWrongPath(t *testing.T) {
 	}
 
 }
+
 // create user with existing user
 func TestLogout(t *testing.T) {
 	Loggers = logger.CreateLoggers("testlogs.txt")
@@ -198,8 +199,36 @@ func TestReadallInvalidated(t *testing.T) {
 
 	}
 }
-
-
+func TestSearchUsernmame(t *testing.T) {
+	Path = "assets/"
+	validated = true
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	req := httptest.NewRequest(http.MethodGet, "/home/search?searchtype=username&searchstring=test", nil)
+	w := httptest.NewRecorder()
+	if !search(w, req) {
+		t.Error("expected to have the search complete")
+	}
+}
+func TestSearchTitle(t *testing.T) {
+	Path = "assets/"
+	validated = true
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	req := httptest.NewRequest(http.MethodGet, "/home/search?searchtype=title&searchstring=test", nil)
+	w := httptest.NewRecorder()
+	if !search(w, req) {
+		t.Error("expected to have the search complete")
+	}
+}
+func TestSearchUnvalidated(t *testing.T){
+	Path = "assets/"
+	validated = false
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	req := httptest.NewRequest(http.MethodGet, "/home/search?searchtype=title&searchstring=test", nil)
+	w := httptest.NewRecorder()
+	if !search(w, req) {
+		t.Error("expected to have the search complete")
+	}
+}
 func TestDelete(t *testing.T) {
 	Path = "assets/"
 	validated = true
@@ -442,7 +471,7 @@ func TestEditSubmitInvalidated(t *testing.T) {
 
 }
 
-func TestParseCardsReadAll(t *testing.T){
+func TestParseCardsReadAll(t *testing.T) {
 	entry := map[string]string{
 		"title":        "title",
 		"password":     "password",
@@ -453,22 +482,21 @@ func TestParseCardsReadAll(t *testing.T){
 	var results_map []map[string]string
 
 	results_map = append(results_map, entry)
-var ans =parseCards(results_map, "readAll")
+	var ans = parseCards(results_map, "readAll")
 
-	if ans == ""{
+	if ans == "" {
 		t.Error("expected a response")
 	}
 }
 
-
-func TestParseCardsreadAllempty(t *testing.T){
+func TestParseCardsreadAllempty(t *testing.T) {
 	var results_map []map[string]string
-	var ans =parseCards(results_map, "readAll")
-	if ans != "<h>No entries found. </br>Try creating a new entry!</h>"{
+	var ans = parseCards(results_map, "readAll")
+	if ans != "<h>No entries found. </br>Try creating a new entry!</h>" {
 		t.Error("expected a response of <h>No entries found. </br>Try creating a new entry!</h> go t", ans)
 	}
 }
-func TestParseCardsElse(t *testing.T){
+func TestParseCardsElse(t *testing.T) {
 	entry := map[string]string{
 		"title":        "title",
 		"password":     "password",
@@ -479,15 +507,15 @@ func TestParseCardsElse(t *testing.T){
 	var results_map []map[string]string
 
 	results_map = append(results_map, entry)
-var ans =parseCards(results_map, "anything")
+	var ans = parseCards(results_map, "anything")
 
-	if ans == ""{
+	if ans == "" {
 		t.Error("expected a response")
 	}
 }
-func TestParseCardselseempty(t *testing.T){
+func TestParseCardselseempty(t *testing.T) {
 	var results_map []map[string]string
-	var ans =parseCards(results_map, "else")
+	var ans = parseCards(results_map, "else")
 	if ans != "<h>Your search didn't return anything. </br>Why don't you try again?</h>" {
 		t.Error("expected a response of <h>Your search didn't return anything. </br>Why don't you try again?</h> got ", ans)
 	}
@@ -594,7 +622,6 @@ func TestHandlercase6(t *testing.T) {
 	}
 }
 
-
 func TestHandlercase8(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/home/searchUser", nil)
 	w := httptest.NewRecorder()
@@ -697,6 +724,6 @@ func TestHandlercase17(t *testing.T) {
 	if w.Code != http.StatusNotFound {
 		t.Error("expected http.StatusNotFound got ", w.Code)
 	}
-	
+
 	removeFiles()
 }

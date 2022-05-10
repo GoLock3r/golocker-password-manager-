@@ -189,7 +189,7 @@ func readAll(w http.ResponseWriter, r *http.Request) bool {
 }
 
 // Gets form data and performs the search by title
-func search(w http.ResponseWriter, r *http.Request) {
+func search(w http.ResponseWriter, r *http.Request) bool{
 
 	var cards = ""
 
@@ -205,16 +205,19 @@ func search(w http.ResponseWriter, r *http.Request) {
 		t, err := template.ParseFiles(fileName)
 		if err != nil {
 			fmt.Println("Parse error")
-			return
+			return false
 		}
 		err = t.ExecuteTemplate(w, "display.html", template.HTML(cards))
 		if err != nil {
 			fmt.Println("Template execution error")
+			return false
 		}
 	} else {
 		w.WriteHeader(http.StatusNotFound)
 		fmt.Fprintf(w, "You are not logged in.")
+		return false
 	}
+	return true
 }
 
 // Deletes an entry from the database for a validated user
@@ -417,7 +420,6 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		home(w, r)
 	case "/home/display":
 		readAll(w, r)
-
 	case "/home/search":
 		search(w, r)
 	case "/home/delete":
