@@ -612,38 +612,6 @@ func TestHandlercase5(t *testing.T) { // needs db access
 		t.Error("expected http.StatusOk got ", w.Code)
 	}
 }
-func TestHandlercase6(t *testing.T) {
-	req := httptest.NewRequest(http.MethodGet, "/home/searchTitle", nil)
-	w := httptest.NewRecorder()
-	validated = true
-	handler(w, req)
-	if w.Code != http.StatusOK {
-		t.Error("expected http.StatusOk got ", w.Code)
-	}
-}
-
-func TestHandlercase8(t *testing.T) {
-	req := httptest.NewRequest(http.MethodGet, "/home/searchUser", nil)
-	w := httptest.NewRecorder()
-	validated = true
-	handler(w, req)
-	if w.Code != http.StatusOK {
-		t.Error("expected http.StatusOk got ", w.Code)
-	}
-}
-
-func TestHandlercase9(t *testing.T) { // needs db access
-	Loggers = logger.CreateLoggers("testlogs.txt")
-	authtool.Loggers = Loggers
-	db.Loggers = Loggers
-	req := httptest.NewRequest(http.MethodGet, "/home/searchUser-Submit", nil)
-	w := httptest.NewRecorder()
-	validated = true
-	handler(w, req)
-	if w.Code != http.StatusOK {
-		t.Error("expected http.StatusOk got ", w.Code)
-	}
-}
 func TestHandlercase10(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/home/delete", nil)
 	w := httptest.NewRecorder()
