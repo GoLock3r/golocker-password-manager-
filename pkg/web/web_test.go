@@ -219,7 +219,7 @@ func TestSearchTitle(t *testing.T) {
 		t.Error("expected to have the search complete")
 	}
 }
-func TestSearchUnvalidated(t *testing.T){
+func TestSearchUnvalidated(t *testing.T) {
 	Path = "assets/"
 	validated = false
 	Loggers = logger.CreateLoggers("testlogs.txt")
@@ -605,6 +605,17 @@ func TestHandlercase5(t *testing.T) { // needs db access
 	validated = true
 	db.Connect("test")
 	req := httptest.NewRequest(http.MethodGet, "/home/display", nil)
+	w := httptest.NewRecorder()
+	validated = true
+	handler(w, req)
+	if w.Code != http.StatusOK {
+		t.Error("expected http.StatusOk got ", w.Code)
+	}
+}
+func TestHandlerCase6(t *testing.T) {
+	Loggers = logger.CreateLoggers("testlogs.txt")
+	authtool.Loggers = Loggers
+	req := httptest.NewRequest(http.MethodGet, "/home/search", nil)
 	w := httptest.NewRecorder()
 	validated = true
 	handler(w, req)
